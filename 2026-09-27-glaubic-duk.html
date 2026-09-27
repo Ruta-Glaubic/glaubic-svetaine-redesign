@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUK | GLAUBIC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<style>
+  /* Spalvos pagal GLAUBIC Brandbook 2026, 09–11 psl. */
+  :root {
+    --violet-100: #ECEEFB;
+    --violet-200: #D3D7F4;
+    --violet-300: #B8BDEE;
+    --violet-400: #A9ADEC;
+    --violet-500: #9AA2E6;
+    --violet-600: #8B93E2;
+    --violet-700: #7079CF;
+    --coral: #FF6A3D;
+    --yellow: #FFED00;
+    --ink-900: #241D2B;
+    --ink-800: #322838;
+    --ink-600: #6B6072;
+    --ink-300: #CBC4D0;
+    --paper: #F5F5F3;
+    --white: #FFFFFF;
+    --fog: linear-gradient(160deg, #FCFCFF 0%, #F2F3FB 50%, #E6E9F7 100%);
+
+    --font-head: "Manrope", system-ui, sans-serif;
+    --font-body: "Hanken Grotesk", system-ui, sans-serif;
+
+    --radius-panel: 28px;
+    --radius-card: 24px;
+    --radius-pill: 999px;
+    --wrap: 1200px;
+    --gutter: clamp(16px, 4vw, 48px);
+    --section: clamp(56px, 8vw, 104px);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  body {
+    margin: 0;
+    background: var(--white);
+    color: var(--ink-800);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0;
+  }
+  p { margin: 0; }
+  a { color: inherit; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+  [hidden] { display: none !important; }
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* Maketo žymė */
+  .mock-note {
+    margin: 0;
+    background: var(--ink-800);
+    color: var(--white);
+    font-size: 14px;
+    text-align: center;
+    padding: 8px var(--gutter);
+  }
+
+  /* Kapsulės: brandbook 14–15 psl. Informacinės žymos nėra paspaudžiamos. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: var(--radius-pill);
+    background: var(--white);
+    color: var(--ink-800);
+    font-size: 16px;
+    white-space: nowrap;
+    border: 0;
+    font-family: var(--font-body);
+  }
+  .pill--sm { height: 32px; padding: 0 14px; font-size: 14px; }
+  .pill--violet { background: var(--violet-200); }
+  .pill--coral { background: var(--coral); }
+  .pill--yellow { background: var(--yellow); }
+  .pill--outline { background: transparent; box-shadow: inset 0 0 0 2px var(--ink-800); font-weight: 700; }
+
+  /* Mygtukai: CTA koralinis, tekstas rašalo tonu */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 28px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 18px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn--cta { background: var(--coral); color: var(--ink-800); }
+  .btn--cta:hover { background: #FF7E57; }
+  .btn--ghost { background: transparent; color: var(--ink-800); border-color: var(--ink-800); }
+  .btn--ghost:hover, .btn--ghost:focus-visible { background: var(--coral); border-color: var(--coral); }
+  .btn--ghost:active, .btn--cta:active { transform: translateY(1px); }
+  .btn { transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.1s ease; }
+  .btn--sm { height: 44px; padding: 0 18px; font-size: 16px; }
+  .btn--block { width: 100%; }
+  :where(a, button, summary, input, select, textarea):focus-visible {
+    outline: 3px solid var(--ink-800);
+    outline-offset: 3px;
+  }
+
+  .eyebrow {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .section-head { max-width: 760px; margin-bottom: 40px; }
+  .section-head h2 { font-size: clamp(32px, 4vw, 52px); margin-top: 12px; }
+  .section-head p { margin-top: 16px; font-size: 19px; }
+
+  /* ---------- Dovanos ikona su animacija ---------- */
+  .gift-icon { display: inline-block; width: 26px; height: 26px; vertical-align: middle; overflow: visible; }
+  .gift-icon .lid { transform-origin: 50% 100%; transform-box: fill-box; animation: lid-pop 2.6s ease-in-out infinite; }
+  .gift-icon .box-all { transform-origin: 50% 100%; transform-box: fill-box; animation: gift-wiggle 2.6s ease-in-out infinite; }
+  .gift-icon .spark { opacity: 0; animation: spark 2.6s ease-in-out infinite; }
+  @keyframes gift-wiggle {
+    0%, 55%, 100% { transform: rotate(0); }
+    62% { transform: rotate(-9deg); }
+    70% { transform: rotate(8deg); }
+    78% { transform: rotate(-5deg); }
+    86% { transform: rotate(3deg); }
+  }
+  @keyframes lid-pop {
+    0%, 20%, 100% { transform: translateY(0) rotate(0); }
+    30% { transform: translateY(-5px) rotate(-10deg); }
+    42% { transform: translateY(0) rotate(0); }
+  }
+  @keyframes spark {
+    0%, 22%, 60%, 100% { opacity: 0; transform: scale(0.4); }
+    32% { opacity: 1; transform: scale(1); }
+    48% { opacity: 0; transform: scale(1.3); }
+  }
+
+  /* ---------- Judantis dovanų baneris ---------- */
+  .promo {
+    display: block;
+    background: var(--coral);
+    color: var(--ink-800);
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
+  }
+  .promo-track { display: inline-flex; animation: promo-scroll 38s linear infinite; }
+  .promo:hover .promo-track, .promo:focus-visible .promo-track { animation-play-state: paused; }
+  .promo-group { display: inline-flex; flex-shrink: 0; align-items: center; }
+  .promo-item { padding: 0 24px; display: inline-flex; align-items: center; gap: 10px; }
+  .promo-item b { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .promo-sep { opacity: 0.6; }
+  .promo:focus-visible { outline: 3px solid var(--ink-800); outline-offset: -3px; }
+  @keyframes promo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ---------- Antraštė ---------- */
+  .site-header { background: var(--violet-500); position: relative; z-index: 10; }
+  .site-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 80px;
+  }
+  .logo { display: inline-flex; align-items: center; text-decoration: none; }
+  .logo-svg { display: block; height: 24px; width: auto; }
+  .site-footer .logo-svg { height: 28px; }
+  .nav { display: flex; gap: 28px; }
+  .nav a { text-decoration: none; font-size: 17px; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+  .nav a:hover, .nav a[aria-current="true"] { text-decoration-line: underline; }
+  .nav a[aria-current="true"] { font-weight: 700; }
+  .lang { display: flex; gap: 4px; font-size: 15px; font-weight: 700; }
+  .lang a { text-decoration: none; padding: 6px 10px; border-radius: var(--radius-pill); }
+  .lang a[aria-current] { background: var(--white); }
+  .menu-btn { display: none; cursor: pointer; }
+  .nav-lang { display: none; }
+  @media (max-width: 1100px) { .nav { gap: 20px; } }
+
+  /* ---------- Pirmas ekranas ---------- */
+  .hero { background: var(--violet-500); padding: clamp(40px, 6vw, 88px) 0 clamp(48px, 7vw, 88px); }
+  .hero .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  .hero .wrap > * { min-width: 0; }
+  .hero h1 { font-size: clamp(38px, 4.4vw, 62px); margin: 20px 0 24px; }
+  .hero .lead { font-size: clamp(18px, 1.6vw, 21px); max-width: 34em; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; max-width: 540px; margin-top: 48px; }
+  .stat b { display: block; font-family: var(--font-head); font-size: 44px; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat > span { display: block; font-size: 16px; margin-top: 6px; line-height: 1.3; }
+
+  /* Tvarkaraštis */
+  .schedule {
+    background: var(--white);
+    border-radius: var(--radius-panel);
+    padding: clamp(20px, 3vw, 32px);
+  }
+  .schedule-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .schedule-head h2 { font-size: 26px; }
+  .months { display: flex; gap: 6px; }
+  .months button {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-800);
+    background: var(--white);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink-800);
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease;
+  }
+  .months button:hover { background: var(--coral); border-color: var(--coral); }
+  .months button[aria-pressed="true"] { background: var(--ink-800); border-color: var(--ink-800); color: var(--white); }
+  .filters { display: flex; gap: 8px; margin: 18px 0 8px; overflow-x: auto; padding: 4px 2px; }
+  .filters button {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--violet-200);
+    background: var(--white);
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink-800);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .filters button[aria-pressed="true"] { background: var(--violet-500); border-color: var(--violet-500); font-weight: 700; }
+  .events { list-style: none; margin: 0; padding: 0; }
+  .event {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 172px;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid var(--ink-300);
+  }
+  .event:first-child { border-top: 0; }
+  .event-date { font-family: var(--font-head); font-size: 34px; letter-spacing: -0.03em; line-height: 1; min-width: 3.1em; }
+  .event-title { font-weight: 700; font-size: 17px; line-height: 1.3; }
+  .event-meta { font-size: 15px; color: var(--ink-600); display: flex; flex-wrap: wrap; gap: 2px 6px; align-items: center; margin-top: 4px; }
+  .event-meta .pill { height: 26px; padding: 0 10px; font-size: 13px; margin-top: 4px; }
+  .event .btn { width: 172px; }
+  .event-meta .nowrap { white-space: nowrap; }
+  .soldout-badge {
+    background: var(--white);
+    color: var(--coral);
+    box-shadow: inset 0 0 0 2px var(--coral);
+    font-weight: 700;
+    animation: soldout-blink 1.6s ease-in-out infinite;
+  }
+  @keyframes soldout-blink {
+    0%, 100% { opacity: 1; box-shadow: inset 0 0 0 2px var(--coral), 0 0 0 0 rgba(255, 106, 61, 0.45); }
+    50% { opacity: 0.55; box-shadow: inset 0 0 0 2px var(--coral), 0 0 0 5px rgba(255, 106, 61, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .soldout-badge { animation: none; } }
+  .event--soldout .event-date, .event--soldout .event-title { color: var(--ink-600); }
+  .event.is-collapsed { display: none; }
+  .event--soldout .event-date { text-decoration: line-through; text-decoration-thickness: 2px; }
+  .event[hidden] { display: none; }
+  .schedule-more { display: block; margin: 8px auto 0; }
+
+  /* ---------- Kursai ---------- */
+  .courses { background: var(--paper); padding: var(--section) 0; }
+  .course-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+  .course {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .course--bundle { background: var(--violet-400); }
+  .course-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .course h3 { font-size: 26px; line-height: 1.12; }
+  .course .benefit { font-size: 17px; }
+  .course .perks { list-style: none; margin: 0; padding: 0; font-size: 16px; display: grid; gap: 6px; }
+  .course .perks li { padding-left: 26px; position: relative; }
+  .course .perks li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 0.45em;
+    width: 12px;
+    height: 7px;
+    border-left: 2.5px solid var(--ink-800);
+    border-bottom: 2.5px solid var(--ink-800);
+    transform: rotate(-45deg);
+  }
+  .next-date {
+    font-size: 15px;
+    background: var(--violet-100);
+    border-radius: 16px;
+    padding: 12px 16px;
+    line-height: 1.4;
+  }
+  .course--bundle .next-date { background: var(--white); }
+  .next-date b { font-family: var(--font-head); font-size: 18px; letter-spacing: -0.02em; }
+  .next-label { display: block; font-size: 14px; color: var(--ink-600); margin-bottom: 4px; }
+  .next-line { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+  .next-line .pill { height: 26px; padding: 0 10px; font-size: 13px; }
+  .course details { background: var(--fog); border-radius: 18px; padding: 4px 18px; }
+  .course--bundle details { background: var(--violet-100); }
+  summary {
+    cursor: pointer;
+    font-weight: 700;
+    padding: 12px 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-size: 22px; line-height: 1; flex-shrink: 0; }
+  details[open] > summary::after { content: "\2212"; }
+  .course ol { margin: 0 0 14px; padding-left: 22px; font-size: 16px; }
+  .course ol li { margin: 6px 0; }
+  .price { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--ink-300); }
+  .course--bundle .price { border-top-color: var(--ink-800); }
+  .price b { font-family: var(--font-head); font-size: 40px; letter-spacing: -0.03em; }
+  .price small { display: block; font-size: 15px; color: var(--ink-600); }
+  .course--bundle .price small { color: var(--ink-800); }
+  .course-actions { display: grid; gap: 10px; }
+  .link-btn {
+    background: none;
+    border: 0;
+    padding: 6px;
+    font: inherit;
+    font-size: 16px;
+    color: var(--ink-800);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    justify-self: center;
+  }
+  .course-note { margin-top: 24px; font-size: 16px; }
+  .btn--gift .gift-icon { width: 24px; height: 24px; }
+  .course--bundle .btn--gift { background: var(--white); border-color: var(--white); }
+  .btn--gift:hover, .btn--gift:focus-visible,
+  .course--bundle .btn--gift:hover, .course--bundle .btn--gift:focus-visible { background: var(--yellow); border-color: var(--yellow); }
+
+  /* Kortelių eilutės sulygiuotos: žymės, pavadinimas, rezultatas, naudos, data, programa, kaina, veiksmai */
+  @supports (grid-template-rows: subgrid) {
+    .course-grid { row-gap: 0; }
+    .course {
+      display: grid;
+      grid-row: span 8;
+      grid-template-rows: subgrid;
+      row-gap: 16px;
+      align-content: start;
+    }
+    .course details { align-self: start; }
+    .course .next-date { align-self: stretch; }
+    .course .price { margin-top: 0; align-self: end; }
+  }
+
+  /* ---------- Atsiliepimai ---------- */
+  .results { background: var(--violet-500); padding: var(--section) 0; }
+  .results-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
+  .results-head .section-head { margin-bottom: 0; }
+  /* Karuselė: kortelių eilutės sulygiuotos per subgrid */
+  .quote-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 40px) / 3);
+    grid-template-rows: auto auto;
+    column-gap: 20px;
+    row-gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .quote-track::-webkit-scrollbar { display: none; }
+  .quote {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    scroll-snap-align: start;
+  }
+  @supports (grid-template-rows: subgrid) {
+    .quote { grid-row: span 2; display: grid; grid-template-rows: subgrid; row-gap: 20px; }
+  }
+  .quote-head { display: flex; align-items: center; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--ink-300); }
+  .quote-person { min-width: 0; font-size: 15px; color: var(--ink-600); line-height: 1.4; }
+  .quote-person b { display: block; font-family: var(--font-head); font-size: 22px; letter-spacing: -0.02em; line-height: 1.15; color: var(--ink-800); margin-bottom: 4px; }
+  .quote-person a { color: var(--ink-800); font-weight: 700; text-underline-offset: 3px; }
+  .quote blockquote { margin: 0; font-size: 18px; }
+  .draft-flag { display: inline-block; margin-top: 8px; background: var(--yellow); color: var(--ink-800); font-size: 12px; font-weight: 700; border-radius: 6px; padding: 2px 8px; }
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 0 0 4px var(--violet-100);
+  }
+  .avatar img, .avatar svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar--a { background: var(--violet-200); }
+  .avatar--b { background: var(--violet-400); }
+  .avatar--c { background: #FFD2C4; }
+  .sample { margin-top: 20px; font-size: 14px; }
+
+  /* ---------- Verslui ---------- */
+  .business { background: var(--white); padding: var(--section) 0; }
+  .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .service {
+    border-radius: var(--radius-panel);
+    padding: clamp(24px, 3.5vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .service--training { background: var(--violet-400); }
+  .service--build { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink-800); }
+  .service-no { font-family: var(--font-head); font-size: 20px; }
+  .service h3 { font-size: clamp(26px, 2.6vw, 34px); }
+  .service ul { margin: 0; padding-left: 20px; }
+  .service li { margin: 4px 0; }
+  .service .btn { margin-top: auto; align-self: flex-start; }
+  .service-foot { font-size: 15px; margin-top: 16px; }
+  .clients { margin-top: 56px; text-align: center; }
+  .clients-title { font-size: clamp(24px, 2.4vw, 30px); }
+  .clients-list {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px 48px;
+  }
+  .clients-list img { display: block; width: auto; }
+  .case-placeholder {
+    margin: 28px auto 0;
+    max-width: 760px;
+    border: 2px dashed var(--ink-300);
+    border-radius: var(--radius-card);
+    padding: 20px 24px;
+    font-size: 15px;
+    color: var(--ink-600);
+  }
+
+  /* ---------- Vertybės: brandbook 04 psl. ---------- */
+  .values { padding: var(--section) 0; background: var(--paper); }
+  .value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .value {
+    border-radius: var(--radius-card);
+    padding: 24px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .value:nth-child(1) { background: var(--violet-500); }
+  .value:nth-child(2) { background: var(--violet-400); }
+  .value:nth-child(3) { background: var(--coral); }
+  .value:nth-child(4) { background: var(--yellow); }
+  .value-no { font-weight: 700; font-size: 15px; }
+  .value h3 { font-size: 28px; margin-bottom: 10px; }
+  .value p { font-size: 16px; }
+
+  /* ---------- Dovana: kvadratinis rėmas, brandbook 14 psl. ---------- */
+  .gift { background: var(--paper); padding: var(--section) 0; }
+  .frame {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    border: 3px solid var(--ink-800);
+    padding: clamp(48px, 7vw, 80px) clamp(24px, 5vw, 64px);
+    text-align: center;
+  }
+  .frame-band {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--paper);
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    white-space: nowrap;
+  }
+  .frame-band--top { top: -11px; }
+  .frame-band--bottom { bottom: -11px; text-decoration: none; }
+  .frame-band--bottom:hover { text-decoration: underline; }
+  .frame .gift-icon { width: 64px; height: 64px; margin-bottom: 16px; }
+  .frame h2 { font-size: clamp(30px, 3.6vw, 46px); }
+  .frame p { margin: 16px auto 28px; max-width: 32em; font-size: 19px; }
+
+  /* ---------- DUK puslapis ---------- */
+  .faq-page { background: var(--fog); padding: clamp(48px, 7vw, 88px) 0 var(--section); }
+  .faq-page .section-head { margin-bottom: 32px; }
+  .faq-list { display: grid; gap: 12px; max-width: 860px; }
+  .faq-list details { background: var(--white); border-radius: 20px; padding: 4px 24px; }
+  .faq-list summary { font-size: 18px; padding: 16px 0; }
+  .faq-list details p { padding: 0 0 18px; font-size: 17px; max-width: 44em; }
+  .faq-more { margin-top: 24px; font-size: 16px; }
+  .faq-more a { text-decoration: underline; text-underline-offset: 3px; }
+  .back-link { display: inline-block; margin-bottom: 20px; font-size: 16px; text-underline-offset: 4px; }
+  /* ---------- Kontaktai ---------- */
+  .contact { background: var(--violet-500); padding: var(--section) 0; }
+  .contact .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .contact h2 { font-size: clamp(32px, 4vw, 52px); margin-top: 12px; }
+  .contact p { margin-top: 16px; font-size: 19px; max-width: 32em; }
+  .contact-card { background: var(--white); border-radius: var(--radius-panel); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; }
+  .contact-line { display: grid; gap: 2px; }
+  .contact-line span { font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+  .contact-line a { font-size: 20px; text-underline-offset: 4px; }
+
+  /* ---------- Naujienlaiškis ---------- */
+  .newsletter { background: var(--white); padding: clamp(56px, 8vw, 96px) 0; }
+  .newsletter .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .newsletter h2 { font-size: clamp(30px, 3.6vw, 46px); margin-top: 12px; }
+  .newsletter p { margin-top: 14px; }
+  .nl-form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .nl-form input {
+    flex: 1 1 240px;
+    height: 56px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-300);
+    padding: 0 22px;
+    font: inherit;
+    color: var(--ink-800);
+    background: var(--white);
+  }
+  .nl-form input:focus { border-color: var(--ink-800); }
+  .nl-note { width: 100%; font-size: 14px; color: var(--ink-600); }
+
+  /* ---------- Poraštė ---------- */
+  .site-footer { background: var(--violet-500); padding: 64px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; }
+  .site-footer h3 { font-family: var(--font-body); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .site-footer ul { list-style: none; margin: 0; padding: 0; }
+  .site-footer li { margin: 6px 0; }
+  .site-footer a { text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
+  .company { margin-top: 16px; font-size: 15px; line-height: 1.6; }
+  .footer-bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--ink-800);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    font-size: 14px;
+  }
+  .footer-bottom nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-bottom a { text-decoration: underline; text-underline-offset: 3px; }
+  .spaced { letter-spacing: 0.3em; }
+
+  /* ---------- Langai (dialogai) ---------- */
+  .modal {
+    border: 0;
+    border-radius: var(--radius-panel);
+    padding: 0;
+    width: min(620px, calc(100% - 24px));
+    max-height: min(92vh, 900px);
+    color: var(--ink-800);
+    background: var(--white);
+  }
+  .modal[open] { display: flex; flex-direction: column; }
+  .modal::backdrop { background: rgba(36, 29, 43, 0.55); }
+  .modal-body { padding: clamp(24px, 4vw, 36px); overflow-y: auto; }
+  .modal-foot {
+    border-top: 1px solid var(--ink-300);
+    padding: 18px clamp(24px, 4vw, 36px);
+    background: var(--white);
+    display: grid;
+    gap: 12px;
+  }
+  .modal h2 { font-size: clamp(26px, 3vw, 34px); padding-right: 52px; }
+  .modal .lead { margin: 10px 0 22px; }
+  .dialog-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-800);
+    background: var(--white);
+    color: var(--ink-800);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 1;
+  }
+  .modal-title-row { display: flex; align-items: center; gap: 14px; }
+  .modal-title-row .gift-icon { width: 40px; height: 40px; flex-shrink: 0; }
+
+  /* Dovanos sąrašas */
+  .gift-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .gift-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    background: var(--violet-100);
+    border-radius: 20px;
+    padding: 16px 16px 16px 22px;
+  }
+  .gift-row-title { font-weight: 700; line-height: 1.3; }
+  .gift-row-meta { font-size: 14px; color: var(--ink-600); }
+  .gift-row-price { text-align: right; font-family: var(--font-head); font-size: 22px; letter-spacing: -0.02em; white-space: nowrap; }
+  .gift-row-price small { display: block; font-family: var(--font-body); font-size: 13px; letter-spacing: 0; color: var(--ink-600); }
+  .terms-box {
+    margin-top: 18px;
+    background: var(--paper);
+    border-radius: 18px;
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+  .terms-box ul { margin: 6px 0 0; padding-left: 20px; }
+  .terms-box li { margin: 3px 0; }
+
+  /* Pirkimo langas */
+  .segmented { display: inline-flex; background: var(--violet-100); border-radius: var(--radius-pill); padding: 4px; margin: 14px 0 22px; }
+  .segmented button {
+    height: 40px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font: inherit;
+    font-size: 16px;
+    color: var(--ink-800);
+    cursor: pointer;
+  }
+  .segmented button[aria-pressed="true"] { background: var(--white); font-weight: 700; box-shadow: inset 0 0 0 2px var(--ink-800); }
+  .buy-meta { font-size: 16px; color: var(--ink-600); margin-top: 8px; }
+  .field { display: grid; gap: 6px; margin-top: 20px; }
+  .field label, .field legend { font-weight: 700; font-size: 16px; padding: 0; }
+  .field .req { color: var(--ink-800); }
+  .field select, .field input, .field textarea {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 14px;
+    border: 2px solid var(--ink-300);
+    background: var(--white);
+    padding: 12px 16px;
+    font: inherit;
+    font-size: 17px;
+    color: var(--ink-800);
+  }
+  .field textarea { min-height: 110px; resize: vertical; }
+  .field select:focus, .field input:focus, .field textarea:focus { border-color: var(--ink-800); }
+  .hint { font-size: 14px; color: var(--ink-600); }
+  .info-box { margin-top: 20px; background: var(--violet-100); border-radius: 18px; padding: 16px 20px; font-size: 16px; }
+  .info-box b { display: block; margin-bottom: 4px; }
+  .stepper { display: inline-flex; align-items: center; gap: 4px; border: 2px solid var(--ink-300); border-radius: var(--radius-pill); padding: 4px; width: max-content; }
+  .stepper button {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    border: 0;
+    background: var(--violet-100);
+    font: inherit;
+    font-size: 22px;
+    color: var(--ink-800);
+    cursor: pointer;
+  }
+  .stepper output { min-width: 40px; text-align: center; font-weight: 700; }
+  .check { display: flex; gap: 12px; align-items: center; margin-top: 20px; font-size: 16px; cursor: pointer; }
+  .check input { width: 22px; height: 22px; accent-color: var(--ink-800); }
+  .buy-program { margin-top: 20px; border-top: 1px solid var(--ink-300); }
+  .buy-program ol { margin: 0 0 8px; padding-left: 22px; font-size: 16px; }
+  .total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .total span { font-size: 16px; }
+  .total b { font-family: var(--font-head); font-size: 30px; letter-spacing: -0.03em; }
+  .total small { font-size: 14px; color: var(--ink-600); margin-left: 6px; }
+  .foot-note { font-size: 13px; color: var(--ink-600); }
+  .form-error { font-size: 15px; font-weight: 700; color: var(--ink-800); background: var(--yellow); border-radius: 10px; padding: 8px 12px; }
+  .form-error:empty { display: none; }
+  .success { text-align: center; padding: 20px 0; }
+  .success h3 { font-size: 28px; margin-bottom: 10px; }
+
+  /* Užklausos forma */
+  .choice-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice { position: relative; }
+  .choice input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .choice span {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--violet-200);
+    font-size: 16px;
+  }
+  .choice input:checked + span { background: var(--violet-500); border-color: var(--violet-500); font-weight: 700; }
+  .choice input:focus-visible + span { outline: 3px solid var(--ink-800); outline-offset: 2px; }
+  fieldset.field { border: 0; margin: 20px 0 0; padding: 0; min-width: 0; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+  /* ---------- Prisitaikymas prie ekrano ---------- */
+  @media (max-width: 1000px) {
+    .hero .wrap { grid-template-columns: minmax(0, 1fr); }
+    .course-grid { grid-template-columns: minmax(0, 1fr); max-width: 620px; row-gap: 20px; }
+    .quote-track { grid-auto-columns: calc((100% - 20px) / 2); }
+    .value-grid { grid-template-columns: 1fr 1fr; }
+    .newsletter .wrap, .contact .wrap { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 820px) {
+    .menu-btn { display: inline-flex; }
+    .lang { display: none; }
+    .nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: var(--white);
+      padding: 8px var(--gutter) 20px;
+      border-bottom: 2px solid var(--ink-800);
+    }
+    .nav.is-open { display: flex; }
+    .nav a { padding: 14px 0; font-size: 19px; border-bottom: 1px solid var(--ink-300); }
+    .nav-lang { display: flex; gap: 8px; padding-top: 16px; }
+    .nav-lang a { border: 0; padding: 6px 14px; border-radius: var(--radius-pill); font-size: 16px; font-weight: 700; }
+    .nav-lang a[aria-current] { background: var(--violet-200); }
+    .service-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .event { grid-template-columns: auto 1fr; }
+    .event .btn { grid-column: 1 / -1; width: 100%; }
+    .hero-actions .btn { width: 100%; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .btn { white-space: normal; height: auto; min-height: 52px; padding: 12px 22px; text-align: center; line-height: 1.25; }
+    .service .btn { align-self: stretch; }
+    .value-grid { grid-template-columns: 1fr; }
+    .value { min-height: 220px; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .gift-row { grid-template-columns: 1fr auto; }
+    .gift-row .btn { grid-column: 1 / -1; width: 100%; }
+    .clients-list { gap: 18px 28px; }
+    .quote-track { grid-auto-columns: 86%; column-gap: 14px; }
+    .avatar { width: 96px; height: 96px; }
+    .quote-person b { font-size: 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .promo-track, .gift-icon .lid, .gift-icon .box-all, .gift-icon .spark { animation: none; }
+  }
+
+  /* ---------- Slapukų pranešimas ---------- */
+  .cookies {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 50;
+    width: min(440px, calc(100% - 24px));
+    background: var(--white);
+    color: var(--ink-800);
+    border-radius: var(--radius-card);
+    box-shadow: inset 0 0 0 2px var(--ink-800);
+    padding: 24px;
+  }
+  .cookies-head { display: flex; align-items: center; gap: 12px; }
+  .cookies h2 { font-size: 24px; }
+  .cookie-icon { width: 40px; height: 40px; flex-shrink: 0; animation: cookie-wobble 3s ease-in-out infinite; transform-origin: 50% 50%; }
+  @keyframes cookie-wobble {
+    0%, 70%, 100% { transform: rotate(0); }
+    76% { transform: rotate(-12deg); }
+    84% { transform: rotate(10deg); }
+    92% { transform: rotate(-4deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .cookie-icon { animation: none; } }
+  .cookies p { margin-top: 10px; font-size: 16px; }
+  .cookies-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+  .cookies-actions .btn { height: 48px; padding: 0 16px; font-size: 16px; }
+  .cookies-more { margin-top: 12px; font-size: 14px; }
+  .footer-bottom .link-btn { padding: 0; font-size: 14px; }
+  @media (max-width: 560px) {
+    .cookies { right: 12px; bottom: 12px; padding: 20px; }
+  }
+
+  /* ---------- Lektoriai ---------- */
+  .lecturers { background: var(--white); padding: var(--section) 0; }
+  .lecturer-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .lecturer {
+    background: var(--paper);
+    border-radius: var(--radius-card);
+    padding: clamp(24px, 3vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  @supports (grid-template-rows: subgrid) {
+    .lecturer-grid { grid-template-rows: auto auto auto auto; row-gap: 0; }
+    .lecturer { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 20px; }
+  }
+  .lecturer-photo { margin: 0; aspect-ratio: 1 / 1; border-radius: 20px; overflow: hidden; background: var(--violet-200); }
+  .lecturer-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+  .lecturer-info { padding-bottom: 18px; border-bottom: 1px solid var(--ink-300); }
+  .lecturer h3 { font-size: clamp(24px, 2.4vw, 30px); }
+  .lecturer-role { margin-top: 6px; font-size: 16px; color: var(--ink-600); line-height: 1.4; }
+  .lecturer-bio { font-size: 17px; }
+  .lecturer-tags { display: flex; flex-wrap: wrap; gap: 8px; align-self: start; }
+  @media (max-width: 820px) {
+    .lecturer-grid { grid-template-columns: minmax(0, 1fr); }
+    .lecturer { grid-row: auto; display: flex; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Bendros ikonos -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="person" viewBox="0 0 60 60">
+      <circle cx="30" cy="23" r="10" fill="#322838"/>
+      <path d="M11 56c1.5-11 9.5-18 19-18s17.5 7 19 18z" fill="#322838"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="promo" href="2026-09-27-glaubic-maketas.html#dovana" aria-label="Padovanokite mokymus kolegai ar artimajam. Kuponas galioja 6 mėnesius. Pasirinkti dovaną">
+  <span class="promo-track" aria-hidden="true">
+    <span class="promo-group">
+      <span class="promo-item">Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
+      <span class="promo-item">Kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
+      <span class="promo-item">Galioja 6 mėnesius</span><span class="promo-sep">·</span>
+      <span class="promo-item"><svg class="gift-icon" viewBox="0 0 32 32" aria-hidden="true"><g class="box-all"><rect x="5" y="14" width="22" height="15" rx="2" fill="#FFFFFF" stroke="#322838" stroke-width="2"/><rect x="14" y="14" width="4" height="15" fill="#322838"/></g><g class="lid"><rect x="3" y="9" width="26" height="6" rx="2" fill="#FFED00" stroke="#322838" stroke-width="2"/><rect x="14" y="9" width="4" height="6" fill="#322838"/><path d="M16 9c-2.5-4.5-7-5-7.5-2.5S12 9 16 9zm0 0c2.5-4.5 7-5 7.5-2.5S20 9 16 9z" fill="none" stroke="#322838" stroke-width="2" stroke-linejoin="round"/></g><g class="spark" fill="#322838"><circle cx="4" cy="4" r="1.3"/><circle cx="28" cy="3" r="1.3"/><circle cx="16" cy="1" r="1.1"/></g></svg><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
+    </span>
+    <span class="promo-group">
+      <span class="promo-item">Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
+      <span class="promo-item">Kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
+      <span class="promo-item">Galioja 6 mėnesius</span><span class="promo-sep">·</span>
+      <span class="promo-item"><svg class="gift-icon" viewBox="0 0 32 32" aria-hidden="true"><g class="box-all"><rect x="5" y="14" width="22" height="15" rx="2" fill="#FFFFFF" stroke="#322838" stroke-width="2"/><rect x="14" y="14" width="4" height="15" fill="#322838"/></g><g class="lid"><rect x="3" y="9" width="26" height="6" rx="2" fill="#FFED00" stroke="#322838" stroke-width="2"/><rect x="14" y="9" width="4" height="6" fill="#322838"/><path d="M16 9c-2.5-4.5-7-5-7.5-2.5S12 9 16 9zm0 0c2.5-4.5 7-5 7.5-2.5S20 9 16 9z" fill="none" stroke="#322838" stroke-width="2" stroke-linejoin="round"/></g><g class="spark" fill="#322838"><circle cx="4" cy="4" r="1.3"/><circle cx="28" cy="3" r="1.3"/><circle cx="16" cy="1" r="1.1"/></g></svg><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
+    </span>
+  </span>
+</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="2026-09-27-glaubic-maketas.html" aria-label="GLAUBIC pradžia"><svg class="logo-svg" viewBox="8 8 1405 199" height="24" role="img" aria-label="GLAUBIC" focusable="false"><path fill="#322838" fill-rule="evenodd" d="M101.5 206.4C71.9 202.5 56.9 195.7 38.2 177.6C18.0 158.1 8.6 135.7 8.6 107.5C8.6 83.8 14.4 66.3 27.9 48.3C42.1 29.4 61.7 16.3 83.6 10.8C96.3 7.7 117.7 7.7 130.4 10.8C141.1 13.5 155.7 20.2 164.6 26.5C171.9 31.7 182.3 42.0 186.6 48.1L189.5 52.3L187.1 53.9C165.1 69.1 160.2 69.5 145.5 57.6C132.9 47.4 121.0 43.0 106.2 43.0C89.6 43.0 76.2 48.7 63.9 61.0C50.3 74.5 44.3 90.6 45.3 110.9C46.1 128.5 51.7 141.4 63.6 153.4C75.9 165.6 88.8 171.1 107.1 171.8C116.4 172.1 120.2 171.9 126.6 170.2C136.1 167.8 145.8 162.4 152.2 155.8C157.3 150.6 162.7 140.6 163.7 134.7L164.3 131.0L134.3 131.0C104.8 131.0 104.2 131.0 100.9 128.7C95.4 125.0 94.0 121.1 94.0 108.7L94.0 98.0L148.8 98.2L203.5 98.5L203.5 112.5C203.5 127.0 202.4 134.9 198.8 146.0C189.2 175.9 163.2 198.5 131.5 204.5C123.9 205.9 106.4 207.0 101.5 206.4ZM1314.5 205.9C1288.4 203.1 1265.2 190.0 1248.0 168.5C1222.4 136.2 1220.5 86.4 1243.8 52.4C1263.9 22.9 1297.9 6.1 1332.7 8.6C1360.1 10.5 1380.1 19.5 1398.2 38.3C1403.4 43.6 1413.8 58.6 1412.9 59.4C1411.8 60.3 1386.0 70.0 1384.6 70.0C1380.8 70.0 1375.3 66.6 1368.1 59.7C1355.6 48.0 1343.2 43.0 1327.0 43.0C1311.3 43.0 1298.0 48.0 1286.6 58.1C1270.4 72.6 1262.6 93.4 1265.0 115.4C1266.8 131.2 1272.4 142.6 1283.9 154.0C1297.4 167.4 1311.0 172.6 1330.0 171.7C1347.0 170.8 1355.3 167.1 1369.4 154.1C1378.3 145.8 1381.8 144.2 1387.5 145.9C1391.9 147.2 1411.4 155.0 1412.2 155.9C1413.6 157.2 1405.5 169.4 1398.0 177.4C1377.7 198.9 1346.8 209.5 1314.5 205.9ZM738.0 204.5C721.0 200.9 710.3 195.3 698.9 184.0C686.2 171.5 680.5 160.1 677.5 141.5C676.3 134.3 676.0 120.3 676.0 72.2L676.0 12.0L689.4 12.0C701.6 12.0 703.0 12.2 706.1 14.3C713.2 19.0 713.0 17.4 713.0 77.0C713.0 109.5 713.4 133.1 714.1 137.0C715.5 145.6 720.9 156.8 725.9 161.3C734.7 169.2 749.8 174.6 761.0 173.7C776.4 172.5 791.5 163.7 797.1 152.8C802.7 141.9 802.4 144.9 803.0 82.0C803.5 26.1 803.6 23.3 805.5 19.5C808.6 13.2 812.1 12.0 827.2 12.0L840.0 12.0L840.0 75.0C840.0 128.7 839.8 139.2 838.4 145.8C832.6 174.0 813.1 194.9 784.9 203.1C775.3 205.8 748.1 206.7 738.0 204.5ZM265.0 107.5L265.0 12.0L278.4 12.0C290.6 12.0 292.0 12.2 295.1 14.3C302.3 19.1 302.0 15.1 302.0 96.7L302.0 169.9L347.2 170.2C390.3 170.5 392.7 170.6 395.8 172.5C401.1 175.7 403.0 181.0 403.0 192.8L403.0 203.0L334.0 203.0L265.0 203.0L265.0 107.5ZM437.0 202.4C437.0 201.8 447.0 182.2 472.5 132.5C477.6 122.6 487.9 102.3 495.5 87.5C533.1 13.6 534.0 12.0 536.3 12.0C538.1 12.0 539.7 14.4 545.2 25.3C548.9 32.5 558.5 51.3 566.5 67.0C574.6 82.7 587.9 108.8 596.2 125.0C604.5 141.2 616.6 164.9 623.1 177.6C629.7 190.3 635.0 201.3 635.0 201.9C635.0 202.9 631.3 203.1 618.8 202.8C601.2 202.4 599.0 201.8 593.8 196.3C589.0 191.1 562.0 138.8 542.5 96.8C539.2 89.8 536.4 84.3 536.2 84.5C536.0 84.7 529.8 97.6 522.4 113.2C504.0 151.8 482.4 192.5 477.9 197.1C475.6 199.4 472.7 201.1 469.7 201.8C465.0 203.0 437.0 203.5 437.0 202.4ZM912.0 107.5L912.0 11.9L962.2 12.2L1012.5 12.5L1020.6 15.3C1042.8 22.8 1052.7 38.4 1051.8 65.0C1051.5 74.9 1051.1 77.3 1048.7 82.3C1047.3 85.5 1044.6 90.0 1042.9 92.1C1039.6 96.2 1030.8 102.0 1027.8 102.0C1024.4 102.0 1026.1 103.6 1030.8 104.9C1041.2 107.6 1052.7 118.5 1057.0 129.7C1060.1 137.7 1060.8 153.8 1058.6 163.4C1054.2 182.2 1041.5 194.3 1020.1 200.3C1012.9 202.3 1009.8 202.4 962.2 202.8L912.0 203.1L912.0 107.5ZM1136.5 201.8C1132.7 200.5 1130.2 198.3 1128.1 194.5C1126.7 191.8 1126.5 182.9 1126.2 101.7L1125.9 12.0L1139.2 12.0C1154.7 12.0 1158.1 13.2 1161.4 19.6C1163.5 23.4 1163.5 24.7 1163.5 113.0L1163.5 202.5L1151.5 202.7C1144.9 202.8 1138.2 202.4 1136.5 201.8ZM1006.4 168.6C1017.9 165.1 1022.2 159.4 1022.8 147.0C1023.1 140.7 1022.8 138.8 1020.8 135.1C1019.5 132.6 1016.9 129.4 1015.0 127.9C1008.8 122.9 1002.4 122.0 974.3 122.0L949.0 122.0L949.0 146.0L949.0 170.0L975.3 170.0C995.3 170.0 1002.8 169.7 1006.4 168.6ZM1000.3 87.6C1010.6 84.5 1015.2 77.8 1015.1 66.0C1015.0 55.2 1012.0 50.1 1003.5 46.3C1000.1 44.8 995.6 44.5 974.2 44.2L949.0 43.8L949.0 66.4L949.0 89.0L972.3 89.0C989.3 89.0 996.9 88.6 1000.3 87.6Z"/></svg></a>
+    <nav class="nav" id="pagrindinis-meniu" aria-label="Pagrindinis meniu">
+      <a href="2026-09-27-glaubic-maketas.html#kursai">Kursai</a>
+      <a href="2026-09-27-glaubic-maketas.html#verslui">Verslui</a>
+      <a href="2026-09-27-glaubic-maketas.html#apie">Apie</a>
+      <a href="2026-09-27-glaubic-maketas.html#lektoriai">Lektoriai</a>
+      <a href="2026-09-27-glaubic-maketas.html#kontaktai">Kontaktai</a>
+      <div class="nav-lang" aria-label="Kalba"><a href="#" aria-current="true">LT</a><a href="#">EN</a></div>
+    </nav>
+    <div class="lang" aria-label="Kalba">
+      <a href="#" aria-current="true">LT</a>
+      <a href="#">EN</a>
+    </div>
+    <button class="pill menu-btn" type="button" aria-controls="pagrindinis-meniu" aria-expanded="false">Meniu</button>
+  </div>
+</header>
+
+<main>
+  <section class="faq-page" id="duk">
+    <div class="wrap">
+      <a class="back-link" href="2026-09-27-glaubic-maketas.html">Grįžti į pradžią</a>
+      <div class="section-head">
+        <span class="eyebrow">DUK</span>
+        <h2>Dažniausi klausimai</h2>
+        <p>Atsakymai parengti pagal mūsų paslaugų teikimo sąlygas. Neradote atsakymo? Parašykite <a href="mailto:ai@marketyourvisions.lt">ai@marketyourvisions.lt</a>.</p>
+      </div>
+      <div class="faq-list">
+          <details>
+            <summary>Ar galiu pakeisti mokymų datą arba atšaukti registraciją?</summary>
+            <p>Taip. Jei atšaukiate likus 7 ar daugiau dienų iki mokymų, grąžiname pinigus arba perkeliame registraciją į kitą datą. Jei likus mažiau nei 7 dienoms, registraciją perkeliame į kitą datą arba išduodame tos pačios vertės kuponą, o sumokėta suma negrąžinama.</p>
+          </details>
+          <details>
+            <summary>Ką daryti, jei negaliu dalyvauti?</summary>
+            <p>Vietoj savęs galite paskirti kitą asmenį. Tik praneškite mums iš anksto el. paštu ai@marketyourvisions.lt.</p>
+          </details>
+          <details>
+            <summary>Kur tiksliai vyks mokymai?</summary>
+            <p>Mokymai vyksta Vilniuje, Kaune ir Klaipėdoje. Tikslų adresą atsiunčiame el. paštu kartu su registracijos patvirtinimu.</p>
+          </details>
+          <details>
+            <summary>Ar išrašote sąskaitą faktūrą?</summary>
+            <p>Taip. Registruodamiesi pažymėkite, kad reikalinga sąskaita faktūra, ir pateikite įmonės rekvizitus.</p>
+          </details>
+          <details>
+            <summary>Kaip galiu sumokėti ir ar kainos nurodytos su PVM?</summary>
+            <p>Mokama saugiai kortele per Stripe. Svetainėje nurodytos kainos be PVM, PVM taikomas pagal galiojančius teisės aktus.</p>
+          </details>
+          <details id="duk-kuponas">
+            <summary>Kaip veikia dovanų kuponas?</summary>
+            <p>Kuponą gausite el. paštu iškart po apmokėjimo. Jis galioja 6 mėnesius nuo įsigijimo. Gavėjas kuponą panaudoja susisiekęs su mumis ir pasirinkęs mokymų datą. Kuponas į pinigus nekeičiamas.</p>
+          </details>
+          <details>
+            <summary>Kaip suderinamos paketo datos?</summary>
+            <p>Per 24 valandas nuo apmokėjimo susisieksime su jumis ir kartu suderinsime abiejų sesijų datas: 3 val. AI agento ir 3,5 val. Claude mokymų.</p>
+          </details>
+          <details>
+            <summary>Kas bus, jei mokymus atšauksite jūs?</summary>
+            <p>Jei mokymus atšaukiame ar perkeliame dėl nuo mūsų priklausančių priežasčių, pasiūlome kitą datą arba grąžiname visą sumą.</p>
+          </details>
+        </div>
+      <p class="faq-more"><a href="#">Visos paslaugų teikimo sąlygos</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="logo" href="2026-09-27-glaubic-maketas.html" aria-label="GLAUBIC pradžia"><svg class="logo-svg" viewBox="8 8 1405 199" height="28" role="img" aria-label="GLAUBIC" focusable="false"><path fill="#322838" fill-rule="evenodd" d="M101.5 206.4C71.9 202.5 56.9 195.7 38.2 177.6C18.0 158.1 8.6 135.7 8.6 107.5C8.6 83.8 14.4 66.3 27.9 48.3C42.1 29.4 61.7 16.3 83.6 10.8C96.3 7.7 117.7 7.7 130.4 10.8C141.1 13.5 155.7 20.2 164.6 26.5C171.9 31.7 182.3 42.0 186.6 48.1L189.5 52.3L187.1 53.9C165.1 69.1 160.2 69.5 145.5 57.6C132.9 47.4 121.0 43.0 106.2 43.0C89.6 43.0 76.2 48.7 63.9 61.0C50.3 74.5 44.3 90.6 45.3 110.9C46.1 128.5 51.7 141.4 63.6 153.4C75.9 165.6 88.8 171.1 107.1 171.8C116.4 172.1 120.2 171.9 126.6 170.2C136.1 167.8 145.8 162.4 152.2 155.8C157.3 150.6 162.7 140.6 163.7 134.7L164.3 131.0L134.3 131.0C104.8 131.0 104.2 131.0 100.9 128.7C95.4 125.0 94.0 121.1 94.0 108.7L94.0 98.0L148.8 98.2L203.5 98.5L203.5 112.5C203.5 127.0 202.4 134.9 198.8 146.0C189.2 175.9 163.2 198.5 131.5 204.5C123.9 205.9 106.4 207.0 101.5 206.4ZM1314.5 205.9C1288.4 203.1 1265.2 190.0 1248.0 168.5C1222.4 136.2 1220.5 86.4 1243.8 52.4C1263.9 22.9 1297.9 6.1 1332.7 8.6C1360.1 10.5 1380.1 19.5 1398.2 38.3C1403.4 43.6 1413.8 58.6 1412.9 59.4C1411.8 60.3 1386.0 70.0 1384.6 70.0C1380.8 70.0 1375.3 66.6 1368.1 59.7C1355.6 48.0 1343.2 43.0 1327.0 43.0C1311.3 43.0 1298.0 48.0 1286.6 58.1C1270.4 72.6 1262.6 93.4 1265.0 115.4C1266.8 131.2 1272.4 142.6 1283.9 154.0C1297.4 167.4 1311.0 172.6 1330.0 171.7C1347.0 170.8 1355.3 167.1 1369.4 154.1C1378.3 145.8 1381.8 144.2 1387.5 145.9C1391.9 147.2 1411.4 155.0 1412.2 155.9C1413.6 157.2 1405.5 169.4 1398.0 177.4C1377.7 198.9 1346.8 209.5 1314.5 205.9ZM738.0 204.5C721.0 200.9 710.3 195.3 698.9 184.0C686.2 171.5 680.5 160.1 677.5 141.5C676.3 134.3 676.0 120.3 676.0 72.2L676.0 12.0L689.4 12.0C701.6 12.0 703.0 12.2 706.1 14.3C713.2 19.0 713.0 17.4 713.0 77.0C713.0 109.5 713.4 133.1 714.1 137.0C715.5 145.6 720.9 156.8 725.9 161.3C734.7 169.2 749.8 174.6 761.0 173.7C776.4 172.5 791.5 163.7 797.1 152.8C802.7 141.9 802.4 144.9 803.0 82.0C803.5 26.1 803.6 23.3 805.5 19.5C808.6 13.2 812.1 12.0 827.2 12.0L840.0 12.0L840.0 75.0C840.0 128.7 839.8 139.2 838.4 145.8C832.6 174.0 813.1 194.9 784.9 203.1C775.3 205.8 748.1 206.7 738.0 204.5ZM265.0 107.5L265.0 12.0L278.4 12.0C290.6 12.0 292.0 12.2 295.1 14.3C302.3 19.1 302.0 15.1 302.0 96.7L302.0 169.9L347.2 170.2C390.3 170.5 392.7 170.6 395.8 172.5C401.1 175.7 403.0 181.0 403.0 192.8L403.0 203.0L334.0 203.0L265.0 203.0L265.0 107.5ZM437.0 202.4C437.0 201.8 447.0 182.2 472.5 132.5C477.6 122.6 487.9 102.3 495.5 87.5C533.1 13.6 534.0 12.0 536.3 12.0C538.1 12.0 539.7 14.4 545.2 25.3C548.9 32.5 558.5 51.3 566.5 67.0C574.6 82.7 587.9 108.8 596.2 125.0C604.5 141.2 616.6 164.9 623.1 177.6C629.7 190.3 635.0 201.3 635.0 201.9C635.0 202.9 631.3 203.1 618.8 202.8C601.2 202.4 599.0 201.8 593.8 196.3C589.0 191.1 562.0 138.8 542.5 96.8C539.2 89.8 536.4 84.3 536.2 84.5C536.0 84.7 529.8 97.6 522.4 113.2C504.0 151.8 482.4 192.5 477.9 197.1C475.6 199.4 472.7 201.1 469.7 201.8C465.0 203.0 437.0 203.5 437.0 202.4ZM912.0 107.5L912.0 11.9L962.2 12.2L1012.5 12.5L1020.6 15.3C1042.8 22.8 1052.7 38.4 1051.8 65.0C1051.5 74.9 1051.1 77.3 1048.7 82.3C1047.3 85.5 1044.6 90.0 1042.9 92.1C1039.6 96.2 1030.8 102.0 1027.8 102.0C1024.4 102.0 1026.1 103.6 1030.8 104.9C1041.2 107.6 1052.7 118.5 1057.0 129.7C1060.1 137.7 1060.8 153.8 1058.6 163.4C1054.2 182.2 1041.5 194.3 1020.1 200.3C1012.9 202.3 1009.8 202.4 962.2 202.8L912.0 203.1L912.0 107.5ZM1136.5 201.8C1132.7 200.5 1130.2 198.3 1128.1 194.5C1126.7 191.8 1126.5 182.9 1126.2 101.7L1125.9 12.0L1139.2 12.0C1154.7 12.0 1158.1 13.2 1161.4 19.6C1163.5 23.4 1163.5 24.7 1163.5 113.0L1163.5 202.5L1151.5 202.7C1144.9 202.8 1138.2 202.4 1136.5 201.8ZM1006.4 168.6C1017.9 165.1 1022.2 159.4 1022.8 147.0C1023.1 140.7 1022.8 138.8 1020.8 135.1C1019.5 132.6 1016.9 129.4 1015.0 127.9C1008.8 122.9 1002.4 122.0 974.3 122.0L949.0 122.0L949.0 146.0L949.0 170.0L975.3 170.0C995.3 170.0 1002.8 169.7 1006.4 168.6ZM1000.3 87.6C1010.6 84.5 1015.2 77.8 1015.1 66.0C1015.0 55.2 1012.0 50.1 1003.5 46.3C1000.1 44.8 995.6 44.5 974.2 44.2L949.0 43.8L949.0 66.4L949.0 89.0L972.3 89.0C989.3 89.0 996.9 88.6 1000.3 87.6Z"/></svg></a>
+        <p class="company">MB „Glaubic“<br>Įmonės kodas 306622581<br>Raitininkų g. 4-74, Vilnius</p>
+      </div>
+      <div>
+        <h3>Kursai</h3>
+        <ul>
+          <li><a href="2026-09-27-glaubic-maketas.html#kursas-agentas">AI agentas per 3 val.</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#kursas-claude">Claude darbe</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#kursas-paketas">Paketas</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#tvarkarastis">Tvarkaraštis</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#dovanos">Dovanų kuponas</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Įmonė</h3>
+        <ul>
+          <li><a href="2026-09-27-glaubic-maketas.html#verslui">Verslui</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#apie">Apie</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#lektoriai">Lektoriai</a></li>
+          <li><a href="2026-09-27-glaubic-duk.html">DUK</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Kontaktai</h3>
+        <ul>
+          <li><a href="mailto:ai@marketyourvisions.lt">ai@marketyourvisions.lt</a></li>
+          <li><a href="tel:+37062910499">+370 629 10499</a></li>
+          <li><a href="#">Instagram @glaubicai</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MB „Glaubic“</span>
+      <nav aria-label="Teisinė informacija">
+        <a href="https://glaubic.com/privatumo-politika">Privatumo politika</a>
+        <a href="#">Paslaugų teikimo sąlygos</a>
+        <button class="link-btn" type="button" data-cookies-open>Slapukų nustatymai</button>
+      </nav>
+      <span class="spaced">WWW.GLAUBIC.COM</span>
+    </div>
+  </div>
+</footer>
+
+<section class="cookies" id="slapukai" role="dialog" aria-labelledby="cookies-title" aria-describedby="cookies-text" hidden>
+  <div class="cookies-head">
+    <svg class="cookie-icon" viewBox="0 0 40 40" aria-hidden="true">
+      <path d="M20 3a17 17 0 1 0 17 17 5 5 0 0 1-6-5 5 5 0 0 1-5-6 5 5 0 0 1-6-6z" fill="#FFD2A6" stroke="#322838" stroke-width="2.2" stroke-linejoin="round"/>
+      <circle cx="13" cy="15" r="2.3" fill="#322838"/>
+      <circle cx="11.5" cy="25" r="2" fill="#322838"/>
+      <circle cx="20" cy="21" r="2.4" fill="#322838"/>
+      <circle cx="26.5" cy="28" r="2.2" fill="#322838"/>
+      <circle cx="18.5" cy="31" r="1.6" fill="#322838"/>
+      <circle cx="21" cy="11" r="1.5" fill="#322838"/>
+      <circle cx="33" cy="9" r="1.4" fill="#FF6A3D"/>
+      <circle cx="36" cy="14" r="1" fill="#FF6A3D"/>
+    </svg>
+    <h2 id="cookies-title">Naudojame slapukus</h2>
+  </div>
+  <p id="cookies-text">Būtini slapukai užtikrina, kad svetainė veiktų. Analitiniai ir rinkodaros slapukai padeda suprasti, kaip naudojatės svetaine, ir rodyti jums aktualų turinį. Pasirinkimą galite pakeisti bet kada.</p>
+  <div class="cookies-actions">
+    <button class="btn btn--ghost" type="button" data-cookies="necessary">Tik būtini</button>
+    <button class="btn btn--cta" type="button" data-cookies="all">Priimti visus</button>
+  </div>
+  <p class="cookies-more">Daugiau informacijos <a href="https://glaubic.com/privatumo-politika">privatumo politikoje</a>.</p>
+</section>
+
+<script>
+  // ---------- Meniu ----------
+  const menuBtn = document.querySelector('.menu-btn');
+  const mainNav = document.getElementById('pagrindinis-meniu');
+  const setMenu = (open) => {
+    mainNav.classList.toggle('is-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.textContent = open ? 'Uždaryti' : 'Meniu';
+  };
+  menuBtn.addEventListener('click', () => setMenu(!mainNav.classList.contains('is-open')));
+  mainNav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+
+  // ---------- Slapukų pranešimas ----------
+  const cookieBar = document.getElementById('slapukai');
+  const COOKIE_KEY = 'glaubic-slapukai';
+  const readConsent = () => { try { return localStorage.getItem(COOKIE_KEY); } catch (e) { return null; } };
+  const saveConsent = (value) => { try { localStorage.setItem(COOKIE_KEY, value); } catch (e) { /* naršyklė neleidžia saugoti */ } };
+  if (!readConsent()) cookieBar.hidden = false;
+  cookieBar.querySelectorAll('[data-cookies]').forEach((btn) => btn.addEventListener('click', () => {
+    saveConsent(btn.dataset.cookies);
+    cookieBar.hidden = true;
+  }));
+  document.querySelector('[data-cookies-open]').addEventListener('click', () => {
+    cookieBar.hidden = false;
+    cookieBar.querySelector('[data-cookies="necessary"]').focus();
+  });
+</script>
+</body>
+</html>
