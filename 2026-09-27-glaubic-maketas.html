@@ -61,6 +61,7 @@
 
   /* Maketo žymė */
   .mock-note {
+    margin: 0;
     background: var(--ink-800);
     color: var(--white);
     font-size: 14px;
@@ -136,14 +137,9 @@
     gap: 24px;
     height: 80px;
   }
-  .logo {
-    font-family: var(--font-head);
-    font-weight: 700;
-    font-size: 26px;
-    letter-spacing: 0.12em;
-    color: var(--ink-800);
-    text-decoration: none;
-  }
+  .logo { display: inline-flex; align-items: center; text-decoration: none; }
+  .logo img { display: block; height: 24px; width: auto; }
+  .site-footer .logo img { height: 28px; }
   .nav { display: flex; gap: 28px; }
   .nav a { text-decoration: none; font-size: 17px; }
   .nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
@@ -387,15 +383,101 @@
     .value { min-height: 220px; }
     .footer-grid { grid-template-columns: 1fr; }
   }
+
+  /* ---------- Judantis dovanų baneris ---------- */
+  .promo {
+    display: block;
+    background: var(--coral);
+    color: var(--ink-800);
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
+  }
+  .promo-track { display: inline-flex; animation: promo-scroll 38s linear infinite; }
+  .promo:hover .promo-track, .promo:focus-visible .promo-track { animation-play-state: paused; }
+  .promo-group { display: inline-flex; flex-shrink: 0; }
+  .promo-item { padding: 0 28px; }
+  .promo-item b { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .promo-sep { opacity: 0.6; }
+  .promo:focus-visible { outline: 3px solid var(--ink-800); outline-offset: -3px; }
+  @keyframes promo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .promo-track { animation: none; }
+  }
+
+  /* ---------- Dovanos pasirinkimo langas ---------- */
+  .gift-dialog {
+    border: 0;
+    border-radius: var(--radius-panel);
+    padding: clamp(24px, 4vw, 40px);
+    width: min(620px, calc(100% - 32px));
+    color: var(--ink-800);
+    background: var(--white);
+  }
+  .gift-dialog::backdrop { background: rgba(36, 29, 43, 0.55); }
+  .gift-dialog h2 { font-size: clamp(26px, 3vw, 34px); padding-right: 48px; }
+  .gift-dialog > p { margin: 12px 0 24px; }
+  .dialog-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-800);
+    background: var(--white);
+    color: var(--ink-800);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .gift-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .gift-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    background: var(--violet-100);
+    border-radius: 20px;
+    padding: 16px 16px 16px 22px;
+  }
+  .gift-row-title { font-weight: 700; line-height: 1.3; }
+  .gift-row-meta { font-size: 14px; color: var(--ink-600); }
+  .gift-row-price { text-align: right; font-family: var(--font-head); font-size: 22px; letter-spacing: -0.02em; white-space: nowrap; }
+  .gift-row-price small { display: block; font-family: var(--font-body); font-size: 13px; letter-spacing: 0; color: var(--ink-600); }
+  .gift-row .btn { height: 44px; padding: 0 20px; font-size: 16px; }
+  .dialog-note { margin-top: 18px; font-size: 14px; color: var(--ink-600); }
+  @media (max-width: 560px) {
+    .gift-row { grid-template-columns: 1fr auto; }
+    .gift-row .btn { grid-column: 1 / -1; width: 100%; }
+  }
 </style>
 </head>
 <body>
 
-<div class="mock-note">Maketas pagal brandbook'ą. Tvarkaraščio datos ir miestai yra pavyzdiniai.</div>
+<a class="promo" href="#dovana" data-gift aria-label="Padovanokite mokymus kolegai ar artimajam. Pasirinkti dovaną">
+  <span class="promo-track" aria-hidden="true">
+    <span class="promo-group">
+      <span class="promo-item">Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
+      <span class="promo-item">Dovanų kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
+      <span class="promo-item">Gavėjas pats pasirinks datą ir miestą</span><span class="promo-sep">·</span>
+      <span class="promo-item"><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
+    </span>
+    <span class="promo-group">
+      <span class="promo-item">Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
+      <span class="promo-item">Dovanų kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
+      <span class="promo-item">Gavėjas pats pasirinks datą ir miestą</span><span class="promo-sep">·</span>
+      <span class="promo-item"><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
+    </span>
+  </span>
+</a>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="#" aria-label="GLAUBIC pradžia">GLAUBIC</a>
+    <a class="logo" href="#" aria-label="GLAUBIC pradžia"><img src="assets/2026-09-27-glaubic-logotipas.svg" alt="GLAUBIC" width="169" height="24"></a>
     <nav class="nav" aria-label="Pagrindinis meniu">
       <a href="#mokymai">Mokymai</a>
       <a href="#keliai">Verslui</a>
@@ -529,7 +611,7 @@
           </div>
           <div class="course-actions">
             <a class="btn btn--cta btn--block" href="#tvarkarastis">Pasirinkti datą</a>
-            <a class="link" href="#">Padovanoti kuponą</a>
+            <a class="link" href="#dovana" data-gift>Padovanoti kuponą</a>
           </div>
         </article>
 
@@ -558,7 +640,7 @@
           </div>
           <div class="course-actions">
             <a class="btn btn--cta btn--block" href="#tvarkarastis">Pasirinkti datą</a>
-            <a class="link" href="#">Padovanoti kuponą</a>
+            <a class="link" href="#dovana" data-gift>Padovanoti kuponą</a>
           </div>
         </article>
 
@@ -585,7 +667,7 @@
           </div>
           <div class="course-actions">
             <a class="btn btn--cta btn--block" href="#">Suderinti datas</a>
-            <a class="link" href="#">Padovanoti kuponą</a>
+            <a class="link" href="#dovana" data-gift>Padovanoti kuponą</a>
           </div>
         </article>
       </div>
@@ -639,7 +721,7 @@
         <span class="frame-band frame-band--top">DOVANA</span>
         <h2>Padovanokite mokymus kolegai ar artimajam</h2>
         <p>Parengsime asmeninį dovanų kuponą. Gavėjas pats pasirinks mokymus, datą ir miestą.</p>
-        <a class="btn btn--cta" href="#">Užsakyti kuponą</a>
+        <a class="btn btn--cta" href="#dovana" data-gift>Pasirinkti dovaną</a>
         <a class="frame-band frame-band--bottom" href="#">KAIP TAI VEIKIA</a>
       </div>
     </div>
@@ -666,12 +748,12 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a class="logo" href="#">GLAUBIC</a>
+        <a class="logo" href="#" aria-label="GLAUBIC pradžia"><img src="assets/2026-09-27-glaubic-logotipas.svg" alt="GLAUBIC" width="198" height="28"></a>
         <p style="margin-top:14px;max-width:22em">Praktiniai AI mokymai Vilniuje, Kaune ir Klaipėdoje.</p>
       </div>
       <div>
         <h3>Mokymai</h3>
-        <ul><li><a href="#kursas-agentas">AI agentas per 3 val.</a></li><li><a href="#kursas-claude">Claude darbe</a></li><li><a href="#tvarkarastis">Tvarkaraštis</a></li><li><a href="#">Dovanų kuponas</a></li></ul>
+        <ul><li><a href="#kursas-agentas">AI agentas per 3 val.</a></li><li><a href="#kursas-claude">Claude darbe</a></li><li><a href="#tvarkarastis">Tvarkaraštis</a></li><li><a href="#dovana" data-gift>Dovanų kuponas</a></li></ul>
       </div>
       <div>
         <h3>Įmonė</h3>
@@ -689,7 +771,40 @@
   </div>
 </footer>
 
+<dialog class="gift-dialog" id="dovana" aria-labelledby="gift-title">
+  <button class="dialog-close" type="button" aria-label="Uždaryti" data-close>×</button>
+  <h2 id="gift-title">Ką norite padovanoti?</h2>
+  <p>Pasirinkite mokymus. Dovanų kuponą gausite el. paštu iškart po apmokėjimo.</p>
+  <ul class="gift-list">
+    <li class="gift-row">
+      <div><div class="gift-row-title">Susikurkite AI agentą per 3 val.</div><div class="gift-row-meta">3 val. · gyvi mokymai</div></div>
+      <div class="gift-row-price">175,45 €<small>145 € be PVM</small></div>
+      <a class="btn btn--cta" href="#">Dovanoti</a>
+    </li>
+    <li class="gift-row">
+      <div><div class="gift-row-title">Claude darbe ir kasdienėse užduotyse</div><div class="gift-row-meta">3,5 val. · gyvi mokymai</div></div>
+      <div class="gift-row-price">199,65 €<small>165 € be PVM</small></div>
+      <a class="btn btn--cta" href="#">Dovanoti</a>
+    </li>
+    <li class="gift-row">
+      <div><div class="gift-row-title">AI agentai ir Claude kartu</div><div class="gift-row-meta">2 sesijos po 3 val.</div></div>
+      <div class="gift-row-price">332,75 €<small>275 € be PVM</small></div>
+      <a class="btn btn--cta" href="#">Dovanoti</a>
+    </li>
+  </ul>
+  <p class="dialog-note">Kuponą gavėjas galės panaudoti pasirinkdamas datą ir miestą tvarkaraštyje.</p>
+</dialog>
+
+<p class="mock-note">Maketas pagal brandbook'ą. Tvarkaraščio datos, miestai ir atsiliepimai yra pavyzdiniai.</p>
+
 <script>
+  // Dovanos pasirinkimo langas
+  const giftDialog = document.getElementById('dovana');
+  const openGift = (e) => { if (e) e.preventDefault(); if (!giftDialog.open) giftDialog.showModal(); };
+  document.querySelectorAll('[data-gift]').forEach((el) => el.addEventListener('click', openGift));
+  giftDialog.querySelector('[data-close]').addEventListener('click', () => giftDialog.close());
+  giftDialog.addEventListener('click', (e) => { if (e.target === giftDialog) giftDialog.close(); });
+  if (location.hash === '#dovana') openGift();
   // Tvarkaraščio filtras pagal miestą
   const filterButtons = document.querySelectorAll('.filters [data-city]');
   const events = document.querySelectorAll('.events .event');
