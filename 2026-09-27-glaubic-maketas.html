@@ -777,6 +777,29 @@
     html { scroll-behavior: auto; }
     .promo-track, .gift-icon .lid, .gift-icon .box-all, .gift-icon .spark { animation: none; }
   }
+
+  /* ---------- Slapukų pranešimas ---------- */
+  .cookies {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 50;
+    width: min(440px, calc(100% - 24px));
+    background: var(--white);
+    color: var(--ink-800);
+    border-radius: var(--radius-card);
+    box-shadow: inset 0 0 0 2px var(--ink-800);
+    padding: 24px;
+  }
+  .cookies h2 { font-size: 24px; }
+  .cookies p { margin-top: 10px; font-size: 16px; }
+  .cookies-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+  .cookies-actions .btn { height: 48px; padding: 0 16px; font-size: 16px; }
+  .cookies-more { margin-top: 12px; font-size: 14px; }
+  .footer-bottom .link-btn { padding: 0; font-size: 14px; }
+  @media (max-width: 560px) {
+    .cookies { left: 12px; bottom: 12px; padding: 20px; }
+  }
 </style>
 </head>
 <body>
@@ -1221,6 +1244,7 @@
       <nav aria-label="Teisinė informacija">
         <a href="https://glaubic.com/privatumo-politika">Privatumo politika</a>
         <a href="#">Paslaugų teikimo sąlygos</a>
+        <button class="link-btn" type="button" data-cookies-open>Slapukų nustatymai</button>
       </nav>
       <span class="spaced">WWW.GLAUBIC.COM</span>
     </div>
@@ -1360,6 +1384,16 @@
     </div>
   </form>
 </dialog>
+
+<section class="cookies" id="slapukai" role="dialog" aria-labelledby="cookies-title" aria-describedby="cookies-text" hidden>
+  <h2 id="cookies-title">Naudojame slapukus</h2>
+  <p id="cookies-text">Būtini slapukai užtikrina, kad svetainė veiktų. Analitiniai ir rinkodaros slapukai padeda suprasti, kaip naudojatės svetaine, ir rodyti jums aktualų turinį. Pasirinkimą galite pakeisti bet kada.</p>
+  <div class="cookies-actions">
+    <button class="btn btn--ghost" type="button" data-cookies="necessary">Tik būtini</button>
+    <button class="btn btn--cta" type="button" data-cookies="all">Priimti visus</button>
+  </div>
+  <p class="cookies-more">Daugiau informacijos <a href="https://glaubic.com/privatumo-politika">privatumo politikoje</a>.</p>
+</section>
 
 <p class="mock-note">Maketas pagal brandbook'ą. Tvarkaraščio datos, vietų skaičius ir atsiliepimai yra pavyzdiniai.</p>
 
@@ -1649,6 +1683,21 @@
   track.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') { e.preventDefault(); slide(1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); slide(-1); }
+  });
+
+  // ---------- Slapukų pranešimas ----------
+  const cookieBar = document.getElementById('slapukai');
+  const COOKIE_KEY = 'glaubic-slapukai';
+  const readConsent = () => { try { return localStorage.getItem(COOKIE_KEY); } catch (e) { return null; } };
+  const saveConsent = (value) => { try { localStorage.setItem(COOKIE_KEY, value); } catch (e) { /* naršyklė neleidžia saugoti */ } };
+  if (!readConsent()) cookieBar.hidden = false;
+  cookieBar.querySelectorAll('[data-cookies]').forEach((btn) => btn.addEventListener('click', () => {
+    saveConsent(btn.dataset.cookies);
+    cookieBar.hidden = true;
+  }));
+  document.querySelector('[data-cookies-open]').addEventListener('click', () => {
+    cookieBar.hidden = false;
+    cookieBar.querySelector('[data-cookies="necessary"]').focus();
   });
 </script>
 </body>
