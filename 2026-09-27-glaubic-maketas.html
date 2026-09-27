@@ -160,7 +160,7 @@
   .hero .lead { font-size: clamp(18px, 1.6vw, 21px); max-width: 34em; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
   .stats { display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 56px); margin-top: 48px; }
-  .stat b { display: block; font-family: var(--font-head); font-size: 44px; letter-spacing: -0.03em; line-height: 1; }
+  .stat b { display: block; font-family: var(--font-head); font-size: 44px; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
   .stat span { font-size: 16px; }
 
   /* Tvarkaraščio panelė */
@@ -505,8 +505,8 @@
           <a class="btn btn--ghost" href="#keliai">Mokymai komandai</a>
         </div>
         <div class="stats">
-          <div class="stat"><b>250+</b><span>dalyvių</span></div>
-          <div class="stat"><b>100+</b><span>valandų mokymų</span></div>
+          <div class="stat"><b><span data-count="750">750</span>+</b><span>dalyvių</span></div>
+          <div class="stat"><b><span data-count="650">650</span>+</b><span>valandų mokymų</span></div>
           <div class="stat"><b>3</b><span>miestai</span></div>
         </div>
       </div>
@@ -805,6 +805,34 @@
   giftDialog.querySelector('[data-close]').addEventListener('click', () => giftDialog.close());
   giftDialog.addEventListener('click', (e) => { if (e.target === giftDialog) giftDialog.close(); });
   if (location.hash === '#dovana') openGift();
+  // Skaičiai kyla nuo nulio iki tikrosios reikšmės, kai tampa matomi
+  const counters = document.querySelectorAll('[data-count]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const runCounter = (el) => {
+    const target = Number(el.dataset.count);
+    const duration = 1800;
+    const start = performance.now();
+    const step = (now) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(target * eased);
+      if (t < 1) requestAnimationFrame(step);
+    };
+    el.textContent = '0';
+    requestAnimationFrame(step);
+  };
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          runCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    counters.forEach((el) => observer.observe(el));
+  }
+
   // Tvarkaraščio filtras pagal miestą
   const filterButtons = document.querySelectorAll('.filters [data-city]');
   const events = document.querySelectorAll('.events .event');
