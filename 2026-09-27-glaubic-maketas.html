@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GLAUBIC maketas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<style>
+  /* Spalvos pagal GLAUBIC Brandbook 2026, 09–11 psl. */
+  :root {
+    --violet-100: #ECEEFB;
+    --violet-200: #D3D7F4;
+    --violet-300: #B8BDEE;
+    --violet-400: #A9ADEC;
+    --violet-500: #9AA2E6;
+    --violet-600: #8B93E2;
+    --violet-700: #7079CF;
+    --coral: #FF6A3D;
+    --yellow: #FFED00;
+    --ink-900: #241D2B;
+    --ink-800: #322838;
+    --ink-600: #6B6072;
+    --ink-300: #CBC4D0;
+    --paper: #F5F5F3;
+    --white: #FFFFFF;
+    --fog: linear-gradient(160deg, #FCFCFF 0%, #F2F3FB 50%, #E6E9F7 100%);
+
+    --font-head: "Manrope", system-ui, sans-serif;
+    --font-body: "Hanken Grotesk", system-ui, sans-serif;
+
+    --radius-panel: 28px;
+    --radius-card: 24px;
+    --radius-pill: 999px;
+    --wrap: 1200px;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--white);
+    color: var(--ink-800);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0;
+  }
+  p { margin: 0; }
+  a { color: inherit; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* Maketo žymė */
+  .mock-note {
+    background: var(--ink-800);
+    color: var(--white);
+    font-size: 14px;
+    text-align: center;
+    padding: 8px var(--gutter);
+  }
+
+  /* Kapsulės: brandbook 14–15 psl. */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: var(--radius-pill);
+    background: var(--white);
+    color: var(--ink-800);
+    font-size: 16px;
+    white-space: nowrap;
+    border: 0;
+    font-family: var(--font-body);
+  }
+  .pill--sm { height: 32px; padding: 0 14px; font-size: 14px; }
+  .pill--violet { background: var(--violet-200); }
+  .pill--coral { background: var(--coral); }
+  .pill--yellow { background: var(--yellow); }
+
+  /* Mygtukai: CTA koralinis, tekstas rašalo tonu */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 28px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 18px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  .btn--cta { background: var(--coral); color: var(--ink-800); }
+  .btn--cta:hover { background: #FF7E57; }
+  .btn--ghost { background: transparent; color: var(--ink-800); border-color: var(--ink-800); }
+  .btn--ghost:hover { background: rgba(50, 40, 56, 0.06); }
+  .btn--block { width: 100%; }
+  .btn:focus-visible, .pill:focus-visible, a:focus-visible, summary:focus-visible {
+    outline: 3px solid var(--ink-800);
+    outline-offset: 3px;
+  }
+
+  /* Pabraukta paantraštė: brandbook 13 psl. */
+  .underlined {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 6px;
+  }
+  .eyebrow {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Antraštė ---------- */
+  .site-header { background: var(--violet-500); }
+  .site-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 80px;
+  }
+  .logo {
+    font-family: var(--font-head);
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 0.12em;
+    color: var(--ink-800);
+    text-decoration: none;
+  }
+  .nav { display: flex; gap: 28px; }
+  .nav a { text-decoration: none; font-size: 17px; }
+  .nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+  .lang { display: flex; gap: 4px; font-size: 15px; font-weight: 700; }
+  .lang a { text-decoration: none; padding: 6px 10px; border-radius: var(--radius-pill); }
+  .lang a[aria-current] { background: var(--white); }
+  .menu-btn { display: none; }
+
+  /* ---------- Pirmas ekranas ---------- */
+  .hero { background: var(--violet-500); padding: clamp(40px, 7vw, 96px) 0 clamp(48px, 7vw, 88px); }
+  .hero .wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  .hero h1 { font-size: clamp(38px, 4.4vw, 62px); margin: 20px 0 24px; }
+  .hero .lead { font-size: clamp(18px, 1.6vw, 21px); max-width: 34em; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+  .stats { display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 56px); margin-top: 48px; }
+  .stat b { display: block; font-family: var(--font-head); font-size: 44px; letter-spacing: -0.03em; line-height: 1; }
+  .stat span { font-size: 16px; }
+
+  /* Tvarkaraščio panelė */
+  .schedule {
+    background: var(--white);
+    border-radius: var(--radius-panel);
+    padding: clamp(20px, 3vw, 32px);
+  }
+  .schedule-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .schedule-head h2 { font-size: 26px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
+  .filters .pill { cursor: pointer; background: var(--violet-100); }
+  .filters .pill[aria-pressed="true"] { background: var(--violet-500); font-weight: 700; }
+  .events { list-style: none; margin: 0; padding: 0; }
+  .event {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 18px;
+    align-items: center;
+    padding: 18px 0;
+    border-top: 1px solid var(--ink-300);
+  }
+  .event:first-child { border-top: 0; }
+  .event-date { font-family: var(--font-head); font-size: 34px; letter-spacing: -0.03em; line-height: 1; min-width: 3.1em; }
+  .event-title { font-weight: 700; }
+  .event-meta { font-size: 15px; color: var(--ink-600); }
+  .event .btn { height: 44px; padding: 0 18px; font-size: 16px; white-space: nowrap; }
+  .event-title { font-size: 17px; line-height: 1.3; }
+  .event[hidden] { display: none; }
+  .schedule-foot { margin-top: 12px; font-size: 15px; }
+
+  /* ---------- Du keliai ---------- */
+  .paths { padding: clamp(56px, 8vw, 104px) 0; background: var(--white); }
+  .section-head { max-width: 760px; margin-bottom: 40px; }
+  .section-head h2 { font-size: clamp(32px, 4vw, 52px); margin-top: 12px; }
+  .section-head p { margin-top: 16px; font-size: 19px; }
+  .paths-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .path {
+    border-radius: var(--radius-panel);
+    padding: clamp(24px, 3.5vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .path--open { background: var(--violet-400); }
+  .path--biz { background: var(--paper); border: 2px solid var(--ink-800); }
+  .path h3 { font-size: clamp(26px, 2.6vw, 34px); }
+  .path ul { margin: 0; padding-left: 20px; }
+  .path li { margin: 4px 0; }
+  .path .btn { margin-top: auto; align-self: flex-start; }
+
+  /* ---------- Kursai ---------- */
+  .courses { background: var(--paper); padding: clamp(56px, 8vw, 104px) 0; }
+  .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+  .course {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .course--bundle { background: var(--violet-400); }
+  .course-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .course h3 { font-size: 26px; line-height: 1.12; }
+  .course .benefit { font-size: 17px; }
+  .course details {
+    background: var(--fog);
+    border-radius: 18px;
+    padding: 4px 18px;
+  }
+  .course--bundle details { background: var(--violet-100); }
+  .course summary {
+    cursor: pointer;
+    font-weight: 700;
+    padding: 12px 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+  }
+  .course summary::-webkit-details-marker { display: none; }
+  .course summary::after { content: "+"; font-size: 22px; line-height: 1; }
+  .course details[open] summary::after { content: "\2212"; }
+  .course ol { margin: 0 0 14px; padding-left: 22px; font-size: 16px; }
+  .course ol li { margin: 6px 0; }
+  .price { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--ink-300); }
+  .course--bundle .price { border-top-color: var(--ink-800); }
+  .price b { font-family: var(--font-head); font-size: 40px; letter-spacing: -0.03em; }
+  .price small { display: block; font-size: 15px; color: var(--ink-600); }
+  .course--bundle .price small { color: var(--ink-800); }
+  .course-actions { display: grid; gap: 10px; }
+  .course-actions a.link { text-align: center; font-size: 16px; }
+
+  @media (max-width: 1000px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .course-grid { grid-template-columns: 1fr; max-width: 620px; }
+    .nav { display: none; }
+    .menu-btn { display: inline-flex; }
+  }
+  @media (max-width: 720px) {
+    .paths-grid { grid-template-columns: 1fr; }
+    .lang { display: none; }
+    .event { grid-template-columns: auto 1fr; }
+    .event .btn { grid-column: 1 / -1; width: 100%; }
+    .hero-actions .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mock-note">Maketas pagal brandbook'ą. Tvarkaraščio datos ir miestai yra pavyzdiniai.</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="GLAUBIC pradžia">GLAUBIC</a>
+    <nav class="nav" aria-label="Pagrindinis meniu">
+      <a href="#mokymai">Mokymai</a>
+      <a href="#keliai">Verslui</a>
+      <a href="#">Apie</a>
+      <a href="#">Lektoriai</a>
+      <a href="#">Kontaktai</a>
+    </nav>
+    <div class="lang" aria-label="Kalba">
+      <a href="#" aria-current="true">LT</a>
+      <a href="#">EN</a>
+    </div>
+    <button class="pill menu-btn" type="button" aria-label="Atidaryti meniu">Meniu</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="pill pill--sm">Gyvi mokymai Vilniuje, Kaune ir Klaipėdoje</span>
+        <h1>Praktiniai AI mokymai, po kurių kitą dieną dirbsite lengviau</h1>
+        <p class="lead">3–3,5 val. gyvi Claude ir AI agentų mokymai mažose grupėse. Išeisite ne su teorija, o su paruoštu darbo srautu savo užduotims.</p>
+        <div class="hero-actions">
+          <a class="btn btn--cta" href="#tvarkarastis">Pasirinkti datą</a>
+          <a class="btn btn--ghost" href="#keliai">Mokymai komandai</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>250+</b><span>dalyvių</span></div>
+          <div class="stat"><b>100+</b><span>valandų mokymų</span></div>
+          <div class="stat"><b>3</b><span>miestai</span></div>
+        </div>
+      </div>
+
+      <aside class="schedule" id="tvarkarastis" aria-labelledby="schedule-title">
+        <div class="schedule-head">
+          <h2 id="schedule-title">Artimiausi mokymai</h2>
+          <span class="event-meta">Rugsėjis ir spalis</span>
+        </div>
+        <div class="filters" role="group" aria-label="Filtruoti pagal miestą">
+          <button class="pill pill--sm" type="button" data-city="visi" aria-pressed="true">Visi miestai</button>
+          <button class="pill pill--sm" type="button" data-city="vilnius" aria-pressed="false">Vilnius</button>
+          <button class="pill pill--sm" type="button" data-city="kaunas" aria-pressed="false">Kaunas</button>
+          <button class="pill pill--sm" type="button" data-city="klaipeda" aria-pressed="false">Klaipėda</button>
+        </div>
+        <ul class="events">
+          <li class="event" data-city="vilnius">
+            <span class="event-date">09.29</span>
+            <div><div class="event-title">Claude darbe ir kasdienėse užduotyse</div><div class="event-meta">Vilnius · 3,5 val.</div></div>
+            <a class="btn btn--ghost" href="#kursas-claude">Įsigyti bilietą</a>
+          </li>
+          <li class="event" data-city="kaunas">
+            <span class="event-date">09.30</span>
+            <div><div class="event-title">Claude darbe ir kasdienėse užduotyse</div><div class="event-meta">Kaunas · 3,5 val.</div></div>
+            <a class="btn btn--ghost" href="#kursas-claude">Įsigyti bilietą</a>
+          </li>
+          <li class="event" data-city="klaipeda">
+            <span class="event-date">10.08</span>
+            <div><div class="event-title">Susikurkite AI agentą per 3 val.</div><div class="event-meta">Klaipėda · 3 val.</div></div>
+            <a class="btn btn--ghost" href="#kursas-agentas">Įsigyti bilietą</a>
+          </li>
+          <li class="event" data-city="vilnius">
+            <span class="event-date">10.15</span>
+            <div><div class="event-title">Susikurkite AI agentą per 3 val.</div><div class="event-meta">Vilnius · 3 val.</div></div>
+            <a class="btn btn--ghost" href="#kursas-agentas">Įsigyti bilietą</a>
+          </li>
+        </ul>
+        <p class="schedule-foot"><a href="#">Visas tvarkaraštis</a></p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="paths" id="keliai">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kaip mokomės</span>
+        <h2>Vienas žmogus ar visa komanda</h2>
+      </div>
+      <div class="paths-grid">
+        <article class="path path--open">
+          <span class="eyebrow">Atviri mokymai</span>
+          <h3>Ateikite į grupę savo mieste</h3>
+          <ul>
+            <li>Fiksuota kaina ir data, bilietą įsigysite internetu</li>
+            <li>Dirbate su savo užduotimis ir failais</li>
+            <li>Pagalba ir po mokymų</li>
+          </ul>
+          <a class="btn btn--ghost" href="#mokymai">Žiūrėti mokymus</a>
+        </article>
+        <article class="path path--biz">
+          <span class="eyebrow">Mokymai komandoms</span>
+          <h3>Pritaikome jūsų įmonės procesams</h3>
+          <ul>
+            <li>Jūsų biure arba nuotoliu</li>
+            <li>Programa pagal jūsų komandos užduotis</li>
+            <li>Pasiūlymą atsiųsime per 8 darbo valandas</li>
+          </ul>
+          <a class="btn btn--ghost" href="#">Gauti pasiūlymą</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="courses" id="mokymai">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Mokymai</span>
+        <h2>Pasirinkite mokymus pagal savo kasdienes užduotis</h2>
+      </div>
+
+      <div class="course-grid">
+        <article class="course" id="kursas-agentas">
+          <div class="course-tags">
+            <span class="pill pill--sm pill--violet">Pradedantiesiems</span>
+            <span class="pill pill--sm pill--violet">3 val.</span>
+          </div>
+          <h3>Susikurkite AI agentą per 3 val.</h3>
+          <p class="benefit">Be programavimo susikursite agentą, kuris skaito, rūšiuoja ir atsako į jūsų el. laiškus Gmail arba Outlook pašte.</p>
+          <details>
+            <summary>Programa, 5 moduliai</summary>
+            <ol>
+              <li>Kaip veikia AI agentai ir kur jie taupo laiką</li>
+              <li>Pašto sujungimas su Gmail ar Outlook be programavimo</li>
+              <li>Laiškų skaitymas, supratimas ir rūšiavimas</li>
+              <li>Atsakymai jūsų tonu ir stiliumi</li>
+              <li>Agento paleidimas su jūsų verslo scenarijais</li>
+            </ol>
+          </details>
+          <div class="price">
+            <b>175,45 €</b>
+            <small>su PVM · 145 € be PVM</small>
+          </div>
+          <div class="course-actions">
+            <a class="btn btn--cta btn--block" href="#tvarkarastis">Pasirinkti datą</a>
+            <a class="link" href="#">Padovanoti kuponą</a>
+          </div>
+        </article>
+
+        <article class="course" id="kursas-claude">
+          <div class="course-tags">
+            <span class="pill pill--sm pill--violet">Pradedantiesiems</span>
+            <span class="pill pill--sm pill--violet">3,5 val.</span>
+          </div>
+          <h3>Claude darbe ir kasdienėse užduotyse</h3>
+          <p class="benefit">Pasiūlymus, ataskaitas ir pristatymus paruošite per minutes, naudodami įrankius, su kuriais jau dirbate.</p>
+          <details>
+            <summary>Programa, 7 moduliai</summary>
+            <ol>
+              <li>Claude Chat ir Claude Cowork pagrindai</li>
+              <li>Interaktyvios aplikacijos ir vizualai (Artifacts)</li>
+              <li>Dokumentai: pasiūlymai, ataskaitos, lentelės</li>
+              <li>Failų, PDF ir duomenų analizė</li>
+              <li>Interneto paieška ir darbo šablonai (Skills)</li>
+              <li>Sujungimas su Canva, Gmail, Google Drive, Slack, Notion, Figma, Miro ir Jira</li>
+              <li>Pasikartojančių užduočių automatizavimas</li>
+            </ol>
+          </details>
+          <div class="price">
+            <b>199,65 €</b>
+            <small>su PVM · 165 € be PVM</small>
+          </div>
+          <div class="course-actions">
+            <a class="btn btn--cta btn--block" href="#tvarkarastis">Pasirinkti datą</a>
+            <a class="link" href="#">Padovanoti kuponą</a>
+          </div>
+        </article>
+
+        <article class="course course--bundle">
+          <div class="course-tags">
+            <span class="pill pill--sm">Abu mokymai</span>
+            <span class="pill pill--sm pill--yellow">Sutaupote 35 € be PVM</span>
+          </div>
+          <h3>AI agentai ir Claude kartu</h3>
+          <p class="benefit">Dvi sesijos po 3 val. Abiejų mokymų programa, o datas suderiname pagal jūsų kalendorių.</p>
+          <details>
+            <summary>Kas įeina</summary>
+            <ol>
+              <li>Visi AI agento mokymų moduliai</li>
+              <li>Visi Claude mokymų moduliai</li>
+              <li>Agentas, atsakantis į el. laiškus</li>
+              <li>Interaktyvios aplikacijos ir vizualai</li>
+              <li>Sujungimas su jūsų darbo įrankiais</li>
+            </ol>
+          </details>
+          <div class="price">
+            <b>332,75 €</b>
+            <small>su PVM · 275 € be PVM</small>
+          </div>
+          <div class="course-actions">
+            <a class="btn btn--cta btn--block" href="#">Suderinti datas</a>
+            <a class="link" href="#">Padovanoti kuponą</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Tvarkaraščio filtras pagal miestą
+  const filterButtons = document.querySelectorAll('.filters [data-city]');
+  const events = document.querySelectorAll('.events .event');
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const city = btn.dataset.city;
+      filterButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      events.forEach((ev) => { ev.hidden = city !== 'visi' && ev.dataset.city !== city; });
+    });
+  });
+</script>
+</body>
+</html>
