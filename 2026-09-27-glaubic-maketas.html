@@ -119,7 +119,9 @@
   .btn--cta { background: var(--coral); color: var(--ink-800); }
   .btn--cta:hover { background: #FF7E57; }
   .btn--ghost { background: transparent; color: var(--ink-800); border-color: var(--ink-800); }
-  .btn--ghost:hover { background: rgba(50, 40, 56, 0.06); }
+  .btn--ghost:hover, .btn--ghost:focus-visible { background: var(--coral); border-color: var(--coral); }
+  .btn--ghost:active, .btn--cta:active { transform: translateY(1px); }
+  .btn { transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.1s ease; }
   .btn--sm { height: 44px; padding: 0 18px; font-size: 16px; }
   .btn--block { width: 100%; }
   :where(a, button, summary, input, select, textarea):focus-visible {
