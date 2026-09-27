@@ -218,9 +218,9 @@
   .hero h1 { font-size: clamp(38px, 4.4vw, 62px); margin: 20px 0 24px; }
   .hero .lead { font-size: clamp(18px, 1.6vw, 21px); max-width: 34em; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
-  .stats { display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 56px); margin-top: 48px; }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; max-width: 540px; margin-top: 48px; }
   .stat b { display: block; font-family: var(--font-head); font-size: 44px; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
-  .stat > span { display: block; font-size: 16px; margin-top: 6px; max-width: 11em; line-height: 1.3; }
+  .stat > span { display: block; font-size: 16px; margin-top: 6px; line-height: 1.3; }
 
   /* Tvarkaraštis */
   .schedule {
@@ -248,7 +248,7 @@
   .events { list-style: none; margin: 0; padding: 0; }
   .event {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) 172px;
     gap: 16px;
     align-items: center;
     padding: 16px 0;
@@ -257,12 +257,27 @@
   .event:first-child { border-top: 0; }
   .event-date { font-family: var(--font-head); font-size: 34px; letter-spacing: -0.03em; line-height: 1; min-width: 3.1em; }
   .event-title { font-weight: 700; font-size: 17px; line-height: 1.3; }
-  .event-meta { font-size: 15px; color: var(--ink-600); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 4px; }
-  .event-meta .pill { height: 26px; padding: 0 10px; font-size: 13px; }
+  .event-meta { font-size: 15px; color: var(--ink-600); display: flex; flex-wrap: wrap; gap: 2px 6px; align-items: center; margin-top: 4px; }
+  .event-meta .pill { height: 26px; padding: 0 10px; font-size: 13px; margin-top: 4px; }
+  .event .btn { width: 172px; }
+  .event-meta .nowrap { white-space: nowrap; }
+  .soldout-badge {
+    background: var(--white);
+    color: var(--coral);
+    box-shadow: inset 0 0 0 2px var(--coral);
+    font-weight: 700;
+    animation: soldout-blink 1.6s ease-in-out infinite;
+  }
+  @keyframes soldout-blink {
+    0%, 100% { opacity: 1; box-shadow: inset 0 0 0 2px var(--coral), 0 0 0 0 rgba(255, 106, 61, 0.45); }
+    50% { opacity: 0.55; box-shadow: inset 0 0 0 2px var(--coral), 0 0 0 5px rgba(255, 106, 61, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .soldout-badge { animation: none; } }
   .event--soldout .event-date, .event--soldout .event-title { color: var(--ink-600); }
+  .event.is-collapsed { display: none; }
   .event--soldout .event-date { text-decoration: line-through; text-decoration-thickness: 2px; }
   .event[hidden] { display: none; }
-  .schedule-foot { margin-top: 12px; font-size: 15px; }
+  .schedule-more { display: block; margin: 8px auto 0; }
 
   /* ---------- Kursai ---------- */
   .courses { background: var(--paper); padding: var(--section) 0; }
@@ -867,7 +882,7 @@
       <div>
         <span class="pill pill--sm">Gyvi mokymai Vilniuje, Kaune ir Klaipėdoje</span>
         <h1>Praktiniai AI mokymai, po kurių kitą dieną dirbsite lengviau</h1>
-        <p class="lead">3–3,5 val. gyvi Claude ir AI agentų mokymai mažose grupėse darbuotojams ir verslo komandoms. Išeisite ne su teorija, o su paruoštu darbo srautu savo užduotims.</p>
+        <p class="lead">Kiek valandų per savaitę atima laiškai, ataskaitos ir pasiūlymai? Per 3–3,5 val. gyvų mokymų mažoje grupėje išmoksite juos paruošti su Claude ir AI agentais. Kitą rytą darbe jau naudosite savo paruoštą sprendimą.</p>
         <div class="hero-actions">
           <a class="btn btn--cta" href="#kursai">Pasirinkti mokymus</a>
           <a class="btn btn--ghost" href="#verslui">Sprendimai verslui</a>
@@ -891,7 +906,7 @@
           <button type="button" data-city="Klaipėda" aria-pressed="false">Klaipėda</button>
         </div>
         <ul class="events" id="events"></ul>
-        <p class="schedule-foot">Tikslų adresą atsiųsime el. paštu kartu su registracijos patvirtinimu.</p>
+        <button class="link-btn schedule-more" type="button" id="events-more" hidden></button>
       </aside>
     </div>
   </section>
@@ -1300,8 +1315,7 @@
 
       <div class="field" id="buy-event-field">
         <label for="buy-event">Data ir miestas <span class="req">*</span></label>
-        <select id="buy-event" required aria-describedby="buy-event-hint"></select>
-        <span class="hint" id="buy-event-hint">Tikslų adresą atsiųsime el. paštu kartu su registracijos patvirtinimu.</span>
+        <select id="buy-event" required></select>
       </div>
 
       <div class="info-box" id="buy-info"></div>
@@ -1433,10 +1447,15 @@
   // status: soldout, few (liko nedaug vietų), open
   const EVENTS = [
     { id: 'e1', course: 'claude', date: '09.29', city: 'Vilnius', status: 'soldout' },
-    { id: 'e2', course: 'claude', date: '09.30', city: 'Kaunas', status: 'few', left: 3 },
-    { id: 'e3', course: 'agentas', date: '10.08', city: 'Klaipėda', status: 'few', left: 5 },
-    { id: 'e4', course: 'agentas', date: '10.15', city: 'Vilnius', status: 'open' },
-    { id: 'e5', course: 'claude', date: '10.22', city: 'Vilnius', status: 'open' }
+    { id: 'e2', course: 'claude', date: '10.02', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e3', course: 'claude', date: '10.08', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
+    { id: 'e4', course: 'claude', date: '10.09', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e5', course: 'claude', date: '10.14', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
+    { id: 'e6', course: 'claude', date: '10.15', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e7', course: 'agentas', date: '10.16', city: 'Vilnius', time: '9:30–12:30', status: 'few', left: 5 },
+    { id: 'e8', course: 'claude', date: '10.17', city: 'Klaipėda', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e9', course: 'claude', date: '10.22', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
+    { id: 'e10', course: 'claude', date: '10.30', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 }
   ];
   const eur = (n) => `${n.toLocaleString('lt-LT')} €`;
   const nextFree = (course, city) =>
@@ -1446,30 +1465,45 @@
   // ---------- Tvarkaraštis ----------
   const eventsEl = document.getElementById('events');
   const statusPill = (e) => e.status === 'soldout'
-    ? '<span class="pill pill--outline">Išparduota</span>'
+    ? '<span class="pill soldout-badge">Išparduota</span>'
     : e.status === 'few' ? `<span class="pill pill--coral">Liko ${e.left} vietos</span>` : '';
   eventsEl.innerHTML = EVENTS.map((e) => {
     const c = COURSES[e.course];
-    const dur = c.meta.split(' · ')[0];
+    const when = e.time || c.meta.split(' · ')[0];
     const alt = e.status === 'soldout' ? nextFree(e.course, e.city) : null;
     const action = e.status === 'soldout'
       ? `<button class="btn btn--ghost btn--sm" type="button" data-buy="${e.course}" data-event="${alt.id}" aria-label="Kita data: ${alt.date} ${alt.city}">Kita data ${alt.date}</button>`
       : `<button class="btn btn--ghost btn--sm" type="button" data-buy="${e.course}" data-event="${e.id}" aria-label="Įsigyti bilietą: ${e.date} ${e.city}">Įsigyti bilietą</button>`;
     return `<li class="event${e.status === 'soldout' ? ' event--soldout' : ''}" data-city="${e.city}">
       <span class="event-date">${e.date}</span>
-      <div><div class="event-title">${c.title}</div><div class="event-meta"><span>${e.city} · ${dur}</span>${statusPill(e)}</div></div>
+      <div><div class="event-title">${c.title}</div><div class="event-meta"><span class="nowrap">${e.city} ·</span><span class="nowrap">${when}</span>${statusPill(e)}</div></div>
       ${action}
     </li>`;
   }).join('');
 
   const filterButtons = document.querySelectorAll('.filters [data-city]');
+  const moreBtn = document.getElementById('events-more');
+  const VISIBLE = 5;
+  let showAll = false;
+  let activeCity = 'visi';
+  const applyFilter = () => {
+    const rows = [...eventsEl.querySelectorAll('.event')];
+    const matching = rows.filter((ev) => activeCity === 'visi' || ev.dataset.city === activeCity);
+    rows.forEach((ev) => { ev.hidden = !matching.includes(ev); ev.classList.remove('is-collapsed'); });
+    if (!showAll) matching.slice(VISIBLE).forEach((ev) => ev.classList.add('is-collapsed'));
+    moreBtn.hidden = matching.length <= VISIBLE;
+    moreBtn.textContent = showAll ? 'Rodyti mažiau' : `Rodyti visas datas (${matching.length})`;
+  };
   filterButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const city = btn.dataset.city;
+      activeCity = btn.dataset.city;
+      showAll = false;
       filterButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      eventsEl.querySelectorAll('.event').forEach((ev) => { ev.hidden = city !== 'visi' && ev.dataset.city !== city; });
+      applyFilter();
     });
   });
+  moreBtn.addEventListener('click', () => { showAll = !showAll; applyFilter(); });
+  applyFilter();
 
   // Artimiausia laisva data kortelėse
   document.querySelectorAll('[data-next]').forEach((el) => {
@@ -1526,7 +1560,7 @@
     const buyEvent = document.getElementById('buy-event');
     buyEvent.innerHTML = '<option value="">Pasirinkite datą ir miestą</option>' + EVENTS
       .filter((e) => e.course === buyState.course)
-      .map((e) => `<option value="${e.id}"${e.status === 'soldout' ? ' disabled' : ''}>${e.date} · ${e.city}${e.status === 'soldout' ? ' · išparduota' : e.status === 'few' ? ` · liko ${e.left} vietos` : ''}</option>`)
+      .map((e) => `<option value="${e.id}"${e.status === 'soldout' ? ' disabled' : ''}>${e.date} · ${e.city}${e.time ? ` · ${e.time}` : ''}${e.status === 'soldout' ? ' · išparduota' : e.status === 'few' ? ` · liko ${e.left} vietos` : ''}</option>`)
       .join('');
     if (buyState.event) buyEvent.value = buyState.event;
     buyError.textContent = '';
