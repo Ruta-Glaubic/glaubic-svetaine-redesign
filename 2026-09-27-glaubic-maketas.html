@@ -781,7 +781,7 @@
   /* ---------- Slapukų pranešimas ---------- */
   .cookies {
     position: fixed;
-    left: 20px;
+    right: 20px;
     bottom: 20px;
     z-index: 50;
     width: min(440px, calc(100% - 24px));
@@ -791,14 +791,23 @@
     box-shadow: inset 0 0 0 2px var(--ink-800);
     padding: 24px;
   }
+  .cookies-head { display: flex; align-items: center; gap: 12px; }
   .cookies h2 { font-size: 24px; }
+  .cookie-icon { width: 40px; height: 40px; flex-shrink: 0; animation: cookie-wobble 3s ease-in-out infinite; transform-origin: 50% 50%; }
+  @keyframes cookie-wobble {
+    0%, 70%, 100% { transform: rotate(0); }
+    76% { transform: rotate(-12deg); }
+    84% { transform: rotate(10deg); }
+    92% { transform: rotate(-4deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .cookie-icon { animation: none; } }
   .cookies p { margin-top: 10px; font-size: 16px; }
   .cookies-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
   .cookies-actions .btn { height: 48px; padding: 0 16px; font-size: 16px; }
   .cookies-more { margin-top: 12px; font-size: 14px; }
   .footer-bottom .link-btn { padding: 0; font-size: 14px; }
   @media (max-width: 560px) {
-    .cookies { left: 12px; bottom: 12px; padding: 20px; }
+    .cookies { right: 12px; bottom: 12px; padding: 20px; }
   }
 </style>
 </head>
@@ -1386,7 +1395,20 @@
 </dialog>
 
 <section class="cookies" id="slapukai" role="dialog" aria-labelledby="cookies-title" aria-describedby="cookies-text" hidden>
-  <h2 id="cookies-title">Naudojame slapukus</h2>
+  <div class="cookies-head">
+    <svg class="cookie-icon" viewBox="0 0 40 40" aria-hidden="true">
+      <path d="M20 3a17 17 0 1 0 17 17 5 5 0 0 1-6-5 5 5 0 0 1-5-6 5 5 0 0 1-6-6z" fill="#FFD2A6" stroke="#322838" stroke-width="2.2" stroke-linejoin="round"/>
+      <circle cx="13" cy="15" r="2.3" fill="#322838"/>
+      <circle cx="11.5" cy="25" r="2" fill="#322838"/>
+      <circle cx="20" cy="21" r="2.4" fill="#322838"/>
+      <circle cx="26.5" cy="28" r="2.2" fill="#322838"/>
+      <circle cx="18.5" cy="31" r="1.6" fill="#322838"/>
+      <circle cx="21" cy="11" r="1.5" fill="#322838"/>
+      <circle cx="33" cy="9" r="1.4" fill="#FF6A3D"/>
+      <circle cx="36" cy="14" r="1" fill="#FF6A3D"/>
+    </svg>
+    <h2 id="cookies-title">Naudojame slapukus</h2>
+  </div>
   <p id="cookies-text">Būtini slapukai užtikrina, kad svetainė veiktų. Analitiniai ir rinkodaros slapukai padeda suprasti, kaip naudojatės svetaine, ir rodyti jums aktualų turinį. Pasirinkimą galite pakeisti bet kada.</p>
   <div class="cookies-actions">
     <button class="btn btn--ghost" type="button" data-cookies="necessary">Tik būtini</button>
