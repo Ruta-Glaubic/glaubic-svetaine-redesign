@@ -351,21 +351,84 @@
 
   /* ---------- Atsiliepimai ---------- */
   .results { background: var(--violet-500); padding: var(--section) 0; }
-  .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .results-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
+  .results-head .section-head { margin-bottom: 0; }
+  .carousel-controls { display: flex; gap: 10px; }
+  .round-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-800);
+    background: var(--white);
+    color: var(--ink-800);
+    font: inherit;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .round-btn:hover { background: var(--violet-100); }
+  .round-btn svg { width: 20px; height: 20px; }
+  /* Karuselė: kortelių eilutės sulygiuotos per subgrid */
+  .quote-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 40px) / 3);
+    grid-template-rows: auto auto auto;
+    column-gap: 20px;
+    row-gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .quote-track::-webkit-scrollbar { display: none; }
   .quote {
     background: var(--white);
     border-radius: var(--radius-card);
     padding: 28px;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 18px;
-    margin: 0;
+    scroll-snap-align: start;
+  }
+  @supports (grid-template-rows: subgrid) {
+    .quote { grid-row: span 3; display: grid; grid-template-rows: subgrid; row-gap: 18px; }
   }
   .quote-num { font-family: var(--font-head); font-size: 56px; letter-spacing: -0.03em; line-height: 1; }
   .quote-num small { display: block; font-family: var(--font-body); font-size: 16px; letter-spacing: 0; margin-top: 8px; }
   .quote blockquote { margin: 0; font-size: 18px; }
-  .quote figcaption { margin-top: auto; font-size: 15px; color: var(--ink-600); }
-  .quote figcaption b { display: block; color: var(--ink-800); }
+  .quote-by {
+    align-self: start;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding-top: 18px;
+    border-top: 1px solid var(--ink-300);
+    font-size: 15px;
+    color: var(--ink-600);
+    line-height: 1.35;
+  }
+  .quote-by b { display: block; color: var(--ink-800); }
+  .quote-by > span:last-child { padding-top: 6px; }
+  .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+  .avatar img, .avatar svg { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar--a { background: var(--violet-200); }
+  .avatar--b { background: var(--violet-400); }
+  .avatar--c { background: #FFD2C4; }
   .sample { margin-top: 20px; font-size: 14px; }
 
   /* ---------- Verslui ---------- */
@@ -665,7 +728,7 @@
   @media (max-width: 1000px) {
     .hero .wrap { grid-template-columns: minmax(0, 1fr); }
     .course-grid { grid-template-columns: 1fr; max-width: 620px; row-gap: 20px; }
-    .quote-grid { grid-template-columns: 1fr; max-width: 620px; }
+    .quote-track { grid-auto-columns: calc((100% - 20px) / 2); }
     .value-grid { grid-template-columns: 1fr 1fr; }
     .newsletter .wrap, .contact .wrap, .faq .wrap { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -707,6 +770,8 @@
     .gift-row { grid-template-columns: 1fr auto; }
     .gift-row .btn { grid-column: 1 / -1; width: 100%; }
     .clients-list { font-size: 20px; gap: 10px 28px; }
+    .quote-track { grid-auto-columns: 86%; column-gap: 14px; }
+    .quote-num { font-size: 46px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -732,6 +797,10 @@
       <g class="spark" fill="#322838">
         <circle cx="4" cy="4" r="1.3"/><circle cx="28" cy="3" r="1.3"/><circle cx="16" cy="1" r="1.1"/>
       </g>
+    </symbol>
+    <symbol id="person" viewBox="0 0 60 60">
+      <circle cx="30" cy="23" r="10" fill="#322838"/>
+      <path d="M11 56c1.5-11 9.5-18 19-18s17.5 7 19 18z" fill="#322838"/>
     </symbol>
   </defs>
 </svg>
@@ -912,28 +981,50 @@
 
   <section class="results" id="rezultatai">
     <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Rezultatai</span>
-        <h2>Vertiname sutaupytas valandas, ne išmoktų funkcijų skaičių</h2>
+      <div class="results-head">
+        <div class="section-head">
+          <span class="eyebrow">Rezultatai</span>
+          <h2>Vertiname sutaupytas valandas, ne išmoktų funkcijų skaičių</h2>
+        </div>
+        <div class="carousel-controls">
+          <button class="round-btn" type="button" data-carousel="prev" aria-label="Ankstesnis atsiliepimas"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 4 6.5 10l6 6"/></svg></button>
+          <button class="round-btn" type="button" data-carousel="toggle" aria-label="Sustabdyti automatinį sukimą" aria-pressed="false"><svg viewBox="0 0 20 20" fill="currentColor"><rect x="5" y="4" width="3.2" height="12" rx="1"/><rect x="11.8" y="4" width="3.2" height="12" rx="1"/></svg></button>
+          <button class="round-btn" type="button" data-carousel="next" aria-label="Kitas atsiliepimas"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4 6 6-6 6"/></svg></button>
+        </div>
       </div>
-      <div class="quote-grid">
-        <figure class="quote">
+      <ul class="quote-track" id="quote-track" aria-label="Dalyvių atsiliepimai" tabindex="0">
+        <li class="quote">
           <div class="quote-num">5 val.<small>sutaupo per savaitę</small></div>
           <blockquote>Agentas dabar surūšiuoja užklausas ir paruošia atsakymų juodraščius. Man lieka juos peržiūrėti ir išsiųsti.</blockquote>
-          <figcaption><b>Pavyzdinis dalyvis</b>Klientų aptarnavimo vadovė, paslaugų įmonė</figcaption>
-        </figure>
-        <figure class="quote">
+          <div class="quote-by"><span class="avatar avatar--a" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#person"/></svg></span><span><b>Pavyzdinis dalyvis</b>Klientų aptarnavimo vadovė, paslaugų įmonė</span></div>
+        </li>
+        <li class="quote">
           <div class="quote-num">3 val.<small>sutaupo kiekvienam pasiūlymui</small></div>
           <blockquote>Pasiūlymą klientui su Claude paruošiu per pusvalandį. Anksčiau tam skirdavau pusę darbo dienos.</blockquote>
-          <figcaption><b>Pavyzdinis dalyvis</b>Pardavimų vadovas, IT įmonė</figcaption>
-        </figure>
-        <figure class="quote">
+          <div class="quote-by"><span class="avatar avatar--b" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#person"/></svg></span><span><b>Pavyzdinis dalyvis</b>Pardavimų vadovas, IT įmonė</span></div>
+        </li>
+        <li class="quote">
           <div class="quote-num">2 d.<small>per mėnesį grąžina komandai</small></div>
           <blockquote>Po mokymų visa komanda ataskaitas ruošia pagal vieną šabloną. Mėnesio pabaigoje nebesėdime iki vėlumos.</blockquote>
-          <figcaption><b>Pavyzdinis dalyvis</b>Finansų skyriaus vadovė, gamybos įmonė</figcaption>
-        </figure>
-      </div>
-      <p class="sample">Atsiliepimai ir skaičiai yra pavyzdiniai. Juos pakeisime realiais dalyvių atsiliepimais.</p>
+          <div class="quote-by"><span class="avatar avatar--c" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#person"/></svg></span><span><b>Pavyzdinis dalyvis</b>Finansų skyriaus vadovė, gamybos įmonė</span></div>
+        </li>
+        <li class="quote">
+          <div class="quote-num">4 val.<small>sutaupo per savaitę</small></div>
+          <blockquote>Susitikimų santraukas ir užduočių sąrašus dabar paruošia Claude. Man lieka tik patikslinti.</blockquote>
+          <div class="quote-by"><span class="avatar avatar--b" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#person"/></svg></span><span><b>Pavyzdinis dalyvis</b>Projektų vadovė, statybų įmonė</span></div>
+        </li>
+        <li class="quote">
+          <div class="quote-num">1 d.<small>per savaitę sutaupo komanda</small></div>
+          <blockquote>Užklausas iš svetainės agentas surūšiuoja ir nukreipia atsakingam žmogui. Nebereikia to daryti rankiniu būdu.</blockquote>
+          <div class="quote-by"><span class="avatar avatar--c" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#person"/></svg></span><span><b>Pavyzdinis dalyvis</b>Operacijų vadovas, logistikos įmonė</span></div>
+        </li>
+        <li class="quote">
+          <div class="quote-num">2 val.<small>sutaupo kasdien</small></div>
+          <blockquote>Socialinių tinklų įrašų idėjas ir tekstus paruošiu per rytą, o ne per visą savaitę.</blockquote>
+          <div class="quote-by"><span class="avatar avatar--a" aria-hidden="true"><svg viewBox="0 0 60 60"><use href="#person"/></svg></span><span><b>Pavyzdinis dalyvis</b>Rinkodaros specialistė, e. prekybos įmonė</span></div>
+        </li>
+      </ul>
+      <p class="sample">Atsiliepimai, skaičiai ir iliustracijos yra pavyzdiniai. Juos pakeisime realiais dalyvių atsiliepimais ir nuotraukomis.</p>
     </div>
   </section>
 
@@ -1524,6 +1615,41 @@
     }, { threshold: 0.6 });
     document.querySelectorAll('[data-count]').forEach((el) => observer.observe(el));
   }
+
+  // ---------- Atsiliepimų karuselė ----------
+  const track = document.getElementById('quote-track');
+  const toggleBtn = document.querySelector('[data-carousel="toggle"]');
+  const pauseIcon = toggleBtn.innerHTML;
+  const playIcon = '<svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4.2v11.6a.8.8 0 0 0 1.2.7l9.2-5.8a.8.8 0 0 0 0-1.4L7.2 3.5A.8.8 0 0 0 6 4.2z"/></svg>';
+  const stepSize = () => {
+    const card = track.querySelector('li');
+    return card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0);
+  };
+  const slide = (dir) => {
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 8;
+    const atStart = track.scrollLeft <= 8;
+    if (dir > 0 && atEnd) track.scrollTo({ left: 0 });
+    else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth });
+    else track.scrollBy({ left: dir * stepSize() });
+  };
+  let userPaused = reduceMotion;
+  let hoverPaused = false;
+  const setToggle = () => {
+    toggleBtn.setAttribute('aria-pressed', String(userPaused));
+    toggleBtn.setAttribute('aria-label', userPaused ? 'Paleisti automatinį sukimą' : 'Sustabdyti automatinį sukimą');
+    toggleBtn.innerHTML = userPaused ? playIcon : pauseIcon;
+  };
+  setToggle();
+  setInterval(() => { if (!userPaused && !hoverPaused && !document.hidden) slide(1); }, 5000);
+  document.querySelector('[data-carousel="prev"]').addEventListener('click', () => slide(-1));
+  document.querySelector('[data-carousel="next"]').addEventListener('click', () => slide(1));
+  toggleBtn.addEventListener('click', () => { userPaused = !userPaused; setToggle(); });
+  ['mouseenter', 'focusin'].forEach((ev) => track.addEventListener(ev, () => { hoverPaused = true; }));
+  ['mouseleave', 'focusout'].forEach((ev) => track.addEventListener(ev, () => { hoverPaused = false; }));
+  track.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); slide(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); slide(-1); }
+  });
 </script>
 </body>
 </html>
