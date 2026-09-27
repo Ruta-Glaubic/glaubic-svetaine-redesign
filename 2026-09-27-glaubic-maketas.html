@@ -393,23 +393,6 @@
   .results { background: var(--violet-500); padding: var(--section) 0; }
   .results-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
   .results-head .section-head { margin-bottom: 0; }
-  .carousel-controls { display: flex; gap: 10px; }
-  .round-btn {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--radius-pill);
-    border: 2px solid var(--ink-800);
-    background: var(--white);
-    color: var(--ink-800);
-    font: inherit;
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-  }
-  .round-btn:hover { background: var(--violet-100); }
-  .round-btn svg { width: 20px; height: 20px; }
   /* Karuselė: kortelių eilutės sulygiuotos per subgrid */
   .quote-track {
     display: grid;
@@ -550,15 +533,15 @@
   .frame h2 { font-size: clamp(30px, 3.6vw, 46px); }
   .frame p { margin: 16px auto 28px; max-width: 32em; font-size: 19px; }
 
-  /* ---------- DUK ---------- */
-  .faq { background: var(--fog); padding: var(--section) 0; }
-  .faq .wrap { display: grid; grid-template-columns: 1fr 1.6fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
-  .faq-list { display: grid; gap: 12px; }
-  .faq-list details { background: var(--white); border-radius: 20px; padding: 6px 22px; }
-  .faq-list summary { font-size: 18px; padding: 16px 0; }
-  .faq-list details p { padding: 0 0 18px; font-size: 17px; max-width: 40em; }
-  .faq-more { margin-top: 20px; font-size: 16px; }
-
+  /* ---------- DUK poraštėje ---------- */
+  .footer-faq { padding-bottom: 48px; margin-bottom: 48px; border-bottom: 1px solid var(--ink-800); }
+  .footer-faq h2 { font-size: clamp(26px, 2.6vw, 34px); margin-bottom: 20px; }
+  .faq-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; align-items: start; }
+  .faq-list details { background: var(--white); border-radius: 18px; padding: 2px 20px; }
+  .faq-list summary { font-size: 16px; padding: 14px 0; }
+  .faq-list details p { padding: 0 0 16px; font-size: 16px; }
+  .faq-more { margin-top: 16px; font-size: 15px; }
+  .site-footer .faq-more a { text-decoration: underline; text-underline-offset: 3px; }
   /* ---------- Kontaktai ---------- */
   .contact { background: var(--violet-500); padding: var(--section) 0; }
   .contact .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
@@ -761,7 +744,8 @@
     .course-grid { grid-template-columns: minmax(0, 1fr); max-width: 620px; row-gap: 20px; }
     .quote-track { grid-auto-columns: calc((100% - 20px) / 2); }
     .value-grid { grid-template-columns: 1fr 1fr; }
-    .newsletter .wrap, .contact .wrap, .faq .wrap { grid-template-columns: 1fr; }
+    .newsletter .wrap, .contact .wrap { grid-template-columns: 1fr; }
+    .faq-list { grid-template-columns: minmax(0, 1fr); }
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 820px) {
@@ -1067,11 +1051,6 @@
           <span class="eyebrow">Atsiliepimai</span>
           <h2>Ką sako mokymų dalyviai</h2>
         </div>
-        <div class="carousel-controls">
-          <button class="round-btn" type="button" data-carousel="prev" aria-label="Ankstesnis atsiliepimas"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 4 6.5 10l6 6"/></svg></button>
-          <button class="round-btn" type="button" data-carousel="toggle" aria-label="Sustabdyti automatinį sukimą" aria-pressed="false"><svg viewBox="0 0 20 20" fill="currentColor"><rect x="5" y="4" width="3.2" height="12" rx="1"/><rect x="11.8" y="4" width="3.2" height="12" rx="1"/></svg></button>
-          <button class="round-btn" type="button" data-carousel="next" aria-label="Kitas atsiliepimas"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4 6 6-6 6"/></svg></button>
-        </div>
       </div>
       <ul class="quote-track" id="quote-track" aria-label="Dalyvių atsiliepimai" tabindex="0">
         <li class="quote">
@@ -1209,52 +1188,6 @@
     </div>
   </section>
 
-  <section class="faq" id="duk">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">DUK</span>
-        <h2>Dažniausi klausimai</h2>
-        <p>Atsakymai parengti pagal mūsų paslaugų teikimo sąlygas.</p>
-      </div>
-      <div>
-        <div class="faq-list">
-          <details>
-            <summary>Ar galiu pakeisti mokymų datą arba atšaukti registraciją?</summary>
-            <p>Taip. Jei atšaukiate likus 7 ar daugiau dienų iki mokymų, grąžiname pinigus arba perkeliame registraciją į kitą datą. Jei likus mažiau nei 7 dienoms, registraciją perkeliame į kitą datą arba išduodame tos pačios vertės kuponą, o sumokėta suma negrąžinama.</p>
-          </details>
-          <details>
-            <summary>Ką daryti, jei negaliu dalyvauti?</summary>
-            <p>Vietoj savęs galite paskirti kitą asmenį. Tik praneškite mums iš anksto el. paštu ai@marketyourvisions.lt.</p>
-          </details>
-          <details>
-            <summary>Kur tiksliai vyks mokymai?</summary>
-            <p>Mokymai vyksta Vilniuje, Kaune ir Klaipėdoje. Tikslų adresą atsiunčiame el. paštu kartu su registracijos patvirtinimu.</p>
-          </details>
-          <details>
-            <summary>Ar išrašote sąskaitą faktūrą?</summary>
-            <p>Taip. Registruodamiesi pažymėkite, kad reikalinga sąskaita faktūra, ir pateikite įmonės rekvizitus.</p>
-          </details>
-          <details>
-            <summary>Kaip galiu sumokėti ir ar kainos nurodytos su PVM?</summary>
-            <p>Mokama saugiai kortele per Stripe. Svetainėje nurodytos kainos be PVM, PVM taikomas pagal galiojančius teisės aktus.</p>
-          </details>
-          <details id="duk-kuponas">
-            <summary>Kaip veikia dovanų kuponas?</summary>
-            <p>Kuponą gausite el. paštu iškart po apmokėjimo. Jis galioja 6 mėnesius nuo įsigijimo. Gavėjas kuponą panaudoja susisiekęs su mumis ir pasirinkęs mokymų datą. Kuponas į pinigus nekeičiamas.</p>
-          </details>
-          <details>
-            <summary>Kaip suderinamos paketo datos?</summary>
-            <p>Per 24 valandas nuo apmokėjimo susisieksime su jumis ir kartu suderinsime abiejų sesijų datas: 3 val. AI agento ir 3,5 val. Claude mokymų.</p>
-          </details>
-          <details>
-            <summary>Kas bus, jei mokymus atšauksite jūs?</summary>
-            <p>Jei mokymus atšaukiame ar perkeliame dėl nuo mūsų priklausančių priežasčių, pasiūlome kitą datą arba grąžiname visą sumą.</p>
-          </details>
-        </div>
-        <p class="faq-more"><a href="#">Visos paslaugų teikimo sąlygos</a></p>
-      </div>
-    </div>
-  </section>
 
   <section class="contact" id="kontaktai">
     <div class="wrap">
@@ -1293,6 +1226,44 @@
 
 <footer class="site-footer">
   <div class="wrap">
+    <div class="footer-faq" id="duk">
+      <h2>Dažniausi klausimai</h2>
+      <div class="faq-list">
+          <details>
+            <summary>Ar galiu pakeisti mokymų datą arba atšaukti registraciją?</summary>
+            <p>Taip. Jei atšaukiate likus 7 ar daugiau dienų iki mokymų, grąžiname pinigus arba perkeliame registraciją į kitą datą. Jei likus mažiau nei 7 dienoms, registraciją perkeliame į kitą datą arba išduodame tos pačios vertės kuponą, o sumokėta suma negrąžinama.</p>
+          </details>
+          <details>
+            <summary>Ką daryti, jei negaliu dalyvauti?</summary>
+            <p>Vietoj savęs galite paskirti kitą asmenį. Tik praneškite mums iš anksto el. paštu ai@marketyourvisions.lt.</p>
+          </details>
+          <details>
+            <summary>Kur tiksliai vyks mokymai?</summary>
+            <p>Mokymai vyksta Vilniuje, Kaune ir Klaipėdoje. Tikslų adresą atsiunčiame el. paštu kartu su registracijos patvirtinimu.</p>
+          </details>
+          <details>
+            <summary>Ar išrašote sąskaitą faktūrą?</summary>
+            <p>Taip. Registruodamiesi pažymėkite, kad reikalinga sąskaita faktūra, ir pateikite įmonės rekvizitus.</p>
+          </details>
+          <details>
+            <summary>Kaip galiu sumokėti ir ar kainos nurodytos su PVM?</summary>
+            <p>Mokama saugiai kortele per Stripe. Svetainėje nurodytos kainos be PVM, PVM taikomas pagal galiojančius teisės aktus.</p>
+          </details>
+          <details id="duk-kuponas">
+            <summary>Kaip veikia dovanų kuponas?</summary>
+            <p>Kuponą gausite el. paštu iškart po apmokėjimo. Jis galioja 6 mėnesius nuo įsigijimo. Gavėjas kuponą panaudoja susisiekęs su mumis ir pasirinkęs mokymų datą. Kuponas į pinigus nekeičiamas.</p>
+          </details>
+          <details>
+            <summary>Kaip suderinamos paketo datos?</summary>
+            <p>Per 24 valandas nuo apmokėjimo susisieksime su jumis ir kartu suderinsime abiejų sesijų datas: 3 val. AI agento ir 3,5 val. Claude mokymų.</p>
+          </details>
+          <details>
+            <summary>Kas bus, jei mokymus atšauksite jūs?</summary>
+            <p>Jei mokymus atšaukiame ar perkeliame dėl nuo mūsų priklausančių priežasčių, pasiūlome kitą datą arba grąžiname visą sumą.</p>
+          </details>
+        </div>
+        <p class="faq-more"><a href="#">Visos paslaugų teikimo sąlygos</a></p>
+    </div>
     <div class="footer-grid">
       <div>
         <a class="logo" href="#" aria-label="GLAUBIC pradžia"><svg class="logo-svg" viewBox="8 8 1405 199" height="28" role="img" aria-label="GLAUBIC" focusable="false"><path fill="#322838" fill-rule="evenodd" d="M101.5 206.4C71.9 202.5 56.9 195.7 38.2 177.6C18.0 158.1 8.6 135.7 8.6 107.5C8.6 83.8 14.4 66.3 27.9 48.3C42.1 29.4 61.7 16.3 83.6 10.8C96.3 7.7 117.7 7.7 130.4 10.8C141.1 13.5 155.7 20.2 164.6 26.5C171.9 31.7 182.3 42.0 186.6 48.1L189.5 52.3L187.1 53.9C165.1 69.1 160.2 69.5 145.5 57.6C132.9 47.4 121.0 43.0 106.2 43.0C89.6 43.0 76.2 48.7 63.9 61.0C50.3 74.5 44.3 90.6 45.3 110.9C46.1 128.5 51.7 141.4 63.6 153.4C75.9 165.6 88.8 171.1 107.1 171.8C116.4 172.1 120.2 171.9 126.6 170.2C136.1 167.8 145.8 162.4 152.2 155.8C157.3 150.6 162.7 140.6 163.7 134.7L164.3 131.0L134.3 131.0C104.8 131.0 104.2 131.0 100.9 128.7C95.4 125.0 94.0 121.1 94.0 108.7L94.0 98.0L148.8 98.2L203.5 98.5L203.5 112.5C203.5 127.0 202.4 134.9 198.8 146.0C189.2 175.9 163.2 198.5 131.5 204.5C123.9 205.9 106.4 207.0 101.5 206.4ZM1314.5 205.9C1288.4 203.1 1265.2 190.0 1248.0 168.5C1222.4 136.2 1220.5 86.4 1243.8 52.4C1263.9 22.9 1297.9 6.1 1332.7 8.6C1360.1 10.5 1380.1 19.5 1398.2 38.3C1403.4 43.6 1413.8 58.6 1412.9 59.4C1411.8 60.3 1386.0 70.0 1384.6 70.0C1380.8 70.0 1375.3 66.6 1368.1 59.7C1355.6 48.0 1343.2 43.0 1327.0 43.0C1311.3 43.0 1298.0 48.0 1286.6 58.1C1270.4 72.6 1262.6 93.4 1265.0 115.4C1266.8 131.2 1272.4 142.6 1283.9 154.0C1297.4 167.4 1311.0 172.6 1330.0 171.7C1347.0 170.8 1355.3 167.1 1369.4 154.1C1378.3 145.8 1381.8 144.2 1387.5 145.9C1391.9 147.2 1411.4 155.0 1412.2 155.9C1413.6 157.2 1405.5 169.4 1398.0 177.4C1377.7 198.9 1346.8 209.5 1314.5 205.9ZM738.0 204.5C721.0 200.9 710.3 195.3 698.9 184.0C686.2 171.5 680.5 160.1 677.5 141.5C676.3 134.3 676.0 120.3 676.0 72.2L676.0 12.0L689.4 12.0C701.6 12.0 703.0 12.2 706.1 14.3C713.2 19.0 713.0 17.4 713.0 77.0C713.0 109.5 713.4 133.1 714.1 137.0C715.5 145.6 720.9 156.8 725.9 161.3C734.7 169.2 749.8 174.6 761.0 173.7C776.4 172.5 791.5 163.7 797.1 152.8C802.7 141.9 802.4 144.9 803.0 82.0C803.5 26.1 803.6 23.3 805.5 19.5C808.6 13.2 812.1 12.0 827.2 12.0L840.0 12.0L840.0 75.0C840.0 128.7 839.8 139.2 838.4 145.8C832.6 174.0 813.1 194.9 784.9 203.1C775.3 205.8 748.1 206.7 738.0 204.5ZM265.0 107.5L265.0 12.0L278.4 12.0C290.6 12.0 292.0 12.2 295.1 14.3C302.3 19.1 302.0 15.1 302.0 96.7L302.0 169.9L347.2 170.2C390.3 170.5 392.7 170.6 395.8 172.5C401.1 175.7 403.0 181.0 403.0 192.8L403.0 203.0L334.0 203.0L265.0 203.0L265.0 107.5ZM437.0 202.4C437.0 201.8 447.0 182.2 472.5 132.5C477.6 122.6 487.9 102.3 495.5 87.5C533.1 13.6 534.0 12.0 536.3 12.0C538.1 12.0 539.7 14.4 545.2 25.3C548.9 32.5 558.5 51.3 566.5 67.0C574.6 82.7 587.9 108.8 596.2 125.0C604.5 141.2 616.6 164.9 623.1 177.6C629.7 190.3 635.0 201.3 635.0 201.9C635.0 202.9 631.3 203.1 618.8 202.8C601.2 202.4 599.0 201.8 593.8 196.3C589.0 191.1 562.0 138.8 542.5 96.8C539.2 89.8 536.4 84.3 536.2 84.5C536.0 84.7 529.8 97.6 522.4 113.2C504.0 151.8 482.4 192.5 477.9 197.1C475.6 199.4 472.7 201.1 469.7 201.8C465.0 203.0 437.0 203.5 437.0 202.4ZM912.0 107.5L912.0 11.9L962.2 12.2L1012.5 12.5L1020.6 15.3C1042.8 22.8 1052.7 38.4 1051.8 65.0C1051.5 74.9 1051.1 77.3 1048.7 82.3C1047.3 85.5 1044.6 90.0 1042.9 92.1C1039.6 96.2 1030.8 102.0 1027.8 102.0C1024.4 102.0 1026.1 103.6 1030.8 104.9C1041.2 107.6 1052.7 118.5 1057.0 129.7C1060.1 137.7 1060.8 153.8 1058.6 163.4C1054.2 182.2 1041.5 194.3 1020.1 200.3C1012.9 202.3 1009.8 202.4 962.2 202.8L912.0 203.1L912.0 107.5ZM1136.5 201.8C1132.7 200.5 1130.2 198.3 1128.1 194.5C1126.7 191.8 1126.5 182.9 1126.2 101.7L1125.9 12.0L1139.2 12.0C1154.7 12.0 1158.1 13.2 1161.4 19.6C1163.5 23.4 1163.5 24.7 1163.5 113.0L1163.5 202.5L1151.5 202.7C1144.9 202.8 1138.2 202.4 1136.5 201.8ZM1006.4 168.6C1017.9 165.1 1022.2 159.4 1022.8 147.0C1023.1 140.7 1022.8 138.8 1020.8 135.1C1019.5 132.6 1016.9 129.4 1015.0 127.9C1008.8 122.9 1002.4 122.0 974.3 122.0L949.0 122.0L949.0 146.0L949.0 170.0L975.3 170.0C995.3 170.0 1002.8 169.7 1006.4 168.6ZM1000.3 87.6C1010.6 84.5 1015.2 77.8 1015.1 66.0C1015.0 55.2 1012.0 50.1 1003.5 46.3C1000.1 44.8 995.6 44.5 974.2 44.2L949.0 43.8L949.0 66.4L949.0 89.0L972.3 89.0C989.3 89.0 996.9 88.6 1000.3 87.6Z"/></svg></a>
@@ -1782,9 +1753,6 @@
 
   // ---------- Atsiliepimų karuselė ----------
   const track = document.getElementById('quote-track');
-  const toggleBtn = document.querySelector('[data-carousel="toggle"]');
-  const pauseIcon = toggleBtn.innerHTML;
-  const playIcon = '<svg viewBox="0 0 20 20" fill="currentColor"><path d="M6 4.2v11.6a.8.8 0 0 0 1.2.7l9.2-5.8a.8.8 0 0 0 0-1.4L7.2 3.5A.8.8 0 0 0 6 4.2z"/></svg>';
   const stepSize = () => {
     const card = track.querySelector('li');
     return card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0);
@@ -1796,18 +1764,9 @@
     else if (dir < 0 && atStart) track.scrollTo({ left: track.scrollWidth });
     else track.scrollBy({ left: dir * stepSize() });
   };
-  let userPaused = reduceMotion;
+  const userPaused = reduceMotion;
   let hoverPaused = false;
-  const setToggle = () => {
-    toggleBtn.setAttribute('aria-pressed', String(userPaused));
-    toggleBtn.setAttribute('aria-label', userPaused ? 'Paleisti automatinį sukimą' : 'Sustabdyti automatinį sukimą');
-    toggleBtn.innerHTML = userPaused ? playIcon : pauseIcon;
-  };
-  setToggle();
   setInterval(() => { if (!userPaused && !hoverPaused && !document.hidden) slide(1); }, 5000);
-  document.querySelector('[data-carousel="prev"]').addEventListener('click', () => slide(-1));
-  document.querySelector('[data-carousel="next"]').addEventListener('click', () => slide(1));
-  toggleBtn.addEventListener('click', () => { userPaused = !userPaused; setToggle(); });
   ['mouseenter', 'focusin'].forEach((ev) => track.addEventListener(ev, () => { hoverPaused = true; }));
   ['mouseleave', 'focusout'].forEach((ev) => track.addEventListener(ev, () => { hoverPaused = false; }));
   track.addEventListener('keydown', (e) => {
