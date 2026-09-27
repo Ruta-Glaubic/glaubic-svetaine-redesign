@@ -271,6 +271,122 @@
     .event .btn { grid-column: 1 / -1; width: 100%; }
     .hero-actions .btn { width: 100%; }
   }
+
+  /* ---------- Atsiliepimai ---------- */
+  .results { background: var(--violet-500); padding: clamp(56px, 8vw, 104px) 0; }
+  .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .quote {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+  }
+  .quote-num { font-family: var(--font-head); font-size: 56px; letter-spacing: -0.03em; line-height: 1; }
+  .quote-num small { display: block; font-family: var(--font-body); font-size: 16px; letter-spacing: 0; margin-top: 8px; }
+  .quote blockquote { margin: 0; font-size: 18px; }
+  .quote figcaption { margin-top: auto; font-size: 15px; color: var(--ink-600); }
+  .quote figcaption b { display: block; color: var(--ink-800); }
+  .sample { margin-top: 20px; font-size: 14px; }
+
+  /* ---------- Vertybės: brandbook 04 psl. ---------- */
+  .values { padding: clamp(56px, 8vw, 104px) 0; background: var(--white); }
+  .value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .value {
+    border-radius: var(--radius-card);
+    padding: 24px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .value:nth-child(1) { background: var(--violet-500); }
+  .value:nth-child(2) { background: var(--violet-400); }
+  .value:nth-child(3) { background: var(--coral); }
+  .value:nth-child(4) { background: var(--yellow); }
+  .value-no { font-weight: 700; font-size: 15px; }
+  .value h3 { font-size: 28px; margin-bottom: 10px; }
+  .value p { font-size: 16px; }
+
+  /* ---------- Dovana: kvadratinis rėmas, brandbook 14 psl. ---------- */
+  .gift { background: var(--paper); padding: clamp(56px, 8vw, 104px) 0; }
+  .frame {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    border: 3px solid var(--ink-800);
+    padding: clamp(48px, 7vw, 80px) clamp(24px, 5vw, 64px);
+    text-align: center;
+  }
+  .frame-band {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--paper);
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    white-space: nowrap;
+  }
+  .frame-band--top { top: -11px; }
+  .frame-band--bottom { bottom: -11px; text-decoration: none; }
+  .frame-band--bottom:hover { text-decoration: underline; }
+  .frame h2 { font-size: clamp(30px, 3.6vw, 46px); }
+  .frame p { margin: 16px auto 28px; max-width: 32em; font-size: 19px; }
+
+  /* ---------- Naujienlaiškis ---------- */
+  .newsletter { background: var(--fog); padding: clamp(56px, 8vw, 96px) 0; }
+  .newsletter .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .newsletter h2 { font-size: clamp(30px, 3.6vw, 46px); }
+  .newsletter p { margin-top: 14px; }
+  .nl-form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .nl-form input {
+    flex: 1 1 240px;
+    height: 56px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-300);
+    padding: 0 22px;
+    font: inherit;
+    color: var(--ink-800);
+    background: var(--white);
+  }
+  .nl-form input:focus { outline: 3px solid var(--ink-800); outline-offset: 2px; border-color: var(--ink-800); }
+  .nl-note { width: 100%; font-size: 14px; color: var(--ink-600); }
+
+  /* ---------- Poraštė ---------- */
+  .site-footer { background: var(--violet-500); padding: 64px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
+  .site-footer h3 { font-family: var(--font-body); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .site-footer ul { list-style: none; margin: 0; padding: 0; }
+  .site-footer li { margin: 6px 0; }
+  .site-footer a { text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
+  .footer-bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--ink-800);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .spaced { letter-spacing: 0.3em; }
+
+  @media (max-width: 1000px) {
+    .quote-grid { grid-template-columns: 1fr; max-width: 620px; }
+    .value-grid { grid-template-columns: 1fr 1fr; }
+    .newsletter .wrap { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .value-grid { grid-template-columns: 1fr; }
+    .value { min-height: 220px; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -475,7 +591,103 @@
       </div>
     </div>
   </section>
+  <section class="results" id="rezultatai">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Rezultatai</span>
+        <h2>Vertiname sutaupytas valandas, ne išmoktų funkcijų skaičių</h2>
+      </div>
+      <div class="quote-grid">
+        <figure class="quote">
+          <div class="quote-num">5 val.<small>sutaupo per savaitę</small></div>
+          <blockquote>Agentas dabar surūšiuoja užklausas ir paruošia atsakymų juodraščius. Man lieka juos peržiūrėti ir išsiųsti.</blockquote>
+          <figcaption><b>Pavyzdinis dalyvis</b>Klientų aptarnavimo vadovė, paslaugų įmonė</figcaption>
+        </figure>
+        <figure class="quote">
+          <div class="quote-num">3 val.<small>sutaupo kiekvienam pasiūlymui</small></div>
+          <blockquote>Pasiūlymą klientui su Claude paruošiu per pusvalandį. Anksčiau tam skirdavau pusę darbo dienos.</blockquote>
+          <figcaption><b>Pavyzdinis dalyvis</b>Pardavimų vadovas, IT įmonė</figcaption>
+        </figure>
+        <figure class="quote">
+          <div class="quote-num">2 d.<small>per mėnesį grąžina komandai</small></div>
+          <blockquote>Po mokymų visa komanda ataskaitas ruošia pagal vieną šabloną. Mėnesio pabaigoje nebesėdime iki vėlumos.</blockquote>
+          <figcaption><b>Pavyzdinis dalyvis</b>Finansų skyriaus vadovė, gamybos įmonė</figcaption>
+        </figure>
+      </div>
+      <p class="sample">Atsiliepimai ir skaičiai yra pavyzdiniai. Juos pakeisime realiais dalyvių atsiliepimais.</p>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Kodėl GLAUBIC</span>
+        <h2>Keturios vertybės</h2>
+      </div>
+      <div class="value-grid">
+        <article class="value"><span class="value-no">01</span><div><h3>Praktika pirmiau</h3><p>Kiekviena mokymų minutė skirta darbui su tikromis užduotimis ir jūsų failais.</p></div></article>
+        <article class="value"><span class="value-no">02</span><div><h3>Aiškumas</h3><p>Sudėtingus dalykus paaiškiname paprastai, be žargono ir be triukšmo.</p></div></article>
+        <article class="value"><span class="value-no">03</span><div><h3>Rezultatas</h3><p>Vertiname sutaupytas valandas, ne išmoktų funkcijų skaičių.</p></div></article>
+        <article class="value"><span class="value-no">04</span><div><h3>Artumas</h3><p>Gyvi mokymai mažose grupėse ir pagalba net baigus kursą.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="gift">
+    <div class="wrap">
+      <div class="frame">
+        <span class="frame-band frame-band--top">DOVANA</span>
+        <h2>Padovanokite mokymus kolegai ar artimajam</h2>
+        <p>Parengsime asmeninį dovanų kuponą. Gavėjas pats pasirinks mokymus, datą ir miestą.</p>
+        <a class="btn btn--cta" href="#">Užsakyti kuponą</a>
+        <a class="frame-band frame-band--bottom" href="#">KAIP TAI VEIKIA</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="newsletter">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Naujienlaiškis</span>
+        <h2 style="margin-top:12px">Nauji mokymai ir praktiniai patarimai jūsų el. paštu</h2>
+        <p>Pranešime apie naujas datas ir dalinsimės darbo pavyzdžiais, kuriuos galėsite pritaikyti iš karto.</p>
+      </div>
+      <form class="nl-form" onsubmit="return false">
+        <label class="visually-hidden" for="nl-email" style="position:absolute;left:-9999px">El. paštas</label>
+        <input id="nl-email" type="email" placeholder="jusu@pastas.lt" autocomplete="email">
+        <button class="btn btn--ghost" type="submit">Prenumeruoti</button>
+        <span class="nl-note">Atsisakyti galite bet kada.</span>
+      </form>
+    </div>
+  </section>
 </main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="logo" href="#">GLAUBIC</a>
+        <p style="margin-top:14px;max-width:22em">Praktiniai AI mokymai Vilniuje, Kaune ir Klaipėdoje.</p>
+      </div>
+      <div>
+        <h3>Mokymai</h3>
+        <ul><li><a href="#kursas-agentas">AI agentas per 3 val.</a></li><li><a href="#kursas-claude">Claude darbe</a></li><li><a href="#tvarkarastis">Tvarkaraštis</a></li><li><a href="#">Dovanų kuponas</a></li></ul>
+      </div>
+      <div>
+        <h3>Įmonė</h3>
+        <ul><li><a href="#keliai">Verslui</a></li><li><a href="#">Apie</a></li><li><a href="#">Lektoriai</a></li></ul>
+      </div>
+      <div>
+        <h3>Kontaktai</h3>
+        <ul><li><a href="#">Parašykite mums</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 GLAUBIC</span>
+      <span class="spaced">WWW.GLAUBIC.COM</span>
+    </div>
+  </div>
+</footer>
 
 <script>
   // Tvarkaraščio filtras pagal miestą
