@@ -35,10 +35,11 @@
     --radius-pill: 999px;
     --wrap: 1200px;
     --gutter: clamp(16px, 4vw, 48px);
+    --section: clamp(56px, 8vw, 104px);
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
   body {
     margin: 0;
     background: var(--white);
@@ -58,6 +59,14 @@
   p { margin: 0; }
   a { color: inherit; }
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+  [hidden] { display: none !important; }
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 
   /* Maketo žymė */
   .mock-note {
@@ -69,7 +78,7 @@
     padding: 8px var(--gutter);
   }
 
-  /* Kapsulės: brandbook 14–15 psl. */
+  /* Kapsulės: brandbook 14–15 psl. Informacinės žymos nėra paspaudžiamos. */
   .pill {
     display: inline-flex;
     align-items: center;
@@ -88,6 +97,7 @@
   .pill--violet { background: var(--violet-200); }
   .pill--coral { background: var(--coral); }
   .pill--yellow { background: var(--yellow); }
+  .pill--outline { background: transparent; box-shadow: inset 0 0 0 2px var(--ink-800); font-weight: 700; }
 
   /* Mygtukai: CTA koralinis, tekstas rašalo tonu */
   .btn {
@@ -104,32 +114,75 @@
     text-decoration: none;
     border: 2px solid transparent;
     cursor: pointer;
+    white-space: nowrap;
   }
   .btn--cta { background: var(--coral); color: var(--ink-800); }
   .btn--cta:hover { background: #FF7E57; }
   .btn--ghost { background: transparent; color: var(--ink-800); border-color: var(--ink-800); }
   .btn--ghost:hover { background: rgba(50, 40, 56, 0.06); }
+  .btn--sm { height: 44px; padding: 0 18px; font-size: 16px; }
   .btn--block { width: 100%; }
-  .btn:focus-visible, .pill:focus-visible, a:focus-visible, summary:focus-visible {
+  :where(a, button, summary, input, select, textarea):focus-visible {
     outline: 3px solid var(--ink-800);
     outline-offset: 3px;
   }
 
-  /* Pabraukta paantraštė: brandbook 13 psl. */
-  .underlined {
-    text-decoration: underline;
-    text-decoration-thickness: 3px;
-    text-underline-offset: 6px;
-  }
   .eyebrow {
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
   }
+  .section-head { max-width: 760px; margin-bottom: 40px; }
+  .section-head h2 { font-size: clamp(32px, 4vw, 52px); margin-top: 12px; }
+  .section-head p { margin-top: 16px; font-size: 19px; }
+
+  /* ---------- Dovanos ikona su animacija ---------- */
+  .gift-icon { display: inline-block; width: 26px; height: 26px; vertical-align: middle; overflow: visible; }
+  .gift-icon .lid { transform-origin: 50% 100%; transform-box: fill-box; animation: lid-pop 2.6s ease-in-out infinite; }
+  .gift-icon .box-all { transform-origin: 50% 100%; transform-box: fill-box; animation: gift-wiggle 2.6s ease-in-out infinite; }
+  .gift-icon .spark { opacity: 0; animation: spark 2.6s ease-in-out infinite; }
+  @keyframes gift-wiggle {
+    0%, 55%, 100% { transform: rotate(0); }
+    62% { transform: rotate(-9deg); }
+    70% { transform: rotate(8deg); }
+    78% { transform: rotate(-5deg); }
+    86% { transform: rotate(3deg); }
+  }
+  @keyframes lid-pop {
+    0%, 20%, 100% { transform: translateY(0) rotate(0); }
+    30% { transform: translateY(-5px) rotate(-10deg); }
+    42% { transform: translateY(0) rotate(0); }
+  }
+  @keyframes spark {
+    0%, 22%, 60%, 100% { opacity: 0; transform: scale(0.4); }
+    32% { opacity: 1; transform: scale(1); }
+    48% { opacity: 0; transform: scale(1.3); }
+  }
+
+  /* ---------- Judantis dovanų baneris ---------- */
+  .promo {
+    display: block;
+    background: var(--coral);
+    color: var(--ink-800);
+    text-decoration: none;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 44px;
+    line-height: 44px;
+    font-size: 16px;
+  }
+  .promo-track { display: inline-flex; animation: promo-scroll 38s linear infinite; }
+  .promo:hover .promo-track, .promo:focus-visible .promo-track { animation-play-state: paused; }
+  .promo-group { display: inline-flex; flex-shrink: 0; align-items: center; }
+  .promo-item { padding: 0 24px; display: inline-flex; align-items: center; gap: 10px; }
+  .promo-item b { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .promo-sep { opacity: 0.6; }
+  .promo:focus-visible { outline: 3px solid var(--ink-800); outline-offset: -3px; }
+  @keyframes promo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
   /* ---------- Antraštė ---------- */
-  .site-header { background: var(--violet-500); }
+  .site-header { background: var(--violet-500); position: relative; z-index: 10; }
   .site-header .wrap {
     display: flex;
     align-items: center;
@@ -141,84 +194,76 @@
   .logo img { display: block; height: 24px; width: auto; }
   .site-footer .logo img { height: 28px; }
   .nav { display: flex; gap: 28px; }
-  .nav a { text-decoration: none; font-size: 17px; }
-  .nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+  .nav a { text-decoration: none; font-size: 17px; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+  .nav a:hover, .nav a[aria-current="true"] { text-decoration-line: underline; }
+  .nav a[aria-current="true"] { font-weight: 700; }
   .lang { display: flex; gap: 4px; font-size: 15px; font-weight: 700; }
   .lang a { text-decoration: none; padding: 6px 10px; border-radius: var(--radius-pill); }
   .lang a[aria-current] { background: var(--white); }
   .menu-btn { display: none; cursor: pointer; }
-  .site-header { position: relative; z-index: 10; }
   .nav-lang { display: none; }
-  @media (max-width: 1100px) {
-    .nav { gap: 20px; }
-  }
+  @media (max-width: 1100px) { .nav { gap: 20px; } }
 
   /* ---------- Pirmas ekranas ---------- */
-  .hero { background: var(--violet-500); padding: clamp(40px, 7vw, 96px) 0 clamp(48px, 7vw, 88px); }
+  .hero { background: var(--violet-500); padding: clamp(40px, 6vw, 88px) 0 clamp(48px, 7vw, 88px); }
   .hero .wrap {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(32px, 5vw, 72px);
     align-items: start;
   }
+  .hero .wrap > * { min-width: 0; }
   .hero h1 { font-size: clamp(38px, 4.4vw, 62px); margin: 20px 0 24px; }
   .hero .lead { font-size: clamp(18px, 1.6vw, 21px); max-width: 34em; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
   .stats { display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 56px); margin-top: 48px; }
   .stat b { display: block; font-family: var(--font-head); font-size: 44px; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
-  .stat > span { font-size: 16px; }
+  .stat > span { display: block; font-size: 16px; margin-top: 6px; max-width: 11em; line-height: 1.3; }
 
-  /* Tvarkaraščio panelė */
+  /* Tvarkaraštis */
   .schedule {
     background: var(--white);
     border-radius: var(--radius-panel);
     padding: clamp(20px, 3vw, 32px);
   }
-  .schedule-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .schedule-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
   .schedule-head h2 { font-size: 26px; }
-  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 8px; }
-  .filters .pill { cursor: pointer; background: var(--violet-100); }
-  .filters .pill[aria-pressed="true"] { background: var(--violet-500); font-weight: 700; }
+  .schedule-sub { font-size: 15px; color: var(--ink-600); }
+  .filters { display: flex; gap: 8px; margin: 18px 0 8px; overflow-x: auto; padding: 4px 2px; }
+  .filters button {
+    height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--violet-200);
+    background: var(--white);
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink-800);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .filters button[aria-pressed="true"] { background: var(--violet-500); border-color: var(--violet-500); font-weight: 700; }
   .events { list-style: none; margin: 0; padding: 0; }
   .event {
     display: grid;
     grid-template-columns: auto 1fr auto;
-    gap: 18px;
+    gap: 16px;
     align-items: center;
-    padding: 18px 0;
+    padding: 16px 0;
     border-top: 1px solid var(--ink-300);
   }
   .event:first-child { border-top: 0; }
   .event-date { font-family: var(--font-head); font-size: 34px; letter-spacing: -0.03em; line-height: 1; min-width: 3.1em; }
-  .event-title { font-weight: 700; }
-  .event-meta { font-size: 15px; color: var(--ink-600); }
-  .event .btn { height: 44px; padding: 0 18px; font-size: 16px; white-space: nowrap; }
-  .event-title { font-size: 17px; line-height: 1.3; }
+  .event-title { font-weight: 700; font-size: 17px; line-height: 1.3; }
+  .event-meta { font-size: 15px; color: var(--ink-600); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 4px; }
+  .event-meta .pill { height: 26px; padding: 0 10px; font-size: 13px; }
+  .event--soldout .event-date, .event--soldout .event-title { color: var(--ink-600); }
+  .event--soldout .event-date { text-decoration: line-through; text-decoration-thickness: 2px; }
   .event[hidden] { display: none; }
   .schedule-foot { margin-top: 12px; font-size: 15px; }
 
-  /* ---------- Du keliai ---------- */
-  .paths { padding: clamp(56px, 8vw, 104px) 0; background: var(--white); }
-  .section-head { max-width: 760px; margin-bottom: 40px; }
-  .section-head h2 { font-size: clamp(32px, 4vw, 52px); margin-top: 12px; }
-  .section-head p { margin-top: 16px; font-size: 19px; }
-  .paths-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .path {
-    border-radius: var(--radius-panel);
-    padding: clamp(24px, 3.5vw, 40px);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .path--open { background: var(--violet-400); }
-  .path--biz { background: var(--paper); border: 2px solid var(--ink-800); }
-  .path h3 { font-size: clamp(26px, 2.6vw, 34px); }
-  .path ul { margin: 0; padding-left: 20px; }
-  .path li { margin: 4px 0; }
-  .path .btn { margin-top: auto; align-self: flex-start; }
-
   /* ---------- Kursai ---------- */
-  .courses { background: var(--paper); padding: clamp(56px, 8vw, 104px) 0; }
+  .courses { background: var(--paper); padding: var(--section) 0; }
   .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
   .course {
     background: var(--white);
@@ -232,23 +277,42 @@
   .course-tags { display: flex; flex-wrap: wrap; gap: 8px; }
   .course h3 { font-size: 26px; line-height: 1.12; }
   .course .benefit { font-size: 17px; }
-  .course details {
-    background: var(--fog);
-    border-radius: 18px;
-    padding: 4px 18px;
+  .course .perks { list-style: none; margin: 0; padding: 0; font-size: 16px; display: grid; gap: 6px; }
+  .course .perks li { padding-left: 26px; position: relative; }
+  .course .perks li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 0.45em;
+    width: 12px;
+    height: 7px;
+    border-left: 2.5px solid var(--ink-800);
+    border-bottom: 2.5px solid var(--ink-800);
+    transform: rotate(-45deg);
   }
+  .next-date {
+    font-size: 15px;
+    background: var(--violet-100);
+    border-radius: 16px;
+    padding: 12px 16px;
+    line-height: 1.4;
+  }
+  .course--bundle .next-date { background: var(--white); }
+  .next-date b { font-family: var(--font-head); font-size: 18px; letter-spacing: -0.02em; }
+  .course details { background: var(--fog); border-radius: 18px; padding: 4px 18px; }
   .course--bundle details { background: var(--violet-100); }
-  .course summary {
+  summary {
     cursor: pointer;
     font-weight: 700;
     padding: 12px 0;
     list-style: none;
     display: flex;
     justify-content: space-between;
+    gap: 16px;
   }
-  .course summary::-webkit-details-marker { display: none; }
-  .course summary::after { content: "+"; font-size: 22px; line-height: 1; }
-  .course details[open] summary::after { content: "\2212"; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-size: 22px; line-height: 1; flex-shrink: 0; }
+  details[open] > summary::after { content: "\2212"; }
   .course ol { margin: 0 0 14px; padding-left: 22px; font-size: 16px; }
   .course ol li { margin: 6px 0; }
   .price { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--ink-300); }
@@ -257,28 +321,354 @@
   .price small { display: block; font-size: 15px; color: var(--ink-600); }
   .course--bundle .price small { color: var(--ink-800); }
   .course-actions { display: grid; gap: 10px; }
-  .course-actions a.link { text-align: center; font-size: 16px; }
+  .link-btn {
+    background: none;
+    border: 0;
+    padding: 6px;
+    font: inherit;
+    font-size: 16px;
+    color: var(--ink-800);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    justify-self: center;
+  }
+  .course-note { margin-top: 24px; font-size: 16px; }
 
-  /* Kortelių eilutės sulygiuotos tarpusavyje: žymės, pavadinimas, aprašas, programa, kaina, veiksmai */
+  /* Kortelių eilutės sulygiuotos: žymės, pavadinimas, rezultatas, naudos, data, programa, kaina, veiksmai */
   @supports (grid-template-rows: subgrid) {
     .course-grid { row-gap: 0; }
     .course {
       display: grid;
-      grid-row: span 6;
+      grid-row: span 8;
       grid-template-rows: subgrid;
       row-gap: 16px;
       align-content: start;
     }
-    .course details { align-self: start; }
+    .course details, .course .next-date { align-self: start; }
     .course .price { margin-top: 0; align-self: end; }
   }
-  @media (max-width: 1000px) {
-    .course-grid { row-gap: 20px; }
+
+  /* ---------- Atsiliepimai ---------- */
+  .results { background: var(--violet-500); padding: var(--section) 0; }
+  .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .quote {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+  }
+  .quote-num { font-family: var(--font-head); font-size: 56px; letter-spacing: -0.03em; line-height: 1; }
+  .quote-num small { display: block; font-family: var(--font-body); font-size: 16px; letter-spacing: 0; margin-top: 8px; }
+  .quote blockquote { margin: 0; font-size: 18px; }
+  .quote figcaption { margin-top: auto; font-size: 15px; color: var(--ink-600); }
+  .quote figcaption b { display: block; color: var(--ink-800); }
+  .sample { margin-top: 20px; font-size: 14px; }
+
+  /* ---------- Verslui ---------- */
+  .business { background: var(--white); padding: var(--section) 0; }
+  .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .service {
+    border-radius: var(--radius-panel);
+    padding: clamp(24px, 3.5vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .service--training { background: var(--violet-400); }
+  .service--build { background: var(--paper); box-shadow: inset 0 0 0 2px var(--ink-800); }
+  .service-no { font-family: var(--font-head); font-size: 20px; }
+  .service h3 { font-size: clamp(26px, 2.6vw, 34px); }
+  .service ul { margin: 0; padding-left: 20px; }
+  .service li { margin: 4px 0; }
+  .service .btn { margin-top: auto; align-self: flex-start; }
+  .service-foot { font-size: 15px; margin-top: 16px; }
+  .clients { margin-top: 56px; text-align: center; }
+  .clients-list {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 40px;
+    font-family: var(--font-head);
+    font-size: 24px;
+    color: var(--ink-600);
+  }
+  .case-placeholder {
+    margin: 28px auto 0;
+    max-width: 760px;
+    border: 2px dashed var(--ink-300);
+    border-radius: var(--radius-card);
+    padding: 20px 24px;
+    font-size: 15px;
+    color: var(--ink-600);
   }
 
+  /* ---------- Vertybės: brandbook 04 psl. ---------- */
+  .values { padding: var(--section) 0; background: var(--paper); }
+  .value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .value {
+    border-radius: var(--radius-card);
+    padding: 24px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .value:nth-child(1) { background: var(--violet-500); }
+  .value:nth-child(2) { background: var(--violet-400); }
+  .value:nth-child(3) { background: var(--coral); }
+  .value:nth-child(4) { background: var(--yellow); }
+  .value-no { font-weight: 700; font-size: 15px; }
+  .value h3 { font-size: 28px; margin-bottom: 10px; }
+  .value p { font-size: 16px; }
+
+  /* ---------- Dovana: kvadratinis rėmas, brandbook 14 psl. ---------- */
+  .gift { background: var(--white); padding: var(--section) 0; }
+  .frame {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    border: 3px solid var(--ink-800);
+    padding: clamp(48px, 7vw, 80px) clamp(24px, 5vw, 64px);
+    text-align: center;
+  }
+  .frame-band {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--white);
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    white-space: nowrap;
+  }
+  .frame-band--top { top: -11px; }
+  .frame-band--bottom { bottom: -11px; text-decoration: none; }
+  .frame-band--bottom:hover { text-decoration: underline; }
+  .frame .gift-icon { width: 64px; height: 64px; margin-bottom: 16px; }
+  .frame h2 { font-size: clamp(30px, 3.6vw, 46px); }
+  .frame p { margin: 16px auto 28px; max-width: 32em; font-size: 19px; }
+
+  /* ---------- DUK ---------- */
+  .faq { background: var(--fog); padding: var(--section) 0; }
+  .faq .wrap { display: grid; grid-template-columns: 1fr 1.6fr; gap: clamp(32px, 5vw, 72px); align-items: start; }
+  .faq-list { display: grid; gap: 12px; }
+  .faq-list details { background: var(--white); border-radius: 20px; padding: 6px 22px; }
+  .faq-list summary { font-size: 18px; padding: 16px 0; }
+  .faq-list details p { padding: 0 0 18px; font-size: 17px; max-width: 40em; }
+  .faq-more { margin-top: 20px; font-size: 16px; }
+
+  /* ---------- Kontaktai ---------- */
+  .contact { background: var(--violet-500); padding: var(--section) 0; }
+  .contact .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .contact h2 { font-size: clamp(32px, 4vw, 52px); margin-top: 12px; }
+  .contact p { margin-top: 16px; font-size: 19px; max-width: 32em; }
+  .contact-card { background: var(--white); border-radius: var(--radius-panel); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; }
+  .contact-line { display: grid; gap: 2px; }
+  .contact-line span { font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+  .contact-line a { font-size: 20px; text-underline-offset: 4px; }
+
+  /* ---------- Naujienlaiškis ---------- */
+  .newsletter { background: var(--white); padding: clamp(56px, 8vw, 96px) 0; }
+  .newsletter .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .newsletter h2 { font-size: clamp(30px, 3.6vw, 46px); margin-top: 12px; }
+  .newsletter p { margin-top: 14px; }
+  .nl-form { display: flex; gap: 10px; flex-wrap: wrap; }
+  .nl-form input {
+    flex: 1 1 240px;
+    height: 56px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-300);
+    padding: 0 22px;
+    font: inherit;
+    color: var(--ink-800);
+    background: var(--white);
+  }
+  .nl-form input:focus { border-color: var(--ink-800); }
+  .nl-note { width: 100%; font-size: 14px; color: var(--ink-600); }
+
+  /* ---------- Poraštė ---------- */
+  .site-footer { background: var(--violet-500); padding: 64px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; }
+  .site-footer h3 { font-family: var(--font-body); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
+  .site-footer ul { list-style: none; margin: 0; padding: 0; }
+  .site-footer li { margin: 6px 0; }
+  .site-footer a { text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
+  .company { margin-top: 16px; font-size: 15px; line-height: 1.6; }
+  .footer-bottom {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--ink-800);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    font-size: 14px;
+  }
+  .footer-bottom nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-bottom a { text-decoration: underline; text-underline-offset: 3px; }
+  .spaced { letter-spacing: 0.3em; }
+
+  /* ---------- Langai (dialogai) ---------- */
+  .modal {
+    border: 0;
+    border-radius: var(--radius-panel);
+    padding: 0;
+    width: min(620px, calc(100% - 24px));
+    max-height: min(92vh, 900px);
+    color: var(--ink-800);
+    background: var(--white);
+  }
+  .modal[open] { display: flex; flex-direction: column; }
+  .modal::backdrop { background: rgba(36, 29, 43, 0.55); }
+  .modal-body { padding: clamp(24px, 4vw, 36px); overflow-y: auto; }
+  .modal-foot {
+    border-top: 1px solid var(--ink-300);
+    padding: 18px clamp(24px, 4vw, 36px);
+    background: var(--white);
+    display: grid;
+    gap: 12px;
+  }
+  .modal h2 { font-size: clamp(26px, 3vw, 34px); padding-right: 52px; }
+  .modal .lead { margin: 10px 0 22px; }
+  .dialog-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--ink-800);
+    background: var(--white);
+    color: var(--ink-800);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 1;
+  }
+  .modal-title-row { display: flex; align-items: center; gap: 14px; }
+  .modal-title-row .gift-icon { width: 40px; height: 40px; flex-shrink: 0; }
+
+  /* Dovanos sąrašas */
+  .gift-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .gift-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    background: var(--violet-100);
+    border-radius: 20px;
+    padding: 16px 16px 16px 22px;
+  }
+  .gift-row-title { font-weight: 700; line-height: 1.3; }
+  .gift-row-meta { font-size: 14px; color: var(--ink-600); }
+  .gift-row-price { text-align: right; font-family: var(--font-head); font-size: 22px; letter-spacing: -0.02em; white-space: nowrap; }
+  .gift-row-price small { display: block; font-family: var(--font-body); font-size: 13px; letter-spacing: 0; color: var(--ink-600); }
+  .terms-box {
+    margin-top: 18px;
+    background: var(--paper);
+    border-radius: 18px;
+    padding: 16px 20px;
+    font-size: 15px;
+  }
+  .terms-box ul { margin: 6px 0 0; padding-left: 20px; }
+  .terms-box li { margin: 3px 0; }
+
+  /* Pirkimo langas */
+  .segmented { display: inline-flex; background: var(--violet-100); border-radius: var(--radius-pill); padding: 4px; margin: 14px 0 22px; }
+  .segmented button {
+    height: 40px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font: inherit;
+    font-size: 16px;
+    color: var(--ink-800);
+    cursor: pointer;
+  }
+  .segmented button[aria-pressed="true"] { background: var(--white); font-weight: 700; box-shadow: inset 0 0 0 2px var(--ink-800); }
+  .buy-meta { font-size: 16px; color: var(--ink-600); margin-top: 8px; }
+  .field { display: grid; gap: 6px; margin-top: 20px; }
+  .field label, .field legend { font-weight: 700; font-size: 16px; padding: 0; }
+  .field .req { color: var(--ink-800); }
+  .field select, .field input, .field textarea {
+    width: 100%;
+    min-height: 52px;
+    border-radius: 14px;
+    border: 2px solid var(--ink-300);
+    background: var(--white);
+    padding: 12px 16px;
+    font: inherit;
+    font-size: 17px;
+    color: var(--ink-800);
+  }
+  .field textarea { min-height: 110px; resize: vertical; }
+  .field select:focus, .field input:focus, .field textarea:focus { border-color: var(--ink-800); }
+  .hint { font-size: 14px; color: var(--ink-600); }
+  .info-box { margin-top: 20px; background: var(--violet-100); border-radius: 18px; padding: 16px 20px; font-size: 16px; }
+  .info-box b { display: block; margin-bottom: 4px; }
+  .stepper { display: inline-flex; align-items: center; gap: 4px; border: 2px solid var(--ink-300); border-radius: var(--radius-pill); padding: 4px; width: max-content; }
+  .stepper button {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    border: 0;
+    background: var(--violet-100);
+    font: inherit;
+    font-size: 22px;
+    color: var(--ink-800);
+    cursor: pointer;
+  }
+  .stepper output { min-width: 40px; text-align: center; font-weight: 700; }
+  .check { display: flex; gap: 12px; align-items: center; margin-top: 20px; font-size: 16px; cursor: pointer; }
+  .check input { width: 22px; height: 22px; accent-color: var(--ink-800); }
+  .buy-program { margin-top: 20px; border-top: 1px solid var(--ink-300); }
+  .buy-program ol { margin: 0 0 8px; padding-left: 22px; font-size: 16px; }
+  .total { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .total span { font-size: 16px; }
+  .total b { font-family: var(--font-head); font-size: 30px; letter-spacing: -0.03em; }
+  .total small { font-size: 14px; color: var(--ink-600); margin-left: 6px; }
+  .foot-note { font-size: 13px; color: var(--ink-600); }
+  .form-error { font-size: 15px; font-weight: 700; color: var(--ink-800); background: var(--yellow); border-radius: 10px; padding: 8px 12px; }
+  .form-error:empty { display: none; }
+  .success { text-align: center; padding: 20px 0; }
+  .success h3 { font-size: 28px; margin-bottom: 10px; }
+
+  /* Užklausos forma */
+  .choice-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice { position: relative; }
+  .choice input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .choice span {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--violet-200);
+    font-size: 16px;
+  }
+  .choice input:checked + span { background: var(--violet-500); border-color: var(--violet-500); font-weight: 700; }
+  .choice input:focus-visible + span { outline: 3px solid var(--ink-800); outline-offset: 2px; }
+  fieldset.field { border: 0; margin: 20px 0 0; padding: 0; min-width: 0; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+  /* ---------- Prisitaikymas prie ekrano ---------- */
   @media (max-width: 1000px) {
-    .hero .wrap { grid-template-columns: 1fr; }
-    .course-grid { grid-template-columns: 1fr; max-width: 620px; }
+    .hero .wrap { grid-template-columns: minmax(0, 1fr); }
+    .course-grid { grid-template-columns: 1fr; max-width: 620px; row-gap: 20px; }
+    .quote-grid { grid-template-columns: 1fr; max-width: 620px; }
+    .value-grid { grid-template-columns: 1fr 1fr; }
+    .newsletter .wrap, .contact .wrap, .faq .wrap { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 820px) {
     .menu-btn { display: inline-flex; }
@@ -300,217 +690,65 @@
     .nav-lang { display: flex; gap: 8px; padding-top: 16px; }
     .nav-lang a { border: 0; padding: 6px 14px; border-radius: var(--radius-pill); font-size: 16px; font-weight: 700; }
     .nav-lang a[aria-current] { background: var(--violet-200); }
+    .service-grid { grid-template-columns: minmax(0, 1fr); }
   }
   @media (max-width: 720px) {
-    .paths-grid { grid-template-columns: 1fr; }
     .event { grid-template-columns: auto 1fr; }
     .event .btn { grid-column: 1 / -1; width: 100%; }
     .hero-actions .btn { width: 100%; }
-  }
-
-  /* ---------- Atsiliepimai ---------- */
-  .results { background: var(--violet-500); padding: clamp(56px, 8vw, 104px) 0; }
-  .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .quote {
-    background: var(--white);
-    border-radius: var(--radius-card);
-    padding: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    margin: 0;
-  }
-  .quote-num { font-family: var(--font-head); font-size: 56px; letter-spacing: -0.03em; line-height: 1; }
-  .quote-num small { display: block; font-family: var(--font-body); font-size: 16px; letter-spacing: 0; margin-top: 8px; }
-  .quote blockquote { margin: 0; font-size: 18px; }
-  .quote figcaption { margin-top: auto; font-size: 15px; color: var(--ink-600); }
-  .quote figcaption b { display: block; color: var(--ink-800); }
-  .sample { margin-top: 20px; font-size: 14px; }
-
-  /* ---------- Vertybės: brandbook 04 psl. ---------- */
-  .values { padding: clamp(56px, 8vw, 104px) 0; background: var(--white); }
-  .value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .value {
-    border-radius: var(--radius-card);
-    padding: 24px;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .value:nth-child(1) { background: var(--violet-500); }
-  .value:nth-child(2) { background: var(--violet-400); }
-  .value:nth-child(3) { background: var(--coral); }
-  .value:nth-child(4) { background: var(--yellow); }
-  .value-no { font-weight: 700; font-size: 15px; }
-  .value h3 { font-size: 28px; margin-bottom: 10px; }
-  .value p { font-size: 16px; }
-
-  /* ---------- Dovana: kvadratinis rėmas, brandbook 14 psl. ---------- */
-  .gift { background: var(--paper); padding: clamp(56px, 8vw, 104px) 0; }
-  .frame {
-    position: relative;
-    max-width: 760px;
-    margin: 0 auto;
-    border: 3px solid var(--ink-800);
-    padding: clamp(48px, 7vw, 80px) clamp(24px, 5vw, 64px);
-    text-align: center;
-  }
-  .frame-band {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--paper);
-    padding: 0 16px;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.24em;
-    white-space: nowrap;
-  }
-  .frame-band--top { top: -11px; }
-  .frame-band--bottom { bottom: -11px; text-decoration: none; }
-  .frame-band--bottom:hover { text-decoration: underline; }
-  .frame h2 { font-size: clamp(30px, 3.6vw, 46px); }
-  .frame p { margin: 16px auto 28px; max-width: 32em; font-size: 19px; }
-
-  /* ---------- Naujienlaiškis ---------- */
-  .newsletter { background: var(--fog); padding: clamp(56px, 8vw, 96px) 0; }
-  .newsletter .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-  .newsletter h2 { font-size: clamp(30px, 3.6vw, 46px); }
-  .newsletter p { margin-top: 14px; }
-  .nl-form { display: flex; gap: 10px; flex-wrap: wrap; }
-  .nl-form input {
-    flex: 1 1 240px;
-    height: 56px;
-    border-radius: var(--radius-pill);
-    border: 2px solid var(--ink-300);
-    padding: 0 22px;
-    font: inherit;
-    color: var(--ink-800);
-    background: var(--white);
-  }
-  .nl-form input:focus { outline: 3px solid var(--ink-800); outline-offset: 2px; border-color: var(--ink-800); }
-  .nl-note { width: 100%; font-size: 14px; color: var(--ink-600); }
-
-  /* ---------- Poraštė ---------- */
-  .site-footer { background: var(--violet-500); padding: 64px 0 40px; }
-  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; }
-  .site-footer h3 { font-family: var(--font-body); font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 14px; }
-  .site-footer ul { list-style: none; margin: 0; padding: 0; }
-  .site-footer li { margin: 6px 0; }
-  .site-footer a { text-decoration: none; }
-  .site-footer a:hover { text-decoration: underline; }
-  .footer-bottom {
-    margin-top: 56px;
-    padding-top: 24px;
-    border-top: 1px solid var(--ink-800);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-size: 14px;
-  }
-  .spaced { letter-spacing: 0.3em; }
-
-  @media (max-width: 1000px) {
-    .quote-grid { grid-template-columns: 1fr; max-width: 620px; }
-    .value-grid { grid-template-columns: 1fr 1fr; }
-    .newsletter .wrap { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
+    .btn { white-space: normal; height: auto; min-height: 52px; padding: 12px 22px; text-align: center; line-height: 1.25; }
+    .service .btn { align-self: stretch; }
     .value-grid { grid-template-columns: 1fr; }
     .value { min-height: 220px; }
     .footer-grid { grid-template-columns: 1fr; }
-  }
-
-  /* ---------- Judantis dovanų baneris ---------- */
-  .promo {
-    display: block;
-    background: var(--coral);
-    color: var(--ink-800);
-    text-decoration: none;
-    overflow: hidden;
-    white-space: nowrap;
-    height: 44px;
-    line-height: 44px;
-    font-size: 16px;
-  }
-  .promo-track { display: inline-flex; animation: promo-scroll 38s linear infinite; }
-  .promo:hover .promo-track, .promo:focus-visible .promo-track { animation-play-state: paused; }
-  .promo-group { display: inline-flex; flex-shrink: 0; }
-  .promo-item { padding: 0 28px; }
-  .promo-item b { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
-  .promo-sep { opacity: 0.6; }
-  .promo:focus-visible { outline: 3px solid var(--ink-800); outline-offset: -3px; }
-  @keyframes promo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  @media (prefers-reduced-motion: reduce) {
-    .promo-track { animation: none; }
-  }
-
-  /* ---------- Dovanos pasirinkimo langas ---------- */
-  .gift-dialog {
-    border: 0;
-    border-radius: var(--radius-panel);
-    padding: clamp(24px, 4vw, 40px);
-    width: min(620px, calc(100% - 32px));
-    color: var(--ink-800);
-    background: var(--white);
-  }
-  .gift-dialog::backdrop { background: rgba(36, 29, 43, 0.55); }
-  .gift-dialog h2 { font-size: clamp(26px, 3vw, 34px); padding-right: 48px; }
-  .gift-dialog > p { margin: 12px 0 24px; }
-  .dialog-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-pill);
-    border: 2px solid var(--ink-800);
-    background: var(--white);
-    color: var(--ink-800);
-    font-size: 22px;
-    line-height: 1;
-    cursor: pointer;
-  }
-  .gift-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-  .gift-row {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    gap: 16px;
-    background: var(--violet-100);
-    border-radius: 20px;
-    padding: 16px 16px 16px 22px;
-  }
-  .gift-row-title { font-weight: 700; line-height: 1.3; }
-  .gift-row-meta { font-size: 14px; color: var(--ink-600); }
-  .gift-row-price { text-align: right; font-family: var(--font-head); font-size: 22px; letter-spacing: -0.02em; white-space: nowrap; }
-  .gift-row-price small { display: block; font-family: var(--font-body); font-size: 13px; letter-spacing: 0; color: var(--ink-600); }
-  .gift-row .btn { height: 44px; padding: 0 20px; font-size: 16px; }
-  .dialog-note { margin-top: 18px; font-size: 14px; color: var(--ink-600); }
-  @media (max-width: 560px) {
     .gift-row { grid-template-columns: 1fr auto; }
     .gift-row .btn { grid-column: 1 / -1; width: 100%; }
+    .clients-list { font-size: 20px; gap: 10px 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .promo-track, .gift-icon .lid, .gift-icon .box-all, .gift-icon .spark { animation: none; }
   }
 </style>
 </head>
 <body>
 
-<a class="promo" href="#dovana" data-gift aria-label="Padovanokite mokymus kolegai ar artimajam. Pasirinkti dovaną">
+<!-- Dovanos ikona, naudojama keliose vietose -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="gift" viewBox="0 0 32 32">
+      <g class="box-all">
+        <rect x="5" y="14" width="22" height="15" rx="2" fill="#FFFFFF" stroke="#322838" stroke-width="2"/>
+        <rect x="14" y="14" width="4" height="15" fill="#322838"/>
+      </g>
+      <g class="lid">
+        <rect x="3" y="9" width="26" height="6" rx="2" fill="#FFED00" stroke="#322838" stroke-width="2"/>
+        <rect x="14" y="9" width="4" height="6" fill="#322838"/>
+        <path d="M16 9c-2.5-4.5-7-5-7.5-2.5S12 9 16 9zm0 0c2.5-4.5 7-5 7.5-2.5S20 9 16 9z" fill="none" stroke="#322838" stroke-width="2" stroke-linejoin="round"/>
+      </g>
+      <g class="spark" fill="#322838">
+        <circle cx="4" cy="4" r="1.3"/><circle cx="28" cy="3" r="1.3"/><circle cx="16" cy="1" r="1.1"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="promo" href="#dovana" data-open-gift aria-label="Padovanokite mokymus kolegai ar artimajam. Kuponas galioja 6 mėnesius. Pasirinkti dovaną">
   <span class="promo-track" aria-hidden="true">
     <span class="promo-group">
-      <span class="promo-item">Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
-      <span class="promo-item">Dovanų kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
-      <span class="promo-item">Gavėjas pats pasirinks datą ir miestą</span><span class="promo-sep">·</span>
-      <span class="promo-item"><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
+      <span class="promo-item"><svg class="gift-icon"><use href="#gift"/></svg>Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
+      <span class="promo-item">Kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
+      <span class="promo-item">Galioja 6 mėnesius</span><span class="promo-sep">·</span>
+      <span class="promo-item"><svg class="gift-icon"><use href="#gift"/></svg><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
     </span>
     <span class="promo-group">
-      <span class="promo-item">Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
-      <span class="promo-item">Dovanų kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
-      <span class="promo-item">Gavėjas pats pasirinks datą ir miestą</span><span class="promo-sep">·</span>
-      <span class="promo-item"><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
+      <span class="promo-item"><svg class="gift-icon"><use href="#gift"/></svg>Padovanokite mokymus kolegai ar artimajam</span><span class="promo-sep">·</span>
+      <span class="promo-item">Kuponą gausite el. paštu iškart po apmokėjimo</span><span class="promo-sep">·</span>
+      <span class="promo-item">Galioja 6 mėnesius</span><span class="promo-sep">·</span>
+      <span class="promo-item"><svg class="gift-icon"><use href="#gift"/></svg><b>Pasirinkti dovaną</b></span><span class="promo-sep">·</span>
     </span>
   </span>
 </a>
@@ -519,11 +757,11 @@
   <div class="wrap">
     <a class="logo" href="#" aria-label="GLAUBIC pradžia"><img src="assets/2026-09-27-glaubic-logotipas.svg" alt="GLAUBIC" width="169" height="24"></a>
     <nav class="nav" id="pagrindinis-meniu" aria-label="Pagrindinis meniu">
-      <a href="#mokymai">Kursai</a>
-      <a href="#keliai">Verslui</a>
-      <a href="#">Apie</a>
-      <a href="#">Lektoriai</a>
-      <a href="#">Kontaktai</a>
+      <a href="#kursai">Kursai</a>
+      <a href="#verslui">Verslui</a>
+      <a href="#apie">Apie</a>
+      <a href="#lektoriai">Lektoriai</a>
+      <a href="#kontaktai">Kontaktai</a>
       <div class="nav-lang" aria-label="Kalba"><a href="#" aria-current="true">LT</a><a href="#">EN</a></div>
     </nav>
     <div class="lang" aria-label="Kalba">
@@ -540,14 +778,14 @@
       <div>
         <span class="pill pill--sm">Gyvi mokymai Vilniuje, Kaune ir Klaipėdoje</span>
         <h1>Praktiniai AI mokymai, po kurių kitą dieną dirbsite lengviau</h1>
-        <p class="lead">3–3,5 val. gyvi Claude ir AI agentų mokymai mažose grupėse. Išeisite ne su teorija, o su paruoštu darbo srautu savo užduotims.</p>
+        <p class="lead">3–3,5 val. gyvi Claude ir AI agentų mokymai mažose grupėse darbuotojams ir verslo komandoms. Išeisite ne su teorija, o su paruoštu darbo srautu savo užduotims.</p>
         <div class="hero-actions">
-          <a class="btn btn--cta" href="#tvarkarastis">Pasirinkti datą</a>
-          <a class="btn btn--ghost" href="#keliai">Mokymai komandai</a>
+          <a class="btn btn--cta" href="#kursai">Pasirinkti mokymus</a>
+          <a class="btn btn--ghost" href="#verslui">Sprendimai verslui</a>
         </div>
         <div class="stats">
-          <div class="stat"><b><span data-count="750">750</span>+</b><span>dalyvių</span></div>
-          <div class="stat"><b><span data-count="650">650</span>+</b><span>valandų mokymų</span></div>
+          <div class="stat"><b><span data-count="750">750</span>+</b><span>mokymų dalyvių</span></div>
+          <div class="stat"><b><span data-count="650">650</span>+</b><span>pravestų mokymų valandų</span></div>
           <div class="stat"><b>3</b><span>miestai</span></div>
         </div>
       </div>
@@ -555,76 +793,24 @@
       <aside class="schedule" id="tvarkarastis" aria-labelledby="schedule-title">
         <div class="schedule-head">
           <h2 id="schedule-title">Artimiausi mokymai</h2>
-          <span class="event-meta">Rugsėjis ir spalis</span>
+          <span class="schedule-sub">Rugsėjis ir spalis</span>
         </div>
         <div class="filters" role="group" aria-label="Filtruoti pagal miestą">
-          <button class="pill pill--sm" type="button" data-city="visi" aria-pressed="true">Visi miestai</button>
-          <button class="pill pill--sm" type="button" data-city="vilnius" aria-pressed="false">Vilnius</button>
-          <button class="pill pill--sm" type="button" data-city="kaunas" aria-pressed="false">Kaunas</button>
-          <button class="pill pill--sm" type="button" data-city="klaipeda" aria-pressed="false">Klaipėda</button>
+          <button type="button" data-city="visi" aria-pressed="true">Visi miestai</button>
+          <button type="button" data-city="Vilnius" aria-pressed="false">Vilnius</button>
+          <button type="button" data-city="Kaunas" aria-pressed="false">Kaunas</button>
+          <button type="button" data-city="Klaipėda" aria-pressed="false">Klaipėda</button>
         </div>
-        <ul class="events">
-          <li class="event" data-city="vilnius">
-            <span class="event-date">09.29</span>
-            <div><div class="event-title">Claude darbe ir kasdienėse užduotyse</div><div class="event-meta">Vilnius · 3,5 val.</div></div>
-            <a class="btn btn--ghost" href="#kursas-claude">Įsigyti bilietą</a>
-          </li>
-          <li class="event" data-city="kaunas">
-            <span class="event-date">09.30</span>
-            <div><div class="event-title">Claude darbe ir kasdienėse užduotyse</div><div class="event-meta">Kaunas · 3,5 val.</div></div>
-            <a class="btn btn--ghost" href="#kursas-claude">Įsigyti bilietą</a>
-          </li>
-          <li class="event" data-city="klaipeda">
-            <span class="event-date">10.08</span>
-            <div><div class="event-title">Susikurkite AI agentą per 3 val.</div><div class="event-meta">Klaipėda · 3 val.</div></div>
-            <a class="btn btn--ghost" href="#kursas-agentas">Įsigyti bilietą</a>
-          </li>
-          <li class="event" data-city="vilnius">
-            <span class="event-date">10.15</span>
-            <div><div class="event-title">Susikurkite AI agentą per 3 val.</div><div class="event-meta">Vilnius · 3 val.</div></div>
-            <a class="btn btn--ghost" href="#kursas-agentas">Įsigyti bilietą</a>
-          </li>
-        </ul>
-        <p class="schedule-foot"><a href="#">Visas tvarkaraštis</a></p>
+        <ul class="events" id="events"></ul>
+        <p class="schedule-foot">Tikslų adresą atsiųsime el. paštu kartu su registracijos patvirtinimu.</p>
       </aside>
     </div>
   </section>
 
-  <section class="paths" id="keliai">
+  <section class="courses" id="kursai">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Kaip mokomės</span>
-        <h2>Vienas žmogus ar visa komanda</h2>
-      </div>
-      <div class="paths-grid">
-        <article class="path path--open">
-          <span class="eyebrow">Atviri mokymai</span>
-          <h3>Ateikite į grupę savo mieste</h3>
-          <ul>
-            <li>Fiksuota kaina ir data, bilietą įsigysite internetu</li>
-            <li>Dirbate su savo užduotimis ir failais</li>
-            <li>Pagalba ir po mokymų</li>
-          </ul>
-          <a class="btn btn--ghost" href="#mokymai">Žiūrėti mokymus</a>
-        </article>
-        <article class="path path--biz">
-          <span class="eyebrow">Mokymai komandoms</span>
-          <h3>Pritaikome jūsų įmonės procesams</h3>
-          <ul>
-            <li>Jūsų biure arba nuotoliu</li>
-            <li>Programa pagal jūsų komandos užduotis</li>
-            <li>Pasiūlymą atsiųsime per 8 darbo valandas</li>
-          </ul>
-          <a class="btn btn--ghost" href="#">Gauti pasiūlymą</a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="courses" id="mokymai">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Mokymai</span>
+        <span class="eyebrow">Kursai</span>
         <h2>Pasirinkite mokymus pagal savo kasdienes užduotis</h2>
       </div>
 
@@ -635,7 +821,13 @@
             <span class="pill pill--sm pill--violet">3 val.</span>
           </div>
           <h3>Susikurkite AI agentą per 3 val.</h3>
-          <p class="benefit">Be programavimo susikursite agentą, kuris skaito, rūšiuoja ir atsako į jūsų el. laiškus Gmail arba Outlook pašte.</p>
+          <p class="benefit">AI agentas yra programa, kuri pati atlieka pasikartojančias užduotis. Susikursite agentą, kuris skaito, rūšiuoja ir atsako į jūsų el. laiškus.</p>
+          <ul class="perks">
+            <li>Veikia su Gmail arba Outlook</li>
+            <li>Programuoti nereikia</li>
+            <li>Atsakymai jūsų tonu ir stiliumi</li>
+          </ul>
+          <p class="next-date" data-next="agentas"></p>
           <details>
             <summary>Programa, 5 moduliai</summary>
             <ol>
@@ -646,13 +838,10 @@
               <li>Agento paleidimas su jūsų verslo scenarijais</li>
             </ol>
           </details>
-          <div class="price">
-            <b>145 €</b>
-            <small>(be PVM)</small>
-          </div>
+          <div class="price"><b>145 €</b><small>(be PVM)</small></div>
           <div class="course-actions">
-            <a class="btn btn--cta btn--block" href="#tvarkarastis">Pasirinkti datą</a>
-            <a class="link" href="#dovana" data-gift>Padovanoti kuponą</a>
+            <button class="btn btn--cta btn--block" type="button" data-buy="agentas">Pasirinkti datą</button>
+            <button class="link-btn" type="button" data-buy="agentas" data-mode="gift">Padovanoti kuponą</button>
           </div>
         </article>
 
@@ -663,57 +852,64 @@
           </div>
           <h3>Claude darbe ir kasdienėse užduotyse</h3>
           <p class="benefit">Pasiūlymus, ataskaitas ir pristatymus paruošite per minutes, naudodami įrankius, su kuriais jau dirbate.</p>
+          <ul class="perks">
+            <li>Dokumentai ir ataskaitos per minutes</li>
+            <li>Failų, PDF ir duomenų analizė</li>
+            <li>Sujungimas su Gmail, Canva, Notion ir kitais</li>
+          </ul>
+          <p class="next-date" data-next="claude"></p>
           <details>
             <summary>Programa, 7 moduliai</summary>
             <ol>
-              <li>Claude Chat ir Claude Cowork pagrindai</li>
-              <li>Interaktyvios aplikacijos ir vizualai (Artifacts)</li>
+              <li>Claude pokalbiai ir Claude Cowork pagrindai</li>
+              <li>Interaktyvios aplikacijos ir vizualai</li>
               <li>Dokumentai: pasiūlymai, ataskaitos, lentelės</li>
               <li>Failų, PDF ir duomenų analizė</li>
-              <li>Interneto paieška ir darbo šablonai (Skills)</li>
+              <li>Interneto paieška ir pakartotinai naudojami darbo šablonai</li>
               <li>Sujungimas su Canva, Gmail, Google Drive, Slack, Notion, Figma, Miro ir Jira</li>
               <li>Pasikartojančių užduočių automatizavimas</li>
             </ol>
           </details>
-          <div class="price">
-            <b>165 €</b>
-            <small>(be PVM)</small>
-          </div>
+          <div class="price"><b>165 €</b><small>(be PVM)</small></div>
           <div class="course-actions">
-            <a class="btn btn--cta btn--block" href="#tvarkarastis">Pasirinkti datą</a>
-            <a class="link" href="#dovana" data-gift>Padovanoti kuponą</a>
+            <button class="btn btn--cta btn--block" type="button" data-buy="claude">Pasirinkti datą</button>
+            <button class="link-btn" type="button" data-buy="claude" data-mode="gift">Padovanoti kuponą</button>
           </div>
         </article>
 
-        <article class="course course--bundle">
+        <article class="course course--bundle" id="kursas-paketas">
           <div class="course-tags">
-            <span class="pill pill--sm">Abu mokymai</span>
-            <span class="pill pill--sm pill--yellow">Sutaupote 35 € be PVM</span>
+            <span class="pill pill--sm">6,5 val.</span>
+            <span class="pill pill--sm pill--yellow">Sutaupote 35 € (be PVM)</span>
           </div>
           <h3>AI agentai ir Claude kartu</h3>
-          <p class="benefit">Dvi sesijos po 3 val. Abiejų mokymų programa, o datas suderiname pagal jūsų kalendorių.</p>
+          <p class="benefit">Abu mokymai vienu pirkimu: dvi atskiros sesijos, kurių datas suderiname su jumis.</p>
+          <ul class="perks">
+            <li>3 val. AI agento mokymai</li>
+            <li>3,5 val. Claude mokymai</li>
+            <li>Mažesnė kaina nei perkant atskirai</li>
+          </ul>
+          <p class="next-date"><b>Datos derinamos</b><br>Susisieksime per 24 val. nuo apmokėjimo.</p>
           <details>
             <summary>Kas įeina</summary>
             <ol>
-              <li>Visi AI agento mokymų moduliai</li>
-              <li>Visi Claude mokymų moduliai</li>
-              <li>Agentas, atsakantis į el. laiškus</li>
-              <li>Interaktyvios aplikacijos ir vizualai</li>
-              <li>Sujungimas su jūsų darbo įrankiais</li>
+              <li>Visi 5 AI agento mokymų moduliai</li>
+              <li>Visi 7 Claude mokymų moduliai</li>
+              <li>Agentas, atsakantis į jūsų el. laiškus</li>
+              <li>Dokumentai, vizualai ir duomenų analizė su Claude</li>
             </ol>
           </details>
-          <div class="price">
-            <b>275 €</b>
-            <small>(be PVM)</small>
-          </div>
+          <div class="price"><b>275 €</b><small>(be PVM)</small></div>
           <div class="course-actions">
-            <a class="btn btn--cta btn--block" href="#">Suderinti datas</a>
-            <a class="link" href="#dovana" data-gift>Padovanoti kuponą</a>
+            <button class="btn btn--cta btn--block" type="button" data-buy="paketas">Įsigyti paketą</button>
+            <button class="link-btn" type="button" data-buy="paketas" data-mode="gift">Padovanoti kuponą</button>
           </div>
         </article>
       </div>
+      <p class="course-note">Prieš registruodamiesi peržiūrėkite <a href="#duk">dažniausius klausimus</a> apie datos keitimą, sąskaitas ir kuponus.</p>
     </div>
   </section>
+
   <section class="results" id="rezultatai">
     <div class="wrap">
       <div class="section-head">
@@ -741,10 +937,53 @@
     </div>
   </section>
 
-  <section class="values">
+  <section class="business" id="verslui">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Kodėl GLAUBIC</span>
+        <span class="eyebrow">Verslui</span>
+        <h2>Sprendimai verslui</h2>
+        <p>Ne tik mokome, bet ir padedame verslui pritaikyti automatizacijos ir AI sprendimus kasdieniame darbe.</p>
+      </div>
+      <div class="service-grid">
+        <article class="service service--training">
+          <span class="service-no">01</span>
+          <h3>Mokymai komandoms</h3>
+          <p>Praktiniai AI ir automatizacijos mokymai jūsų komandai, pritaikyti jūsų srities darbams ir įrankiams.</p>
+          <ul>
+            <li>Programa pagal jūsų procesus ir tikslus</li>
+            <li>Vilniuje, Kaune, Klaipėdoje arba nuotoliu</li>
+            <li>Realūs pavyzdžiai, kuriuos komanda naudoja iškart</li>
+          </ul>
+          <button class="btn btn--ghost" type="button" data-inquiry="mokymai">Gauti mokymų pasiūlymą</button>
+        </article>
+        <article class="service service--build">
+          <span class="service-no">02</span>
+          <h3>AI ir automatizacijos diegimas</h3>
+          <p>Ne tik apmokome, bet ir įdiegiame. Automatizuojame kasdienius procesus su AI agentais ir Claude.</p>
+          <ul>
+            <li>El. laiškų, dokumentų ir ataskaitų automatizavimas</li>
+            <li>AI agentai klientų aptarnavimui ir vidiniams procesams</li>
+            <li>Nuo idėjos iki veikiančio sprendimo</li>
+          </ul>
+          <button class="btn btn--ghost" type="button" data-inquiry="diegimas">Aptarti automatizavimo poreikį</button>
+        </article>
+      </div>
+      <p class="service-foot">Į užklausas atsakome per 8 darbo valandas.</p>
+
+      <div class="clients">
+        <span class="eyebrow">Mumis pasitiki</span>
+        <ul class="clients-list">
+          <li>Ellex</li><li>Medžio bitės</li><li>Elpekas</li><li>Synergy</li><li>findalocal</li><li>SOMO</li>
+        </ul>
+        <p class="case-placeholder">Čia bus 2–3 trumpi patvirtinti klientų atvejai: kokią paslaugą klientas gavo ir kokį rezultatą pasiekė. Vietoje pavadinimų bus įdėti klientų logotipai.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="values" id="apie">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Apie GLAUBIC</span>
         <h2>Keturios vertybės</h2>
       </div>
       <div class="value-grid">
@@ -756,14 +995,80 @@
     </div>
   </section>
 
-  <section class="gift">
+  <section class="gift" id="dovanos">
     <div class="wrap">
       <div class="frame">
         <span class="frame-band frame-band--top">DOVANA</span>
+        <svg class="gift-icon" aria-hidden="true"><use href="#gift"/></svg>
         <h2>Padovanokite mokymus kolegai ar artimajam</h2>
-        <p>Parengsime asmeninį dovanų kuponą. Gavėjas pats pasirinks mokymus, datą ir miestą.</p>
-        <a class="btn btn--cta" href="#dovana" data-gift>Pasirinkti dovaną</a>
-        <a class="frame-band frame-band--bottom" href="#">KAIP TAI VEIKIA</a>
+        <p>Dovanų kuponą gausite el. paštu iškart po apmokėjimo. Kuponas galioja 6 mėnesius nuo įsigijimo.</p>
+        <button class="btn btn--cta" type="button" data-open-gift>Pasirinkti dovaną</button>
+        <a class="frame-band frame-band--bottom" href="#duk">KAIP TAI VEIKIA</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="duk">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">DUK</span>
+        <h2>Dažniausi klausimai</h2>
+        <p>Atsakymai parengti pagal mūsų paslaugų teikimo sąlygas.</p>
+      </div>
+      <div>
+        <div class="faq-list">
+          <details>
+            <summary>Ar galiu pakeisti mokymų datą arba atšaukti registraciją?</summary>
+            <p>Taip. Jei atšaukiate likus 7 ar daugiau dienų iki mokymų, grąžiname pinigus arba perkeliame registraciją į kitą datą. Jei likus mažiau nei 7 dienoms, registraciją perkeliame į kitą datą arba išduodame tos pačios vertės kuponą, o sumokėta suma negrąžinama.</p>
+          </details>
+          <details>
+            <summary>Ką daryti, jei negaliu dalyvauti?</summary>
+            <p>Vietoj savęs galite paskirti kitą asmenį. Tik praneškite mums iš anksto el. paštu ai@marketyourvisions.lt.</p>
+          </details>
+          <details>
+            <summary>Kur tiksliai vyks mokymai?</summary>
+            <p>Mokymai vyksta Vilniuje, Kaune ir Klaipėdoje. Tikslų adresą atsiunčiame el. paštu kartu su registracijos patvirtinimu.</p>
+          </details>
+          <details>
+            <summary>Ar išrašote sąskaitą faktūrą?</summary>
+            <p>Taip. Registruodamiesi pažymėkite, kad reikalinga sąskaita faktūra, ir pateikite įmonės rekvizitus.</p>
+          </details>
+          <details>
+            <summary>Kaip galiu sumokėti ir ar kainos nurodytos su PVM?</summary>
+            <p>Mokama saugiai kortele per Stripe. Svetainėje nurodytos kainos be PVM, PVM taikomas pagal galiojančius teisės aktus.</p>
+          </details>
+          <details id="duk-kuponas">
+            <summary>Kaip veikia dovanų kuponas?</summary>
+            <p>Kuponą gausite el. paštu iškart po apmokėjimo. Jis galioja 6 mėnesius nuo įsigijimo. Gavėjas kuponą panaudoja susisiekęs su mumis ir pasirinkęs mokymų datą. Kuponas į pinigus nekeičiamas.</p>
+          </details>
+          <details>
+            <summary>Kaip suderinamos paketo datos?</summary>
+            <p>Per 24 valandas nuo apmokėjimo susisieksime su jumis ir kartu suderinsime abiejų sesijų datas: 3 val. AI agento ir 3,5 val. Claude mokymų.</p>
+          </details>
+          <details>
+            <summary>Kas bus, jei mokymus atšauksite jūs?</summary>
+            <p>Jei mokymus atšaukiame ar perkeliame dėl nuo mūsų priklausančių priežasčių, pasiūlome kitą datą arba grąžiname visą sumą.</p>
+          </details>
+        </div>
+        <p class="faq-more"><a href="#">Visos paslaugų teikimo sąlygos</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="kontaktai">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Kontaktai</span>
+        <h2>Mokymai komandai ar AI diegimas?</h2>
+        <p>Papasakokite, ką norite pasiekti. Paruošime mokymų pasiūlymą arba aptarsime automatizavimo sprendimą. Atsakome per 8 darbo valandas.</p>
+        <div class="hero-actions">
+          <button class="btn btn--cta" type="button" data-inquiry="">Pateikti užklausą</button>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-line"><span>El. paštas</span><a href="mailto:ai@marketyourvisions.lt">ai@marketyourvisions.lt</a></div>
+        <div class="contact-line"><span>Telefonas</span><a href="tel:+37062910499">+370 629 10499</a></div>
+        <div class="contact-line"><span>Instagram</span><a href="#">@glaubicai</a></div>
       </div>
     </div>
   </section>
@@ -772,11 +1077,11 @@
     <div class="wrap">
       <div>
         <span class="eyebrow">Naujienlaiškis</span>
-        <h2 style="margin-top:12px">Nauji mokymai ir praktiniai patarimai jūsų el. paštu</h2>
-        <p>Pranešime apie naujas datas ir dalinsimės darbo pavyzdžiais, kuriuos galėsite pritaikyti iš karto.</p>
+        <h2>Naujos mokymų datos ir praktiniai patarimai</h2>
+        <p>Siunčiame 1–2 kartus per mėnesį: naujas mokymų datas ir darbo pavyzdžius, kuriuos galėsite pritaikyti iš karto.</p>
       </div>
       <form class="nl-form" onsubmit="return false">
-        <label class="visually-hidden" for="nl-email" style="position:absolute;left:-9999px">El. paštas</label>
+        <label class="visually-hidden" for="nl-email">El. paštas</label>
         <input id="nl-email" type="email" placeholder="jusu@pastas.lt" autocomplete="email">
         <button class="btn btn--ghost" type="submit">Prenumeruoti</button>
         <span class="nl-note">Atsisakyti galite bet kada.</span>
@@ -790,63 +1095,384 @@
     <div class="footer-grid">
       <div>
         <a class="logo" href="#" aria-label="GLAUBIC pradžia"><img src="assets/2026-09-27-glaubic-logotipas.svg" alt="GLAUBIC" width="198" height="28"></a>
-        <p style="margin-top:14px;max-width:22em">Praktiniai AI mokymai Vilniuje, Kaune ir Klaipėdoje.</p>
+        <p class="company">MB „Glaubic“<br>Įmonės kodas 306622581<br>Raitininkų g. 4-74, Vilnius</p>
       </div>
       <div>
         <h3>Kursai</h3>
-        <ul><li><a href="#kursas-agentas">AI agentas per 3 val.</a></li><li><a href="#kursas-claude">Claude darbe</a></li><li><a href="#tvarkarastis">Tvarkaraštis</a></li><li><a href="#dovana" data-gift>Dovanų kuponas</a></li></ul>
+        <ul>
+          <li><a href="#kursas-agentas">AI agentas per 3 val.</a></li>
+          <li><a href="#kursas-claude">Claude darbe</a></li>
+          <li><a href="#kursas-paketas">Paketas</a></li>
+          <li><a href="#tvarkarastis">Tvarkaraštis</a></li>
+          <li><a href="#dovanos">Dovanų kuponas</a></li>
+        </ul>
       </div>
       <div>
         <h3>Įmonė</h3>
-        <ul><li><a href="#keliai">Verslui</a></li><li><a href="#">Apie</a></li><li><a href="#">Lektoriai</a></li></ul>
+        <ul>
+          <li><a href="#verslui">Verslui</a></li>
+          <li><a href="#apie">Apie</a></li>
+          <li><a href="#lektoriai">Lektoriai</a></li>
+          <li><a href="#duk">DUK</a></li>
+        </ul>
       </div>
       <div>
         <h3>Kontaktai</h3>
-        <ul><li><a href="#">Parašykite mums</a></li></ul>
+        <ul>
+          <li><a href="mailto:ai@marketyourvisions.lt">ai@marketyourvisions.lt</a></li>
+          <li><a href="tel:+37062910499">+370 629 10499</a></li>
+          <li><a href="#">Instagram @glaubicai</a></li>
+        </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 GLAUBIC</span>
+      <span>© 2026 MB „Glaubic“</span>
+      <nav aria-label="Teisinė informacija">
+        <a href="https://glaubic.com/privatumo-politika">Privatumo politika</a>
+        <a href="#">Paslaugų teikimo sąlygos</a>
+      </nav>
       <span class="spaced">WWW.GLAUBIC.COM</span>
     </div>
   </div>
 </footer>
 
-<dialog class="gift-dialog" id="dovana" aria-labelledby="gift-title">
-  <button class="dialog-close" type="button" aria-label="Uždaryti" data-close>×</button>
-  <h2 id="gift-title">Ką norite padovanoti?</h2>
-  <p>Pasirinkite mokymus. Dovanų kuponą gausite el. paštu iškart po apmokėjimo.</p>
-  <ul class="gift-list">
-    <li class="gift-row">
-      <div><div class="gift-row-title">Susikurkite AI agentą per 3 val.</div><div class="gift-row-meta">3 val. · gyvi mokymai</div></div>
-      <div class="gift-row-price">145 €<small>(be PVM)</small></div>
-      <a class="btn btn--cta" href="#">Dovanoti</a>
-    </li>
-    <li class="gift-row">
-      <div><div class="gift-row-title">Claude darbe ir kasdienėse užduotyse</div><div class="gift-row-meta">3,5 val. · gyvi mokymai</div></div>
-      <div class="gift-row-price">165 €<small>(be PVM)</small></div>
-      <a class="btn btn--cta" href="#">Dovanoti</a>
-    </li>
-    <li class="gift-row">
-      <div><div class="gift-row-title">AI agentai ir Claude kartu</div><div class="gift-row-meta">2 sesijos po 3 val.</div></div>
-      <div class="gift-row-price">275 €<small>(be PVM)</small></div>
-      <a class="btn btn--cta" href="#">Dovanoti</a>
-    </li>
-  </ul>
-  <p class="dialog-note">Kuponą gavėjas galės panaudoti pasirinkdamas datą ir miestą tvarkaraštyje.</p>
+<!-- Dovanos pasirinkimas -->
+<dialog class="modal" id="dovana" aria-labelledby="gift-title">
+  <button class="dialog-close" type="button" aria-label="Uždaryti langą" data-close>×</button>
+  <div class="modal-body">
+    <div class="modal-title-row">
+      <svg class="gift-icon" aria-hidden="true"><use href="#gift"/></svg>
+      <h2 id="gift-title">Ką norite padovanoti?</h2>
+    </div>
+    <p class="lead">Pasirinkite mokymus. Dovanų kuponą gausite el. paštu iškart po apmokėjimo.</p>
+    <ul class="gift-list">
+      <li class="gift-row">
+        <div><div class="gift-row-title">Susikurkite AI agentą per 3 val.</div><div class="gift-row-meta">3 val. · gyvi mokymai</div></div>
+        <div class="gift-row-price">145 €<small>(be PVM)</small></div>
+        <button class="btn btn--cta btn--sm" type="button" data-buy="agentas" data-mode="gift">Dovanoti</button>
+      </li>
+      <li class="gift-row">
+        <div><div class="gift-row-title">Claude darbe ir kasdienėse užduotyse</div><div class="gift-row-meta">3,5 val. · gyvi mokymai</div></div>
+        <div class="gift-row-price">165 €<small>(be PVM)</small></div>
+        <button class="btn btn--cta btn--sm" type="button" data-buy="claude" data-mode="gift">Dovanoti</button>
+      </li>
+      <li class="gift-row">
+        <div><div class="gift-row-title">AI agentai ir Claude kartu</div><div class="gift-row-meta">3 val. ir 3,5 val. · dvi sesijos</div></div>
+        <div class="gift-row-price">275 €<small>(be PVM)</small></div>
+        <button class="btn btn--cta btn--sm" type="button" data-buy="paketas" data-mode="gift">Dovanoti</button>
+      </li>
+    </ul>
+    <div class="terms-box">
+      <b>Kaip veikia kuponas</b>
+      <ul>
+        <li>Kuponą atsiųsime jums el. paštu iškart po apmokėjimo, kad galėtumėte jį įteikti.</li>
+        <li>Kuponas galioja 6 mėnesius nuo įsigijimo.</li>
+        <li>Gavėjas susisiekia su mumis ir pasirenka mokymų datą.</li>
+      </ul>
+    </div>
+  </div>
 </dialog>
 
-<p class="mock-note">Maketas pagal brandbook'ą. Tvarkaraščio datos, miestai ir atsiliepimai yra pavyzdiniai.</p>
+<!-- Pirkimo langas -->
+<dialog class="modal" id="pirkimas" aria-labelledby="buy-title">
+  <button class="dialog-close" type="button" aria-label="Uždaryti langą" data-close>×</button>
+  <form id="buy-form" novalidate style="display:contents">
+    <div class="modal-body" id="buy-body">
+      <span class="eyebrow">Registracija</span>
+      <div class="segmented" role="group" aria-label="Perkate sau ar dovanojate?">
+        <button type="button" data-mode="self" aria-pressed="true">Sau</button>
+        <button type="button" data-mode="gift" aria-pressed="false">Dovanoti</button>
+      </div>
+      <h2 id="buy-title"></h2>
+      <p class="buy-meta" id="buy-meta"></p>
+
+      <div class="field" id="buy-event-field">
+        <label for="buy-event">Data ir miestas <span class="req">*</span></label>
+        <select id="buy-event" required aria-describedby="buy-event-hint"></select>
+        <span class="hint" id="buy-event-hint">Tikslų adresą atsiųsime el. paštu kartu su registracijos patvirtinimu.</span>
+      </div>
+
+      <div class="info-box" id="buy-info"></div>
+
+      <div class="field">
+        <span id="qty-label" style="font-weight:700;font-size:16px">Dalyvių skaičius</span>
+        <div class="stepper" role="group" aria-labelledby="qty-label">
+          <button type="button" data-step="-1" aria-label="Sumažinti">−</button>
+          <output id="qty" aria-live="polite">1</output>
+          <button type="button" data-step="1" aria-label="Padidinti">+</button>
+        </div>
+      </div>
+
+      <label class="check"><input type="checkbox" id="invoice"> Reikalinga sąskaita faktūra</label>
+
+      <details class="buy-program">
+        <summary>Kas įeina</summary>
+        <ol id="buy-program"></ol>
+      </details>
+    </div>
+    <div class="modal-foot" id="buy-foot">
+      <p class="form-error" id="buy-error" role="alert"></p>
+      <div class="total"><span>Iš viso</span><div><b id="buy-total">145 €</b><small>(be PVM)</small></div></div>
+      <button class="btn btn--cta btn--block" type="submit" id="buy-submit">Tęsti apmokėjimą</button>
+      <p class="foot-note">Saugus mokėjimas kortele per Stripe. Tęsdami sutinkate su <a href="#">paslaugų teikimo sąlygomis</a>.</p>
+    </div>
+  </form>
+</dialog>
+
+<!-- Pasiūlymo užklausa -->
+<dialog class="modal" id="uzklausa" aria-labelledby="inq-title">
+  <button class="dialog-close" type="button" aria-label="Uždaryti langą" data-close>×</button>
+  <form id="inq-form" novalidate style="display:contents">
+    <div class="modal-body" id="inq-body">
+      <h2 id="inq-title">Pasiūlymo užklausa</h2>
+      <p class="lead">Atsakysime per 8 darbo valandas. Laukai su <span aria-hidden="true">*</span> yra privalomi.</p>
+
+      <fieldset class="field">
+        <legend>Paslauga <span class="req" aria-hidden="true">*</span></legend>
+        <div class="choice-row">
+          <label class="choice"><input type="radio" name="service" value="mokymai" required><span>Mokymai komandai</span></label>
+          <label class="choice"><input type="radio" name="service" value="diegimas"><span>AI ir automatizacijos diegimas</span></label>
+          <label class="choice"><input type="radio" name="service" value="konsultacija"><span>Konsultacija</span></label>
+        </div>
+      </fieldset>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="inq-name">Vardas ir pavardė <span class="req" aria-hidden="true">*</span></label>
+          <input id="inq-name" name="name" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="inq-company">Įmonė <span class="req" aria-hidden="true">*</span></label>
+          <input id="inq-company" name="company" autocomplete="organization" required>
+        </div>
+        <div class="field">
+          <label for="inq-email">El. paštas <span class="req" aria-hidden="true">*</span></label>
+          <input id="inq-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="inq-phone">Telefonas (neprivaloma)</label>
+          <input id="inq-phone" name="phone" type="tel" autocomplete="tel">
+        </div>
+      </div>
+      <div class="field" id="inq-team-field">
+        <label for="inq-team">Kiek darbuotojų mokysis? (neprivaloma)</label>
+        <input id="inq-team" name="team" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label for="inq-need">Trumpai apie poreikį <span class="req" aria-hidden="true">*</span></label>
+        <textarea id="inq-need" name="need" required></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <p class="form-error" id="inq-error" role="alert"></p>
+      <button class="btn btn--cta btn--block" type="submit">Siųsti užklausą</button>
+    </div>
+  </form>
+</dialog>
+
+<p class="mock-note">Maketas pagal brandbook'ą. Tvarkaraščio datos, vietų skaičius ir atsiliepimai yra pavyzdiniai.</p>
 
 <script>
-  // Dovanos pasirinkimo langas
+  // ---------- Duomenys (maketui pavyzdiniai) ----------
+  const COURSES = {
+    agentas: {
+      title: 'Susikurkite AI agentą per 3 val.',
+      meta: '3 val. · gyvi mokymai',
+      price: 145,
+      program: ['Kaip veikia AI agentai ir kur jie taupo laiką', 'Pašto sujungimas su Gmail ar Outlook be programavimo', 'Laiškų skaitymas, supratimas ir rūšiavimas', 'Atsakymai jūsų tonu ir stiliumi', 'Agento paleidimas su jūsų verslo scenarijais']
+    },
+    claude: {
+      title: 'Claude darbe ir kasdienėse užduotyse',
+      meta: '3,5 val. · gyvi mokymai',
+      price: 165,
+      program: ['Claude pokalbiai ir Claude Cowork pagrindai', 'Interaktyvios aplikacijos ir vizualai', 'Dokumentai: pasiūlymai, ataskaitos, lentelės', 'Failų, PDF ir duomenų analizė', 'Interneto paieška ir darbo šablonai', 'Sujungimas su jūsų darbo įrankiais', 'Pasikartojančių užduočių automatizavimas']
+    },
+    paketas: {
+      title: 'AI agentai ir Claude kartu',
+      meta: 'Dvi sesijos: 3 val. AI agento ir 3,5 val. Claude mokymai',
+      price: 275,
+      bundle: true,
+      program: ['Visi 5 AI agento mokymų moduliai', 'Visi 7 Claude mokymų moduliai', 'Agentas, atsakantis į jūsų el. laiškus', 'Dokumentai, vizualai ir duomenų analizė su Claude']
+    }
+  };
+  // status: soldout, few (liko nedaug vietų), open
+  const EVENTS = [
+    { id: 'e1', course: 'claude', date: '09.29', city: 'Vilnius', status: 'soldout' },
+    { id: 'e2', course: 'claude', date: '09.30', city: 'Kaunas', status: 'few', left: 3 },
+    { id: 'e3', course: 'agentas', date: '10.08', city: 'Klaipėda', status: 'few', left: 5 },
+    { id: 'e4', course: 'agentas', date: '10.15', city: 'Vilnius', status: 'open' },
+    { id: 'e5', course: 'claude', date: '10.22', city: 'Vilnius', status: 'open' }
+  ];
+  const eur = (n) => `${n.toLocaleString('lt-LT')} €`;
+  const nextFree = (course, city) =>
+    EVENTS.find((e) => e.course === course && e.status !== 'soldout' && (!city || e.city === city)) ||
+    EVENTS.find((e) => e.course === course && e.status !== 'soldout');
+
+  // ---------- Tvarkaraštis ----------
+  const eventsEl = document.getElementById('events');
+  const statusPill = (e) => e.status === 'soldout'
+    ? '<span class="pill pill--outline">Išparduota</span>'
+    : e.status === 'few' ? `<span class="pill pill--coral">Liko ${e.left} vietos</span>` : '';
+  eventsEl.innerHTML = EVENTS.map((e) => {
+    const c = COURSES[e.course];
+    const dur = c.meta.split(' · ')[0];
+    const alt = e.status === 'soldout' ? nextFree(e.course, e.city) : null;
+    const action = e.status === 'soldout'
+      ? `<button class="btn btn--ghost btn--sm" type="button" data-buy="${e.course}" data-event="${alt.id}" aria-label="Kita data: ${alt.date} ${alt.city}">Kita data ${alt.date}</button>`
+      : `<button class="btn btn--ghost btn--sm" type="button" data-buy="${e.course}" data-event="${e.id}" aria-label="Įsigyti bilietą: ${e.date} ${e.city}">Įsigyti bilietą</button>`;
+    return `<li class="event${e.status === 'soldout' ? ' event--soldout' : ''}" data-city="${e.city}">
+      <span class="event-date">${e.date}</span>
+      <div><div class="event-title">${c.title}</div><div class="event-meta"><span>${e.city} · ${dur}</span>${statusPill(e)}</div></div>
+      ${action}
+    </li>`;
+  }).join('');
+
+  const filterButtons = document.querySelectorAll('.filters [data-city]');
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const city = btn.dataset.city;
+      filterButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      eventsEl.querySelectorAll('.event').forEach((ev) => { ev.hidden = city !== 'visi' && ev.dataset.city !== city; });
+    });
+  });
+
+  // Artimiausia laisva data kortelėse
+  document.querySelectorAll('[data-next]').forEach((el) => {
+    const e = nextFree(el.dataset.next);
+    el.innerHTML = `Artimiausia laisva data<br><b>${e.date}</b> ${e.city}${e.status === 'few' ? ` · liko ${e.left} vietos` : ''}`;
+  });
+
+  // ---------- Langai ----------
+  const openDialog = (dlg) => { document.querySelectorAll('dialog[open]').forEach((d) => d.close()); dlg.showModal(); };
+  document.querySelectorAll('dialog').forEach((dlg) => {
+    dlg.querySelector('[data-close]').addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  });
+
+  // Dovanos pasirinkimas
   const giftDialog = document.getElementById('dovana');
-  const openGift = (e) => { if (e) e.preventDefault(); if (!giftDialog.open) giftDialog.showModal(); };
-  document.querySelectorAll('[data-gift]').forEach((el) => el.addEventListener('click', openGift));
-  giftDialog.querySelector('[data-close]').addEventListener('click', () => giftDialog.close());
-  giftDialog.addEventListener('click', (e) => { if (e.target === giftDialog) giftDialog.close(); });
-  if (location.hash === '#dovana') openGift();
-  // Meniu mygtukas siauruose ekranuose
+  document.querySelectorAll('[data-open-gift]').forEach((el) => el.addEventListener('click', (e) => { e.preventDefault(); openDialog(giftDialog); }));
+  if (location.hash === '#dovana') openDialog(giftDialog);
+
+  // Pirkimas
+  const buyDialog = document.getElementById('pirkimas');
+  const buyForm = document.getElementById('buy-form');
+  const buyBody = document.getElementById('buy-body');
+  const buyFoot = document.getElementById('buy-foot');
+  const buyState = { course: 'agentas', mode: 'self', qty: 1 };
+  const buyError = document.getElementById('buy-error');
+  const buyBodyHtml = buyBody.innerHTML;
+
+  const renderBuy = () => {
+    const c = COURSES[buyState.course];
+    const gift = buyState.mode === 'gift';
+    buyDialog.querySelectorAll('.segmented button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === buyState.mode)));
+    document.getElementById('buy-title').textContent = c.title;
+    document.getElementById('buy-meta').textContent = c.meta;
+    document.getElementById('buy-event-field').hidden = gift || c.bundle;
+    document.getElementById('qty-label').textContent = gift ? 'Kuponų skaičius' : 'Dalyvių skaičius';
+    document.getElementById('qty').textContent = buyState.qty;
+    document.getElementById('buy-total').textContent = eur(c.price * buyState.qty);
+    document.getElementById('buy-program').innerHTML = c.program.map((p) => `<li>${p}</li>`).join('');
+    document.getElementById('buy-submit').textContent = gift ? 'Tęsti apmokėjimą už kuponą' : 'Tęsti apmokėjimą';
+
+    let info = '';
+    if (gift && c.bundle) {
+      info = '<b>Dovanų kuponas</b>Kuponą atsiųsime jums el. paštu iškart po apmokėjimo. Jis galioja 6 mėnesius nuo įsigijimo. Per 24 val. susisieksime dėl abiejų sesijų datų.';
+    } else if (gift) {
+      info = '<b>Dovanų kuponas</b>Kuponą atsiųsime jums el. paštu iškart po apmokėjimo. Jis galioja 6 mėnesius nuo įsigijimo. Gavėjas susisieks su mumis ir pasirinks mokymų datą.';
+    } else if (c.bundle) {
+      info = '<b>Kaip suderinsime datas</b>Per 24 val. nuo apmokėjimo susisieksime su jumis el. paštu ir kartu suderinsime abiejų sesijų datas ir miestą. Tikslų adresą atsiųsime el. paštu.';
+    }
+    const infoEl = document.getElementById('buy-info');
+    infoEl.innerHTML = info;
+    infoEl.hidden = !info;
+
+    const buyEvent = document.getElementById('buy-event');
+    buyEvent.innerHTML = '<option value="">Pasirinkite datą ir miestą</option>' + EVENTS
+      .filter((e) => e.course === buyState.course)
+      .map((e) => `<option value="${e.id}"${e.status === 'soldout' ? ' disabled' : ''}>${e.date} · ${e.city}${e.status === 'soldout' ? ' · išparduota' : e.status === 'few' ? ` · liko ${e.left} vietos` : ''}</option>`)
+      .join('');
+    if (buyState.event) buyEvent.value = buyState.event;
+    buyError.textContent = '';
+  };
+
+  const bindBuyBody = () => {
+    buyDialog.querySelectorAll('.segmented button').forEach((b) => b.addEventListener('click', () => { buyState.mode = b.dataset.mode; renderBuy(); }));
+    buyDialog.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => {
+      buyState.qty = Math.min(10, Math.max(1, buyState.qty + Number(b.dataset.step)));
+      renderBuy();
+    }));
+    document.getElementById('buy-event').addEventListener('change', (e) => { buyState.event = e.target.value; buyError.textContent = ''; });
+  };
+  bindBuyBody();
+
+  const openBuy = (course, mode, eventId) => {
+    buyBody.innerHTML = buyBodyHtml;
+    buyFoot.hidden = false;
+    Object.assign(buyState, { course, mode: mode || 'self', qty: 1, event: eventId || '' });
+    bindBuyBody();
+    renderBuy();
+    openDialog(buyDialog);
+  };
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-buy]');
+    if (t) openBuy(t.dataset.buy, t.dataset.mode, t.dataset.event);
+  });
+
+  buyForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const c = COURSES[buyState.course];
+    const needsDate = buyState.mode === 'self' && !c.bundle;
+    const sel = document.getElementById('buy-event');
+    if (needsDate && !sel.value) {
+      document.getElementById('buy-error').textContent = 'Pasirinkite mokymų datą ir miestą.';
+      sel.focus();
+      return;
+    }
+    buyBody.innerHTML = `<div class="success"><h3>Toliau: apmokėjimas</h3><p>Šiame makete čia lankytojas būtų nukreiptas į Stripe apmokėjimo puslapį. Suma: ${eur(c.price * buyState.qty)} (be PVM).</p></div>`;
+    buyFoot.hidden = true;
+  });
+
+  // Pasiūlymo užklausa
+  const inqDialog = document.getElementById('uzklausa');
+  const inqForm = document.getElementById('inq-form');
+  const inqBody = document.getElementById('inq-body');
+  const inqBodyHtml = inqBody.innerHTML;
+  const needHints = {
+    mokymai: 'Pvz., kokiai komandai, kokios užduotys užima daugiausia laiko, kada norėtumėte mokymų.',
+    diegimas: 'Pvz., kokį procesą norite automatizuoti, kokius įrankius naudojate, kiek laiko jis dabar užima.',
+    konsultacija: 'Pvz., kokį klausimą norite aptarti.'
+  };
+  const syncInquiry = () => {
+    const val = (inqForm.querySelector('input[name="service"]:checked') || {}).value || '';
+    document.getElementById('inq-team-field').hidden = val !== 'mokymai';
+    document.getElementById('inq-need').placeholder = needHints[val] || 'Trumpai aprašykite, ko jums reikia.';
+  };
+  const openInquiry = (service) => {
+    inqBody.innerHTML = inqBodyHtml;
+    inqForm.querySelector('.modal-foot').hidden = false;
+    if (service) inqForm.querySelector(`input[name="service"][value="${service}"]`).checked = true;
+    inqForm.querySelectorAll('input[name="service"]').forEach((r) => r.addEventListener('change', syncInquiry));
+    syncInquiry();
+    openDialog(inqDialog);
+  };
+  document.querySelectorAll('[data-inquiry]').forEach((el) => el.addEventListener('click', () => openInquiry(el.dataset.inquiry)));
+  inqForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const err = document.getElementById('inq-error');
+    const invalid = [...inqForm.querySelectorAll('[required]')].find((f) => !f.checkValidity());
+    if (invalid) {
+      err.textContent = invalid.type === 'radio' ? 'Pasirinkite paslaugą.' : 'Užpildykite visus privalomus laukus.';
+      invalid.focus();
+      return;
+    }
+    err.textContent = '';
+    inqBody.innerHTML = '<div class="success"><h3>Ačiū, užklausą gavome</h3><p>Atsakysime per 8 darbo valandas.</p></div>';
+    inqForm.querySelector('.modal-foot').hidden = true;
+  });
+
+  // ---------- Meniu ----------
   const menuBtn = document.querySelector('.menu-btn');
   const mainNav = document.getElementById('pagrindinis-meniu');
   const setMenu = (open) => {
@@ -857,8 +1483,23 @@
   menuBtn.addEventListener('click', () => setMenu(!mainNav.classList.contains('is-open')));
   mainNav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
 
-  // Skaičiai kyla nuo nulio iki tikrosios reikšmės, kai tampa matomi
-  const counters = document.querySelectorAll('[data-count]');
+  // Aktyvi meniu skiltis slenkant puslapį
+  const navLinks = [...mainNav.querySelectorAll('a[href^="#"]')].filter((a) => a.getAttribute('href').length > 1);
+  const sections = navLinks.map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  if ('IntersectionObserver' in window) {
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach((a) => {
+          if (a.getAttribute('href') === `#${entry.target.id}`) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    sections.forEach((s) => navObserver.observe(s));
+  }
+
+  // ---------- Skaičiai kyla iki tikrosios reikšmės ----------
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const runCounter = (el) => {
     const target = Number(el.dataset.count);
@@ -866,8 +1507,7 @@
     const start = performance.now();
     const step = (now) => {
       const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      el.textContent = Math.round(target * eased);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3)));
       if (t < 1) requestAnimationFrame(step);
     };
     el.textContent = '0';
@@ -882,19 +1522,8 @@
         }
       });
     }, { threshold: 0.6 });
-    counters.forEach((el) => observer.observe(el));
+    document.querySelectorAll('[data-count]').forEach((el) => observer.observe(el));
   }
-
-  // Tvarkaraščio filtras pagal miestą
-  const filterButtons = document.querySelectorAll('.filters [data-city]');
-  const events = document.querySelectorAll('.events .event');
-  filterButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const city = btn.dataset.city;
-      filterButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      events.forEach((ev) => { ev.hidden = city !== 'visi' && ev.dataset.city !== city; });
-    });
-  });
 </script>
 </body>
 </html>
