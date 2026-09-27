@@ -259,6 +259,23 @@
   .course-actions { display: grid; gap: 10px; }
   .course-actions a.link { text-align: center; font-size: 16px; }
 
+  /* Kortelių eilutės sulygiuotos tarpusavyje: žymės, pavadinimas, aprašas, programa, kaina, veiksmai */
+  @supports (grid-template-rows: subgrid) {
+    .course-grid { row-gap: 0; }
+    .course {
+      display: grid;
+      grid-row: span 6;
+      grid-template-rows: subgrid;
+      row-gap: 16px;
+      align-content: start;
+    }
+    .course details { align-self: start; }
+    .course .price { margin-top: 0; align-self: end; }
+  }
+  @media (max-width: 1000px) {
+    .course-grid { row-gap: 20px; }
+  }
+
   @media (max-width: 1000px) {
     .hero .wrap { grid-template-columns: 1fr; }
     .course-grid { grid-template-columns: 1fr; max-width: 620px; }
