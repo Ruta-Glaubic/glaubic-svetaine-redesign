@@ -1,0 +1,77 @@
+/* Generatoriaus sąsaja. Spalvos pagal GLAUBIC Brandbook 2026, 09–11 psl. */
+:root {
+  --violet-100: #ECEEFB;
+  --violet-200: #D3D7F4;
+  --violet-500: #9AA2E6;
+  --violet-700: #7079CF;
+  --coral: #FF6A3D;
+  --yellow: #FFED00;
+  --ink-800: #322838;
+  --ink-600: #6B6072;
+  --ink-300: #CBC4D0;
+  --paper: #F5F5F3;
+  --white: #FFFFFF;
+  --font-head: "Manrope", system-ui, sans-serif;
+  --font-body: "Hanken Grotesk", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-800);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.seq-nav { display: flex; gap: 6px; overflow-x: auto; padding: 16px; max-width: 1280px; margin: 0 auto; }
+.seq-nav a {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px;
+  border-radius: 999px; background: var(--white); color: var(--ink-800); text-decoration: none; font-size: 14px; white-space: nowrap;
+}
+.seq-nav a b { font-family: var(--font-head); }
+.seq-nav a[aria-current="page"] { background: var(--ink-800); color: var(--white); }
+.seq-nav a:hover:not([aria-current]) { background: var(--violet-200); }
+.app { display: grid; grid-template-columns: minmax(320px, 420px) 1fr; gap: 24px; max-width: 1280px; margin: 0 auto; padding: 0 16px 32px; }
+@media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+.panel { background: var(--white); border-radius: 24px; padding: 24px; align-self: start; }
+.panel h1, .panel h2 { font-family: var(--font-head); font-weight: 700; letter-spacing: -0.03em; margin: 0 0 8px; }
+.panel h1 { font-size: 26px; line-height: 1.1; }
+.panel h2 { font-size: 17px; margin-top: 24px; }
+.meta { display: grid; gap: 6px; margin: 12px 0 16px; padding: 14px; border-radius: 16px; background: var(--violet-100); font-size: 14px; }
+.meta b { font-weight: 700; }
+.meta-row { display: flex; gap: 8px; align-items: baseline; justify-content: space-between; }
+.meta-row span { color: var(--ink-600); flex: 0 0 auto; }
+.meta-row output { font-weight: 700; text-align: right; }
+.goal { color: var(--ink-600); font-size: 14px; margin: 0; }
+details.group { border-top: 1px solid var(--ink-300); padding: 12px 0 0; margin-top: 12px; }
+details.group summary { cursor: pointer; font-weight: 700; font-family: var(--font-head); margin-bottom: 12px; }
+.field { display: block; margin-bottom: 14px; }
+.field span { display: block; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.field small { display: block; color: var(--ink-600); font-size: 13px; margin-top: 4px; }
+.field input, .field textarea, .field select {
+  width: 100%; font: inherit; color: inherit;
+  border: 2px solid var(--ink-300); border-radius: 12px; padding: 10px 12px; background: var(--white);
+}
+.field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--violet-700); }
+.field textarea { min-height: 120px; resize: vertical; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 12px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 20px;
+  border-radius: 999px; border: 2px solid var(--ink-800); background: transparent; color: var(--ink-800);
+  font: 700 15px var(--font-body); cursor: pointer; text-decoration: none;
+}
+.btn--cta { background: var(--coral); border-color: var(--coral); }
+.btn:hover { background: var(--ink-800); border-color: var(--ink-800); color: var(--white); }
+.status { min-height: 1.5em; font-size: 14px; color: var(--violet-700); font-weight: 700; margin: 0; }
+.warn { background: var(--yellow); border-radius: 12px; padding: 10px 12px; font-size: 14px; margin: 0 0 14px; }
+.warn ul { margin: 4px 0 0; padding-left: 18px; }
+.subject { display: flex; gap: 8px; align-items: center; background: var(--white); border-radius: 16px; padding: 12px 16px; margin-bottom: 12px; }
+.subject span { color: var(--ink-600); font-size: 14px; flex: 0 0 auto; }
+.subject output { font-weight: 700; flex: 1 1 auto; min-width: 0; }
+.subject .btn { height: 36px; padding: 0 14px; font-size: 14px; }
+.preview-wrap { background: var(--paper); border-radius: 24px; overflow: auto; }
+.preview-label { font-size: 14px; color: var(--ink-600); margin: 0 0 8px; }
+.sms { background: var(--white); border-radius: 24px; padding: 24px; max-width: 420px; }
+.sms-bubble { background: var(--violet-200); border-radius: 20px 20px 20px 6px; padding: 14px 16px; white-space: pre-wrap; font-size: 16px; }
+.sms-count { font-size: 14px; color: var(--ink-600); margin-top: 10px; }
+code { background: var(--violet-100); padding: 1px 6px; border-radius: 6px; font-size: 13px; }

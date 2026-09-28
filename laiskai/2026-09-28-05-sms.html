@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05 SMS – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 5,
+  goal: "Sumažinti neatvykimų skaičių. SMS nebūtina, siunčiama mokymų dieną likus 2 val. iki pradžios.",
+  sms: function (x, k) {
+    return "GLAUBIC: primename, siandien " + k.time + " mokymai " + x.venue + ", " + x.address + ". Iki greito! Klausimai: " + x.smsPhone;
+  },
+  fields: ["date", "time", "venue", "address", "smsPhone"]
+});
+</script>
+</body>
+</html>

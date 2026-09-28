@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 Priminimas – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 4,
+  pill: "Priminimas",
+  goal: "Užtikrinti atvykimą: laikas, vieta, įėjimas, parkavimas, programa ir kontaktai.",
+  ics: true,
+  attach: "Po įklijuoto teksto pridėkite įėjimo nuotrauką.",
+  fields: ["title", "date", "time", "hours", "venue", "venueUrl", "venueNote", "address", "entryNote", "parking", "agenda", "required", "icsUrl", "logoUrl"],
+  subject: function (x, k) { return "Rytoj " + k.time + ": " + x.title; },
+  preheader: function (x, k) { return "Laikas, vieta, įėjimas ir parkavimas vienoje vietoje."; },
+  body: function (x, k) {
+    return k.p("iki susimatymo jau netrukus, rytoj, " + k.esc(k.dateAcc) + ", " + k.time + " val., praktiniuose mokymuose <b>„" + k.esc(x.title) + "“</b>.") +
+      k.eventCard(true) +
+      k.card(
+        k.cardLabel("Kaip atvykti") +
+        (x.entryNote ? k.cardText("<b>Įėjimas.</b> " + k.esc(x.entryNote)) : "") +
+        k.cardText("<b>Parkavimas.</b> " + k.v("parking").replace(/\n/g, "<br>"), true),
+        { bg: k.C.violet100 }) +
+      k.heading("Ką darysime mokymų metu?") +
+      k.bullets(x.agendaList.map(k.esc)) +
+      k.requiredCard() +
+      k.p("Jeigu turėsite klausimų, rašykite ar skambinkite.");
+  }
+});
+</script>
+</body>
+</html>

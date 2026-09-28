@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10 Rekomendacija – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 10,
+  pill: "Bendruomenė",
+  pillColor: "violet",
+  marketing: true,
+  goal: "Nauji klientai: „Rekomenduok kolegai“, Substack prenumerata ir LinkedIn.",
+  fields: ["title", "referralBenefit", "scheduleUrl", "companyLinkedin", "unsubscribeUrl", "logoUrl"],
+  subject: function (x, k) { return "Pažįstate, kam Claude sutaupytų laiko?"; },
+  preheader: function (x, k) { return "Persiųskite kolegai ir likime ryšyje."; },
+  body: function (x, k) {
+    return k.p("praėjo mėnuo nuo mokymų <b>„" + k.esc(x.title) + "“</b>. Ačiū, kad esate GLAUBIC bendruomenės dalis!") +
+      k.card(
+        k.cardTitle("Rekomenduokite kolegai") +
+        k.cardText("Pažįstate žmogų ar komandą, kuriems Claude sutaupytų laiko? Persiųskite šį laišką arba pasidalinkite mokymų tvarkaraščiu." + (x.referralBenefit ? " " + k.esc(x.referralBenefit) : "")) +
+        k.button(k.u("scheduleUrl"), "Mokymų tvarkaraštis")
+      ) +
+      k.heading("Likime ryšyje") +
+      k.bullets([
+        "<a href=\"https://substack.com/@sonatasulce\" target=\"_blank\" style=\"" + k.link + "\"><b>Substack</b></a>: Sonatos straipsniai apie AI praktikoje. Prenumeruokite, kad nepraleistumėte naujų.",
+        "<a href=\"" + k.esc(k.u("companyLinkedin")) + "\" target=\"_blank\" style=\"" + k.link + "\"><b>LinkedIn</b></a>: GLAUBIC naujienos ir nauji mokymai.",
+        "<a href=\"https://www.instagram.com/glaubicai/\" target=\"_blank\" style=\"" + k.link + "\"><b>Instagram @glaubicai</b></a>: trumpi patarimai kasdienai."
+      ]) +
+      k.buttons(k.button("https://substack.com/@sonatasulce", "Prenumeruoti Substack", "violet")) +
+      k.p("Iki susitikimo kituose mokymuose!");
+  }
+});
+</script>
+</body>
+</html>

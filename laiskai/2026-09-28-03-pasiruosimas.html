@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 Pasiruošimas – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 3,
+  pill: "Pasiruošimas",
+  pillColor: "violet",
+  goal: "Kad dalyvis atvyktų pasiruošęs: PRO planas, Claude Desktop, prisijungimas, Google ir Canva paskyros connectoriams.",
+  ics: true,
+  fields: ["title", "date", "time", "hours", "venue", "venueUrl", "venueNote", "address", "icsUrl", "logoUrl"],
+  subject: function (x, k) { return "Po savaitės mokymai: 4 žingsniai pasiruošti"; },
+  preheader: function (x, k) { return "Užtruks apie 15 min., o mokymuose sutaupys valandą."; },
+  body: function (x, k) {
+    return k.p("jau po savaitės, " + k.esc(k.dateAcc) + ", " + k.time + " val., susitinkame mokymuose <b>„" + k.esc(x.title) + "“</b>. Kad jau pirmąją minutę dirbtumėte praktiškai, prašome iš anksto atlikti šiuos žingsnius. Visi kartu užtruks apie 15 minučių.") +
+      k.heading("Pasiruošimo sąrašas") +
+      k.steps([
+        { title: "Aktyvuokite Claude PRO planą", text: "Mokymuose naudosime funkcijas, kurių nemokamoje versijoje nėra. <a href=\"https://claude.com/pricing\" target=\"_blank\" style=\"" + k.link + "\">Peržiūrėti planus</a>" },
+        { title: "Įsidiekite Claude Desktop programą", text: "Claude Cowork ir darbas su failais iš kompiuterio veikia programoje, ne naršyklėje. <a href=\"https://claude.ai/download\" target=\"_blank\" style=\"" + k.link + "\">Atsisiųsti programą</a>" },
+        { title: "Prisijunkite prie programos", text: "Atidarykite Claude Desktop ir prisijunkite ta pačia paskyra, kurioje aktyvuotas PRO planas." },
+        { title: "Paruoškite Google ir Canva paskyras", text: "Mokymuose jas prijungsime prie Claude kaip connectorius. Įsitikinkite, kad žinote prisijungimo duomenis." }
+      ]) +
+      k.card(k.cardLabel("Papildomai") + k.cardText("Pasiimkite 1–2 realias darbo užduotis ar failus, kuriuos norėtumėte išspręsti su Claude. Taip iš mokymų išsinešite jau veikiantį rezultatą.", true), { bg: k.C.violet100, accent: k.C.coral }) +
+      k.eventCard(true) +
+      k.p("Jei kažkas nepavyksta, parašykite arba paskambinkite. Padėsime dar iki mokymų.");
+  }
+});
+</script>
+</body>
+</html>

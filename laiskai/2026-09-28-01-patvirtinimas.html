@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 Patvirtinimas – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 1,
+  pill: "Registracija patvirtinta",
+  pillColor: "violet",
+  goal: "Nuraminti ir įtvirtinti sprendimą: bilietas, sąskaita, data, vieta, kalendoriaus mygtukai ir reikalavimai.",
+  ics: true,
+  attach: "Prisekite sąskaitą faktūrą (ir bilietą, jei jis yra failas).",
+  fields: ["title", "date", "time", "hours", "venue", "venueUrl", "venueNote", "address", "required", "orderNo", "ticketUrl", "invoiceNote", "icsUrl", "logoUrl"],
+  subject: function (x, k) { return "Jūsų vieta užtikrinta: " + x.title + ", " + k.dateShort; },
+  preheader: function (x, k) { return "Registracija patvirtinta. Įsitraukite mokymus į kalendorių vienu paspaudimu."; },
+  body: function (x, k) {
+    return k.p("ačiū, kad renkatės GLAUBIC! Jūsų vieta praktiniuose mokymuose <b>„" + k.esc(x.title) + "“</b> užtikrinta. Laukiame jūsų " + k.esc(k.dateAcc) + ", " + k.time + " val.") +
+      k.eventCard(true) +
+      (x.orderNo || x.ticketUrl || x.invoiceNote ? k.card(
+        k.cardLabel("Bilietas ir sąskaita") +
+        (x.orderNo ? k.cardText("Užsakymo Nr.: <b>" + k.esc(x.orderNo) + "</b>") : "") +
+        (x.invoiceNote ? k.cardText(k.esc(x.invoiceNote), !x.ticketUrl) : "") +
+        (x.ticketUrl ? k.button(x.ticketUrl, "Atsisiųsti bilietą", "outline") : ""),
+        { bg: k.C.violet100 }) : "") +
+      k.requiredCard() +
+      k.heading("Kas toliau?") +
+      k.bullets([
+        "<b>Rytoj</b> atsiųsime trumpą anketą. Ji padės pritaikyti mokymus jūsų užduotims.",
+        "<b>Likus 7 dienoms</b> gausite pasiruošimo sąrašą, kad jau pirmąją minutę dirbtumėte praktiškai.",
+        "<b>Likus 1 dienai</b> priminsime laiką ir atsiųsime įėjimo bei parkavimo informaciją."
+      ]) +
+      k.p("Jeigu turėsite klausimų, tiesiog atsakykite į šį laišką arba skambinkite.");
+  }
+});
+</script>
+</body>
+</html>

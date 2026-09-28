@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>07 Atsiliepimas – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 7,
+  pill: "Jūsų nuomonė",
+  pillColor: "violet",
+  marketing: true,
+  goal: "Socialinis įrodymas: paprašyti palikti Google atsiliepimą arba pasidalinti įspūdžiais LinkedIn.",
+  fields: ["title", "reviewUrl", "companyLinkedin", "unsubscribeUrl", "logoUrl"],
+  subject: function (x, k) { return "Ar galite skirti vieną minutę?"; },
+  preheader: function (x, k) { return "Jūsų atsiliepimas padės kitiems apsispręsti."; },
+  body: function (x, k) {
+    return k.p("prieš kelias dienas kartu mokėmės dirbti su Claude. Jei mokymai buvo naudingi, būsime labai dėkingi už trumpą atsiliepimą. Jis padeda kitiems apsispręsti, o mums augti.") +
+      k.card(
+        k.cardTitle("Palikite atsiliepimą Google") +
+        k.cardText("Užtenka poros sakinių. Jei nežinote, nuo ko pradėti, atsakykite į vieną iš šių klausimų:") +
+        k.bullets(["Kokią užduotį jau išsprendėte su Claude?", "Kiek laiko tai jums sutaupo?", "Kam rekomenduotumėte šiuos mokymus?"], true) +
+        '<div style="height:6px;line-height:6px;">&nbsp;</div>' +
+        k.button(k.u("reviewUrl"), "Parašyti atsiliepimą")
+      ) +
+      k.p("Arba pasidalinkite įspūdžiais <a href=\"" + k.esc(k.u("companyLinkedin")) + "\" target=\"_blank\" style=\"" + k.link + "\">LinkedIn</a> ir pažymėkite GLAUBIC. Mielai pasidalinsime jūsų įrašu.") +
+      k.p("Ačiū, tai tikrai daug reiškia!");
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08 Vertės laiškas – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 8,
+  pill: "2 patarimai",
+  pillColor: "violet",
+  marketing: true,
+  goal: "Išlaikyti įprotį: 1–2 praktiniai patarimai ir klausimas, kaip sekasi taikyti.",
+  fields: ["tip1Title", "tip1Text", "tip2Title", "tip2Text", "unsubscribeUrl", "logoUrl"],
+  subject: function (x, k) { return "Kaip sekasi su Claude? 2 patarimai kasdienai"; },
+  preheader: function (x, k) { return x.tip1Title + " ir dar vienas triukas."; },
+  body: function (x, k) {
+    function tip(no, t, txt) {
+      return k.card(
+        '<p style="margin:0 0 8px;font-family:Manrope,Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;color:' + k.C.ink + ';">PATARIMAS ' + no + '</p>' +
+        k.cardTitle(k.v(t)) + k.cardText(k.v(txt).replace(/\n/g, "<br>"), true),
+        { bg: no === 1 ? k.C.violet200 : k.C.violet100 });
+    }
+    return k.p("praėjo savaitė nuo mokymų. Dalinamės dviem patarimais, kurie padeda Claude naudoti kasdien, o ne tik retkarčiais.") +
+      tip(1, "tip1Title", "tip1Text") +
+      tip(2, "tip2Title", "tip2Text") +
+      k.heading("Kaip jums sekasi?") +
+      k.p("Kokią užduotį jau atliekate su Claude? O gal kažkas vis dar stringa? Atsakykite į šį laišką, perskaitome kiekvieną ir mielai patarsime.");
+  }
+});
+</script>
+</body>
+</html>

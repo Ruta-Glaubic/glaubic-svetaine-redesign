@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 Susipažinkime – GLAUBIC laiškai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="2026-09-28-laiskai-bendra.css">
+</head>
+<body>
+<script src="2026-09-28-laiskai-bendra.js"></script>
+<script>
+GLAUBIC.page({
+  no: 2,
+  pill: "Susipažinkime",
+  pillColor: "violet",
+  goal: "Įtraukti dalyvį ir sužinoti, kas jis: pareigos, patirtis su AI, kokias užduotis nori automatizuoti.",
+  fields: ["title", "date", "time", "surveyUrl", "logoUrl"],
+  subject: function (x, k) { return "Susipažinkime? 3 klausimai prieš mokymus"; },
+  preheader: function (x, k) { return "Užtruks apie 2 minutes, o mokymai bus pritaikyti jūsų darbui."; },
+  body: function (x, k) {
+    return k.p("iki mokymų <b>„" + k.esc(x.title) + "“</b> (" + k.esc(k.dateAcc) + ", " + k.time + " val.) dar liko šiek tiek laiko. Norime, kad jie būtų naudingi būtent jums, todėl prašome atsakyti į 3 trumpus klausimus.") +
+      k.card(
+        k.cardLabel("Anketa · apie 2 min.") +
+        k.bullets([
+          "<b>Jūsų pareigos ir sritis.</b> Kuo užsiimate kasdien?",
+          "<b>Patirtis su AI.</b> Dar nenaudojate, naudojate kartais ar kasdien?",
+          "<b>Ką norėtumėte automatizuoti?</b> Kokios užduotys atima daugiausia laiko?"
+        ], true) +
+        '<div style="height:8px;line-height:8px;">&nbsp;</div>' +
+        k.button(k.u("surveyUrl"), "Atsakyti į klausimus")
+      ) +
+      k.p("Pagal atsakymus parinksime pavyzdžius, kurie artimi jūsų kasdieniam darbui.") +
+      k.small("Norite papasakoti plačiau? Tiesiog atsakykite į šį laišką, perskaitome kiekvieną.");
+  }
+});
+</script>
+</body>
+</html>
