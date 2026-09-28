@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mokymų laiško generatorius</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700&family=Manrope:wght@700&display=swap" rel="stylesheet">
+<style>
+  /* Spalvos pagal GLAUBIC Brandbook 2026, 09–11 psl. (tos pačios kaip svetainės makete) */
+  :root {
+    --violet-100: #ECEEFB;
+    --violet-200: #D3D7F4;
+    --violet-500: #9AA2E6;
+    --violet-700: #7079CF;
+    --coral: #FF6A3D;
+    --yellow: #FFED00;
+    --ink-800: #322838;
+    --ink-600: #6B6072;
+    --ink-300: #CBC4D0;
+    --paper: #F5F5F3;
+    --white: #FFFFFF;
+    --font-head: "Manrope", system-ui, sans-serif;
+    --font-body: "Hanken Grotesk", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink-800);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .app { display: grid; grid-template-columns: minmax(320px, 420px) 1fr; gap: 24px; max-width: 1280px; margin: 0 auto; padding: 24px 16px; }
+  @media (max-width: 900px) { .app { grid-template-columns: 1fr; } }
+  .panel { background: var(--white); border-radius: 24px; padding: 24px; }
+  .panel h1, .panel h2 { font-family: var(--font-head); font-weight: 700; letter-spacing: -0.03em; margin: 0 0 8px; }
+  .panel h1 { font-size: 26px; line-height: 1.1; }
+  .panel h2 { font-size: 18px; margin-top: 24px; }
+  .hint { color: var(--ink-600); font-size: 14px; margin: 0 0 16px; }
+  .field { display: block; margin-bottom: 14px; }
+  .field span { display: block; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .field small { display: block; color: var(--ink-600); font-size: 13px; margin-top: 4px; }
+  .field input, .field textarea {
+    width: 100%; font: inherit; color: inherit;
+    border: 2px solid var(--ink-300); border-radius: 12px; padding: 10px 12px; background: var(--white);
+  }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--violet-700); }
+  .field textarea { min-height: 150px; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 12px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 22px;
+    border-radius: 999px; border: 2px solid var(--ink-800); background: transparent; color: var(--ink-800);
+    font: 700 16px var(--font-body); cursor: pointer; text-decoration: none;
+  }
+  .btn--cta { background: var(--coral); border-color: var(--coral); }
+  .btn:hover { background: var(--ink-800); border-color: var(--ink-800); color: var(--white); }
+  .status { min-height: 1.5em; font-size: 14px; color: var(--violet-700); font-weight: 700; margin: 0; }
+  .warn { background: var(--yellow); border-radius: 12px; padding: 10px 12px; font-size: 14px; margin: 0 0 14px; }
+  .steps { padding-left: 20px; margin: 0; font-size: 14px; }
+  .steps li { margin-bottom: 6px; }
+  code { background: var(--violet-100); padding: 1px 6px; border-radius: 6px; font-size: 13px; }
+  .preview-wrap { background: var(--paper); border-radius: 24px; overflow: auto; }
+  .preview-label { font-size: 14px; color: var(--ink-600); margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <form class="panel" id="form" autocomplete="off">
+    <h1>Mokymų priminimo laiškas</h1>
+    <p class="hint">Užpildykite laukus, o peržiūra, Google Calendar nuoroda ir .ics failas atsinaujins automatiškai.</p>
+
+    <label class="field"><span>Mokymų pavadinimas</span>
+      <input name="title" value="Claude galimybės verslo ir kasdieninėse užduotyse"></label>
+    <div class="row">
+      <label class="field"><span>Data</span><input type="date" name="date" value="2026-07-23" required></label>
+      <label class="field"><span>Pradžia</span><input type="time" name="time" value="10:00" required></label>
+    </div>
+    <div class="row">
+      <label class="field"><span>Trukmė, val.</span><input type="number" name="hours" value="3.5" min="0.5" step="0.5" required></label>
+      <label class="field"><span>Kada (žodis)</span><input name="when" value="rytoj"><small>pvz. „rytoj“, „jau šį“</small></label>
+    </div>
+
+    <label class="field"><span>Erdvės pavadinimas</span><input name="venue" value="Redakcija"></label>
+    <label class="field"><span>Erdvės nuoroda</span><input type="url" name="venueUrl" value="https://www.redakcijacoworking.lt/redakcija-laisve/"></label>
+    <label class="field"><span>Erdvės aprašymas</span><input name="venueNote" value="bendradarbystės ir ofisų erdvė"></label>
+    <label class="field"><span>Adresas</span><input name="address" value="E. Ožeškienės g. 10, Kaunas"><small>Google Maps nuoroda sudaroma automatiškai.</small></label>
+    <label class="field"><span>Pastaba apie įėjimą</span><input name="entryNote" value="Pridedame ekrano nuotrauką, pro kur įeiti."></label>
+
+    <label class="field"><span>Ką darysime (viena eilutė = vienas punktas)</span>
+      <textarea name="agenda">Praktiškai pradėsime taikyti Claude Cowork.
+Claude galimybės projektų valdymui.
+Claude užklausų formulavimas, kad gautumėte tikslų rezultatą.
+Claude ir el. pašto valdymas: atsakymų rengimas, šablonai, komunikacijos automatizavimas.
+Claude ataskaitų ir dokumentų kūrimui.
+Claude klientų komunikacijai: pasiūlymų, pristatymų ir atsakymų rengimas.
+Claude darbas su failais: dokumentų analizė ir tvarkymas tiesiai iš savo kompiuterio.
+Svarbiausia – Claude connectoriai ir integracija su Canva, Google Workspace, kalendoriais ar kitais įrankiais, kurie prijungiami prie Claude.</textarea></label>
+    <label class="field"><span>Būtina</span><input name="required" value="Turėti savo kompiuterį ir mokamą Claude versiją PRO."></label>
+
+    <label class="field"><span>.ics failo adresas (Apple / Outlook)</span>
+      <input type="url" name="icsUrl" value="" placeholder="https://www.glaubic.com/kalendorius/mokymai.ics">
+      <small>Atsisiųskite .ics failą žemiau, įkelkite jį į svetainę ir čia įklijuokite jo adresą.</small></label>
+    <p class="warn" id="icsWarn" hidden>Neįrašytas .ics adresas, todėl Apple / Outlook mygtuko laiške nebus.</p>
+
+    <label class="field"><span>Logotipo paveikslėlio adresas (nebūtina)</span>
+      <input type="url" name="logoUrl" value="" placeholder="https://www.glaubic.com/…/logotipas.png">
+      <small>Tik viešas PNG adresas (Gmail nerodo SVG). Jei tuščia, rodomas tekstinis GLAUBIC ženklas.</small></label>
+
+    <div class="actions">
+      <button type="button" class="btn btn--cta" id="copyEmail">Kopijuoti laišką</button>
+      <button type="button" class="btn" id="downloadIcs">Atsisiųsti .ics</button>
+      <button type="button" class="btn" id="copyHtml">Kopijuoti HTML</button>
+    </div>
+    <p class="status" id="status" role="status"></p>
+
+    <h2>Kaip išsiųsti per Gmail</h2>
+    <ol class="steps">
+      <li>Paspauskite <b>Atsisiųsti .ics</b>, įkelkite failą į svetainę ir įrašykite jo adresą į laukelį aukščiau.</li>
+      <li>Paspauskite <b>Kopijuoti laišką</b>.</li>
+      <li>Gmail'e atidarykite naują laišką ir įklijuokite (<code>Ctrl/Cmd + V</code>).</li>
+      <li>Po įklijuoto teksto pridėkite įėjimo nuotrauką.</li>
+      <li>Išsiųskite bandomąjį laišką sau ir patikrinkite abu kalendoriaus mygtukus.</li>
+    </ol>
+  </form>
+
+  <section>
+    <p class="preview-label">Laiško peržiūra</p>
+    <div class="preview-wrap"><div id="preview"></div></div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Brandbook spalvos laiškui (el. pašto klientai nepalaiko CSS kintamųjų)
+  var C = {
+    ink: "#322838", inkSoft: "#6B6072", violet: "#9AA2E6", violet200: "#D3D7F4", violet100: "#ECEEFB",
+    coral: "#FF6A3D", yellow: "#FFED00", paper: "#F5F5F3", white: "#FFFFFF", line: "#CBC4D0"
+  };
+  var HEAD = "Manrope, 'Helvetica Neue', Arial, sans-serif";
+  var BODY = "'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif";
+  var TZ = "Europe/Vilnius";
+
+  var MONTHS = ["sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio", "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"];
+  var DAYS_ACC = ["sekmadienį", "pirmadienį", "antradienį", "trečiadienį", "ketvirtadienį", "penktadienį", "šeštadienį"];
+  var DAYS_NOM = ["Sekmadienis", "Pirmadienis", "Antradienis", "Trečiadienis", "Ketvirtadienis", "Penktadienis", "Šeštadienis"];
+
+  var form = document.getElementById("form");
+  var preview = document.getElementById("preview");
+  var statusEl = document.getElementById("status");
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  function readData() {
+    var f = form.elements;
+    var d = (f.date.value || "2026-07-23").split("-").map(Number);
+    var t = (f.time.value || "10:00").split(":").map(Number);
+    var hours = parseFloat(f.hours.value) || 1;
+    // Skaičiuojame „sieninį“ laiką per UTC, kad naršyklės laiko juosta neturėtų įtakos
+    var start = new Date(Date.UTC(d[0], d[1] - 1, d[2], t[0], t[1]));
+    var end = new Date(start.getTime() + Math.round(hours * 60) * 60000);
+    return {
+      title: f.title.value.trim(),
+      start: start,
+      end: end,
+      hoursText: String(hours).replace(".", ","),
+      when: f.when.value.trim(),
+      venue: f.venue.value.trim(),
+      venueUrl: f.venueUrl.value.trim(),
+      venueNote: f.venueNote.value.trim(),
+      address: f.address.value.trim(),
+      entryNote: f.entryNote.value.trim(),
+      agenda: f.agenda.value.split("\n").map(function (l) { return l.trim(); }).filter(Boolean),
+      required: f.required.value.trim(),
+      icsUrl: f.icsUrl.value.trim(),
+      logoUrl: f.logoUrl.value.trim()
+    };
+  }
+
+  function stamp(dt) {
+    return dt.getUTCFullYear() + pad(dt.getUTCMonth() + 1) + pad(dt.getUTCDate()) + "T" + pad(dt.getUTCHours()) + pad(dt.getUTCMinutes()) + "00";
+  }
+  function hhmm(dt) { return pad(dt.getUTCHours()) + ":" + pad(dt.getUTCMinutes()); }
+  function eventLocation(x) { return [x.venue, x.address].filter(Boolean).join(", "); }
+  function mapsUrl(x) { return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(x.address); }
+
+  function plainDescription(x) {
+    var lines = ["Praktiniai GLAUBIC mokymai. Trukmė: " + x.hoursText + " val."];
+    if (x.required) lines.push("Būtina: " + x.required);
+    lines.push("Klausimai: +37062910499, +37062469115", "www.glaubic.com");
+    return lines.join("\n");
+  }
+
+  function googleUrl(x) {
+    return "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent(x.title) +
+      "&dates=" + stamp(x.start) + "/" + stamp(x.end) +
+      "&ctz=" + encodeURIComponent(TZ) +
+      "&location=" + encodeURIComponent(eventLocation(x)) +
+      "&details=" + encodeURIComponent(plainDescription(x));
+  }
+
+  // RFC 5545: tekstas su kabliataškiais/kableliais ekranuojamas, eilutės lankstomos po 75 baitus
+  function icsText(s) { return String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n"); }
+  function fold(line) {
+    var enc = new TextEncoder(), out = [], cur = "", limit = 75;
+    for (var ch of line) {
+      if (enc.encode(cur + ch).length > limit) { out.push(cur); cur = " " + ch; limit = 75; }
+      else cur += ch;
+    }
+    out.push(cur);
+    return out.join("\r\n");
+  }
+  function buildIcs(x) {
+    var now = new Date();
+    var dtstamp = now.getUTCFullYear() + pad(now.getUTCMonth() + 1) + pad(now.getUTCDate()) + "T" + pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + pad(now.getUTCSeconds()) + "Z";
+    var lines = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//GLAUBIC//Mokymai//LT", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+      "BEGIN:VTIMEZONE", "TZID:" + TZ,
+      "BEGIN:DAYLIGHT", "TZOFFSETFROM:+0200", "TZOFFSETTO:+0300", "TZNAME:EEST", "DTSTART:19700329T030000", "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU", "END:DAYLIGHT",
+      "BEGIN:STANDARD", "TZOFFSETFROM:+0300", "TZOFFSETTO:+0200", "TZNAME:EET", "DTSTART:19701025T040000", "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU", "END:STANDARD",
+      "END:VTIMEZONE",
+      "BEGIN:VEVENT",
+      "UID:mokymai-" + stamp(x.start) + "@glaubic.com",
+      "DTSTAMP:" + dtstamp,
+      "DTSTART;TZID=" + TZ + ":" + stamp(x.start),
+      "DTEND;TZID=" + TZ + ":" + stamp(x.end),
+      "SUMMARY:" + icsText(x.title),
+      "LOCATION:" + icsText(eventLocation(x)),
+      "DESCRIPTION:" + icsText(plainDescription(x)),
+      "URL:https://www.glaubic.com",
+      "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + icsText(x.title), "TRIGGER:-PT1H", "END:VALARM",
+      "END:VEVENT", "END:VCALENDAR"
+    ];
+    return lines.map(fold).join("\r\n") + "\r\n";
+  }
+
+  function button(href, label, bg, border) {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display:inline-table;margin:0 8px 10px 0;"><tr>' +
+      '<td align="center" bgcolor="' + bg + '" style="background:' + bg + ';border:2px solid ' + border + ';border-radius:999px;">' +
+      '<a href="' + esc(href) + '" target="_blank" style="display:inline-block;padding:13px 24px;font-family:' + BODY + ';font-size:16px;font-weight:700;line-height:20px;color:' + C.ink + ';text-decoration:none;border-radius:999px;">' + label + '</a>' +
+      '</td></tr></table>';
+  }
+
+  function buildEmail(x) {
+    var s = x.start;
+    var dateLine = MONTHS[s.getUTCMonth()] + " " + s.getUTCDate() + " d., " + DAYS_ACC[s.getUTCDay()];
+    var dateBig = DAYS_NOM[s.getUTCDay()] + ", " + MONTHS[s.getUTCMonth()] + " " + s.getUTCDate() + " d.";
+    var link = "color:" + C.ink + ";text-decoration:underline;";
+    var p = "margin:0 0 16px;font-family:" + BODY + ";font-size:16px;line-height:24px;color:" + C.ink + ";";
+    var label = "margin:0 0 12px;font-family:" + HEAD + ";font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:" + C.ink + ";";
+
+    var logo = x.logoUrl
+      ? '<img src="' + esc(x.logoUrl) + '" alt="GLAUBIC" width="140" style="display:block;width:140px;height:auto;border:0;">'
+      : '<span style="font-family:' + HEAD + ';font-size:22px;font-weight:700;letter-spacing:0.12em;color:' + C.ink + ';">GLAUBIC</span>';
+
+    var venue = x.venueUrl ? '<a href="' + esc(x.venueUrl) + '" target="_blank" style="' + link + '">' + esc(x.venue) + '</a>' : esc(x.venue);
+    var address = x.address ? ' <a href="' + esc(mapsUrl(x)) + '" target="_blank" style="' + link + '">' + esc(x.address) + '</a>' : "";
+
+    var agenda = x.agenda.map(function (item) {
+      return '<tr><td valign="top" width="22" style="padding:0 0 10px;"><span style="display:inline-block;width:10px;height:10px;border-radius:999px;background:' + C.violet + ';margin-top:7px;"></span></td>' +
+        '<td style="padding:0 0 10px;font-family:' + BODY + ';font-size:16px;line-height:24px;color:' + C.ink + ';">' + esc(item) + '</td></tr>';
+    }).join("");
+
+    var buttons = button(googleUrl(x), "+ Google Calendar", C.coral, C.coral) +
+      (x.icsUrl ? button(x.icsUrl, "+ Apple / Outlook", C.white, C.ink) : "");
+
+    return '' +
+'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="' + C.paper + '" style="background:' + C.paper + ';">' +
+'<tr><td align="center" style="padding:24px 12px;">' +
+'<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:' + C.white + ';border-radius:24px;">' +
+
+// Antraštė
+'<tr><td style="padding:28px 32px 0;">' +
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>' +
+  '<td valign="middle">' + logo + '</td>' +
+  '<td align="right" valign="middle"><span style="display:inline-block;padding:6px 14px;border-radius:999px;background:' + C.yellow + ';font-family:' + BODY + ';font-size:13px;font-weight:700;color:' + C.ink + ';">Priminimas</span></td>' +
+  '</tr></table>' +
+'</td></tr>' +
+
+// Įžanga
+'<tr><td style="padding:24px 32px 0;">' +
+  '<p style="' + p + '">Sveiki,</p>' +
+  '<p style="' + p + '">iki susimatymo jau netrukus – ' + esc(x.when ? x.when + ", " : "") + esc(dateLine) + ', ' + hhmm(s) + ' val. praktiniuose mokymuose <b>„' + esc(x.title) + '“</b>.</p>' +
+'</td></tr>' +
+
+// Renginio kortelė
+'<tr><td style="padding:8px 24px 0;">' +
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="' + C.violet200 + '" style="background:' + C.violet200 + ';border-radius:20px;">' +
+  '<tr><td style="padding:24px;">' +
+    '<p style="margin:0 0 6px;font-family:' + BODY + ';font-size:14px;line-height:20px;color:' + C.ink + ';">Praktiniai mokymai</p>' +
+    '<p style="margin:0 0 16px;font-family:' + HEAD + ';font-size:24px;font-weight:700;line-height:30px;letter-spacing:-0.02em;color:' + C.ink + ';">' + esc(x.title) + '</p>' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px;">' +
+      '<tr><td style="padding:0 16px 8px 0;font-family:' + BODY + ';font-size:14px;color:' + C.inkSoft + ';">Kada</td><td style="padding:0 0 8px;font-family:' + BODY + ';font-size:16px;font-weight:700;color:' + C.ink + ';">' + esc(dateBig) + ', ' + hhmm(s) + '–' + hhmm(x.end) + '</td></tr>' +
+      '<tr><td style="padding:0 16px 8px 0;font-family:' + BODY + ';font-size:14px;color:' + C.inkSoft + ';">Trukmė</td><td style="padding:0 0 8px;font-family:' + BODY + ';font-size:16px;font-weight:700;color:' + C.ink + ';">' + esc(x.hoursText) + ' val.</td></tr>' +
+      '<tr><td valign="top" style="padding:0 16px 0 0;font-family:' + BODY + ';font-size:14px;color:' + C.inkSoft + ';">Vieta</td><td style="font-family:' + BODY + ';font-size:16px;line-height:24px;color:' + C.ink + ';">' + venue + (x.venueNote ? " " + esc(x.venueNote) : "") + ',' + address + '</td></tr>' +
+    '</table>' +
+    '<p style="margin:0 0 10px;font-family:' + BODY + ';font-size:14px;font-weight:700;color:' + C.ink + ';">Įsitraukite į savo kalendorių:</p>' +
+    buttons +
+  '</td></tr></table>' +
+'</td></tr>' +
+
+(x.entryNote ? '<tr><td style="padding:16px 32px 0;"><p style="margin:0;font-family:' + BODY + ';font-size:15px;line-height:22px;color:' + C.inkSoft + ';">' + esc(x.entryNote) + '</p></td></tr>' : "") +
+
+// Programa
+'<tr><td style="padding:28px 32px 0;">' +
+  '<p style="' + label + '">Ką darysime mokymų metu?</p>' +
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' + agenda + '</table>' +
+'</td></tr>' +
+
+// Būtina
+(x.required ? '<tr><td style="padding:16px 24px 0;">' +
+  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="' + C.violet100 + '" style="background:' + C.violet100 + ';border-radius:20px;border-left:6px solid ' + C.coral + ';">' +
+  '<tr><td style="padding:18px 20px;">' +
+    '<p style="margin:0 0 6px;font-family:' + HEAD + ';font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:' + C.ink + ';">Būtina</p>' +
+    '<p style="margin:0;font-family:' + BODY + ';font-size:16px;line-height:24px;color:' + C.ink + ';">' + esc(x.required) + '</p>' +
+  '</td></tr></table>' +
+'</td></tr>' : "") +
+
+// Parašas
+'<tr><td style="padding:24px 32px 32px;">' +
+  '<p style="' + p + '">Jeigu turėsite klausimų, rašykite ar skambinkite.</p>' +
+  '<p style="margin:0 0 4px;font-family:' + BODY + ';font-size:16px;line-height:24px;color:' + C.ink + ';">Su linkėjimais,</p>' +
+  '<p style="margin:0;font-family:' + HEAD + ';font-size:17px;font-weight:700;line-height:24px;color:' + C.ink + ';">Sonata Šulcė</p>' +
+  '<p style="margin:0 0 12px;font-family:' + BODY + ';font-size:14px;line-height:20px;color:' + C.inkSoft + ';">GLAUBIC Co-Founder</p>' +
+  '<p style="margin:0 0 4px;font-family:' + BODY + ';font-size:14px;line-height:22px;color:' + C.ink + ';">' +
+    '<a href="tel:+37062910499" style="' + link + '">+370 629 10499</a>, <a href="tel:+37062469115" style="' + link + '">+370 624 69115</a><br>' +
+    '<a href="https://www.glaubic.com" target="_blank" style="' + link + 'font-weight:700;">www.glaubic.com</a></p>' +
+  '<p style="margin:0;font-family:' + BODY + ';font-size:14px;line-height:22px;color:' + C.ink + ';">' +
+    '<a href="https://substack.com/@sonatasulce" target="_blank" style="' + link + '">Substack</a> | ' +
+    '<a href="https://www.instagram.com/sonata.sulce/" target="_blank" style="' + link + '">Instagram</a> | ' +
+    '<a href="https://www.linkedin.com/in/sonata-%C5%A1ulc%C4%97-8576b391/" target="_blank" style="' + link + '">LinkedIn</a></p>' +
+'</td></tr>' +
+
+'</table></td></tr></table>';
+  }
+
+  var current = null;
+  function render() {
+    var x = readData();
+    current = { data: x, html: buildEmail(x), ics: buildIcs(x) };
+    preview.innerHTML = current.html;
+    document.getElementById("icsWarn").hidden = !!x.icsUrl;
+  }
+
+  function say(msg) { statusEl.textContent = msg; }
+
+  function copyRich() {
+    var html = current.html;
+    if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+      navigator.clipboard.write([new ClipboardItem({
+        "text/html": new Blob([html], { type: "text/html" }),
+        "text/plain": new Blob([preview.innerText], { type: "text/plain" })
+      })]).then(function () { say("Laiškas nukopijuotas, įklijuokite jį į Gmail."); }, fallbackCopy);
+    } else fallbackCopy();
+  }
+  function fallbackCopy() {
+    var range = document.createRange();
+    range.selectNodeContents(preview);
+    var sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(range);
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    sel.removeAllRanges();
+    say(ok ? "Laiškas nukopijuotas, įklijuokite jį į Gmail." : "Nepavyko nukopijuoti automatiškai. Pažymėkite peržiūrą ir spauskite Ctrl/Cmd + C.");
+  }
+
+  form.addEventListener("input", render);
+  document.getElementById("copyEmail").addEventListener("click", copyRich);
+  document.getElementById("copyHtml").addEventListener("click", function () {
+    navigator.clipboard.writeText(current.html).then(function () { say("HTML kodas nukopijuotas."); }, function () { say("Nepavyko nukopijuoti HTML."); });
+  });
+  document.getElementById("downloadIcs").addEventListener("click", function () {
+    var blob = new Blob([current.ics], { type: "text/calendar;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = current.data.start.toISOString().slice(0, 10) + "-glaubic-mokymai.ics";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    say("Failas atsisiųstas. Įkelkite jį į svetainę ir įrašykite adresą aukščiau.");
+  });
+
+  window.__glaubic = { readData: readData, buildIcs: buildIcs, googleUrl: googleUrl, render: render };
+  render();
+})();
+</script>
+</body>
+</html>
