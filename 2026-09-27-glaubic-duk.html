@@ -40,7 +40,7 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
   body {
     margin: 0;
     background: var(--white);
@@ -49,6 +49,7 @@
     font-size: 18px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    padding-bottom: 84px;
   }
   h1, h2, h3 {
     font-family: var(--font-head);
@@ -165,15 +166,17 @@
 
   /* ---------- Dovanų baneris: plaukiojanti juosta, visada ekrano viršuje ---------- */
   .promo-wrap {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 12px;
     z-index: 50;
-    height: 0;
     padding: 0 var(--gutter);
+    pointer-events: none;
   }
   .promo-bar {
+    pointer-events: auto;
     position: relative;
-    top: 12px;
     max-width: calc(var(--wrap) - 2 * var(--gutter) + 48px);
     margin: 0 auto;
     height: 60px;
@@ -186,7 +189,7 @@
     backdrop-filter: blur(14px) saturate(1.2);
     border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 22px;
-    box-shadow: 0 8px 24px rgba(36, 29, 43, 0.1);
+    box-shadow: 0 10px 30px rgba(36, 29, 43, 0.18);
   }
   .promo-icon { width: 40px; height: 40px; flex-shrink: 0; display: block; }
   .promo {
@@ -220,13 +223,20 @@
   }
 
   /* ---------- Antraštė ---------- */
-  .site-header { background: var(--violet-500); position: relative; z-index: 10; padding-top: 84px; }
+  .site-header {
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 45;
+    border-bottom: 1px solid var(--ink-300);
+    box-shadow: 0 4px 18px rgba(36, 29, 43, 0.08);
+  }
   .site-header .wrap {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    height: 80px;
+    height: 72px;
   }
   .logo { display: inline-flex; align-items: center; text-decoration: none; }
   .logo-svg { display: block; height: 24px; width: auto; }
@@ -237,8 +247,8 @@
   .nav a[aria-current="true"] { font-weight: 700; }
   .lang { display: flex; gap: 4px; font-size: 15px; font-weight: 700; }
   .lang a { text-decoration: none; padding: 6px 10px; border-radius: var(--radius-pill); }
-  .lang a[aria-current] { background: var(--white); }
-  .menu-btn { display: none; cursor: pointer; }
+  .lang a[aria-current] { background: var(--violet-200); }
+  .menu-btn { display: none; cursor: pointer; box-shadow: inset 0 0 0 2px var(--ink-800); font-weight: 700; }
   .nav-lang { display: none; }
   @media (max-width: 1100px) { .nav { gap: 20px; } }
 
@@ -446,6 +456,33 @@
     padding: 0;
   }
   .quote-track::-webkit-scrollbar { display: none; }
+  .carousel { position: relative; }
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid var(--ink-800);
+    background: var(--white);
+    color: var(--ink-800);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 18px rgba(36, 29, 43, 0.15);
+    transition: background-color 0.18s ease, border-color 0.18s ease;
+  }
+  .carousel-arrow:hover, .carousel-arrow:focus-visible { background: var(--yellow); border-color: var(--yellow); }
+  .carousel-arrow svg { width: 22px; height: 22px; }
+  .carousel-arrow--prev { left: -28px; }
+  .carousel-arrow--next { right: -28px; }
+  @media (max-width: 1320px) {
+    .carousel-arrow--prev { left: -12px; }
+    .carousel-arrow--next { right: -12px; }
+  }
+  @media (max-width: 720px) { .carousel-arrow { display: none; } }
   .quote {
     background: var(--white);
     border-radius: var(--radius-card);
@@ -537,6 +574,8 @@
   .value:nth-child(3) { background: var(--coral); }
   .value:nth-child(4) { background: var(--yellow); }
   .value-no { font-weight: 700; font-size: 15px; }
+  .value-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .value-icon { width: 72px; height: 72px; display: block; }
   .value h3 { font-size: 28px; margin-bottom: 10px; }
   .value p { font-size: 16px; }
 
@@ -835,8 +874,8 @@
   .cookies {
     position: fixed;
     right: 20px;
-    bottom: 20px;
-    z-index: 50;
+    bottom: 88px;
+    z-index: 55;
     width: min(440px, calc(100% - 24px));
     background: var(--white);
     color: var(--ink-800);
@@ -860,7 +899,7 @@
   .cookies-more { margin-top: 12px; font-size: 14px; }
   .footer-bottom .link-btn { padding: 0; font-size: 14px; }
   @media (max-width: 560px) {
-    .cookies { right: 12px; bottom: 12px; padding: 20px; }
+    .cookies { right: 12px; bottom: 80px; padding: 20px; }
   }
 
   /* ---------- Lektoriai: po vieną eilutėje, nuotrauka pakaitomis ---------- */
