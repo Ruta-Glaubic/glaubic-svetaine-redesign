@@ -92,8 +92,11 @@
     display: inline-block; padding: 2px 6px; border-radius: 3px;
     background: var(--badge-yellow); color: var(--badge-yellow-text); font-size: 9px; font-weight: 500;
   }
-  .link { color: var(--link); text-decoration: none; }
-  .link:hover { text-decoration: underline; }
+  .btn-sm {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 28px; padding: 0 12px; font-size: 11px; text-decoration: none; white-space: nowrap;
+  }
+  .btn-sm:focus-visible { outline: 2px solid var(--cpo-blue); outline-offset: 2px; }
 
   /* Išskleidimo mygtukas */
   .toggle {
@@ -205,7 +208,7 @@
           <th style="width:90px">Būsena ⇕</th>
           <th style="width:240px">Pasiūlymų pateikimo terminas ⇕</th>
           <th style="width:16%">Veikimas</th>
-          <th style="width:90px">Operacijos</th>
+          <th style="width:110px">Operacijos</th>
         </tr>
       </thead>
       <tbody id="purchases-body"></tbody>
@@ -284,7 +287,7 @@
         <td><span class="badge">Paskelbtas</span></td>
         <td>${esc(p.deadline)}</td>
         <td>Pasiūlymų pateikimo terminas ${esc(p.deadline)}</td>
-        <td><a class="link" href="#">Peržiūrėti</a></td>
+        <td><a class="btn btn-sm" href="#" aria-label="Peržiūrėti pirkimą ${p.id}">Peržiūrėti</a></td>
       </tr>`;
     const details = hasSpec
       ? `<tr class="row-details" id="details-${p.id}" hidden><td colspan="8">${renderDetails(p)}</td></tr>`
