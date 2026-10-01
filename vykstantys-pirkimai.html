@@ -90,8 +90,11 @@
   .col-toggle { width: 34px; padding-left: 8px !important; padding-right: 0 !important; }
   .badge {
     display: inline-block; padding: 2px 6px; border-radius: 3px;
-    background: var(--badge-yellow); color: var(--badge-yellow-text); font-size: 9px; font-weight: 500;
+    background: var(--badge-yellow); color: var(--badge-yellow-text); font-size: 9px; font-weight: 500; white-space: nowrap;
   }
+  .badge-info { background: #dff3f1; color: #0b7a70; }
+  .muted { color: var(--muted); }
+  .count { font-weight: 400; opacity: .8; text-transform: none; }
   .btn-sm {
     display: inline-flex; align-items: center; justify-content: center;
     height: 28px; padding: 0 12px; font-size: 11px; text-decoration: none; white-space: nowrap;
@@ -138,6 +141,7 @@
     padding: 10px 12px; border-bottom: 1px solid var(--border); background: #fafbfc; vertical-align: bottom;
   }
   table.spec td { font-size: 12px; padding: 14px 12px; vertical-align: top; }
+  table.spec tbody tr + tr td { border-top: 1px solid var(--border); }
   .spec-name { display: flex; gap: 10px; align-items: flex-start; }
   .spec-name .tag { margin-top: 2px; }
   .spec-name a { color: var(--link); text-decoration: none; line-height: 1.5; }
@@ -202,7 +206,7 @@
           <th style="width:60px">ID ⇕</th>
           <th style="width:19%">Organizacija ⇕</th>
           <th>Modulis ⇕</th>
-          <th style="width:90px">Būsena ⇕</th>
+          <th style="width:110px">Būsena ⇕</th>
           <th style="width:240px">Pasiūlymų pateikimo terminas ⇕</th>
           <th style="width:16%">Veikimas</th>
           <th style="width:110px">Operacijos</th>
@@ -238,15 +242,31 @@
     { id: 13583, org: 'Uždaroji akcinė bendrovė "Biržų šilumos tinklai"', module: MOD_RENOV, deadline: '2026-10-19 09:00' },
     { id: 13130, org: 'AB "LTG Cargo"', module: 'Elektromobilių įkrovimo stotelės', deadline: '2026-10-15 09:00' },
     { id: 13159, org: 'AB "LTG Infra"', module: 'Elektromobilių įkrovimo stotelės', deadline: '2026-10-15 09:00' },
+    // Pirkimo 13459 modulis ir pasiūlymų pateikimo terminas ekrano nuotraukoje nenurodyti.
+    { id: 13459, org: 'Viešoji įstaiga Vilniaus miesto klinikinė ligoninė', module: null, deadline: null,
+      status: 'Priduotas auditui', statusType: 'info',
+      categories: [
+        { label: 'Pirkimo dalis', name: 'Nepavojingos atliekos', specs: [
+          { name: '(MATP-NA1) 18 01 01 Aštrūs daiktai (išskyrus nurodytus 18 01 03)' },
+          { name: '(MATP-NA3) 18 01 02 Anatominė medžiaga (kūno dalys ir organai, įskaitant kraujo paketus ir konservuotą kraują (išskyrus 18 01 03))' },
+          { name: '(MATP-NA4) 18 01 04 Atliekos, kurių rinkimui ir šalinimui netaikomi specialūs reikalavimai, kad būtų išvengta infekcijos' },
+          { name: '(MATP-NA5) 18 01 09 Vaistai, nenurodyti 18 01 08' },
+        ]},
+        { label: 'Pirkimo dalis', name: 'Pavojingos atliekos', specs: [
+          { name: '(MATP-PA1) 18 01 03 Infekuotos atliekos (atliekos, kurių rinkimui ir šalinimui taikomi specialūs reikalavimai, kad būtų išvengta infekcijos)' },
+          { name: '(MATP-PA3) 18 01 06 / 18 02 05 Cheminės medžiagos, sudarytos iš pavojingų cheminių medžiagų arba jų turinčios' },
+        ]},
+      ]
+    },
   ];
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   function renderDetails(p) {
     return p.categories.map((c, i) => `
-      <div class="category">
+      <div class="category"${i ? ' style="margin-top:10px"' : ''}>
         <button type="button" class="category-head" aria-expanded="true" aria-controls="cat-${p.id}-${i}">
-          ${CHEVRON_UP}<span class="tag">Kategorija</span><span>${esc(c.name)}</span>
+          ${CHEVRON_UP}<span class="tag">${esc(c.label || 'Kategorija')}</span><span>${esc(c.name)} <span class="count">(${c.specs.length})</span></span>
         </button>
         <div id="cat-${p.id}-${i}">
           <table class="spec">
@@ -274,10 +294,10 @@
         <td class="col-toggle">${toggle}</td>
         <td>${p.id}</td>
         <td>${esc(p.org)}</td>
-        <td>${esc(p.module)}</td>
-        <td><span class="badge">Paskelbtas</span></td>
-        <td>${esc(p.deadline)}</td>
-        <td>Pasiūlymų pateikimo terminas ${esc(p.deadline)}</td>
+        <td>${p.module ? esc(p.module) : '<span class="muted">—</span>'}</td>
+        <td><span class="badge${p.statusType ? ' badge-' + p.statusType : ''}">${esc(p.status || 'Paskelbtas')}</span></td>
+        <td>${p.deadline ? esc(p.deadline) : '<span class="muted">—</span>'}</td>
+        <td>${p.deadline ? 'Pasiūlymų pateikimo terminas ' + esc(p.deadline) : '<span class="muted">—</span>'}</td>
         <td><a class="btn btn-sm" href="#" aria-label="Peržiūrėti pirkimą ${p.id}">Peržiūrėti</a></td>
       </tr>`;
     const details = hasSpec
