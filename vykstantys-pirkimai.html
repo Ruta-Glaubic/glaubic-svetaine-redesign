@@ -138,9 +138,6 @@
     padding: 10px 12px; border-bottom: 1px solid var(--border); background: #fafbfc; vertical-align: bottom;
   }
   table.spec td { font-size: 12px; padding: 14px 12px; vertical-align: top; }
-  table.spec .num { white-space: nowrap; }
-  table.spec .price { text-align: right; white-space: nowrap; font-weight: 500; }
-  table.spec th.price { text-align: right; }
   .spec-name { display: flex; gap: 10px; align-items: flex-start; }
   .spec-name .tag { margin-top: 2px; }
   .spec-name a { color: var(--link); text-decoration: none; line-height: 1.5; }
@@ -228,8 +225,7 @@
       categories: [{
         name: '(RD3) Daugiabučių namų atnaujinimo (modernizavimo) rangos darbai (ypatingųjų arba neypatingųjų pastatų paprastasis remontas, neypatingųjų pastatų kapitalinis remontas arba rekonstrukcija), kurių planuojama vertė didesnė kaip 0,5 mln., bet neviršija 1 mln. Eur be PVM',
         specs: [{
-          name: '(RD3.2) Daugiabučių namų atnaujinimo (modernizavimo) rangos darbai (ypatingųjų arba neypatingųjų pastatų paprastasis remontas, neypatingųjų pastatų kapitalinis remontas arba rekonstrukcija), kurių planuojama vertė didesnė kaip 0,5 mln., bet neviršija 1 mln. Eur be PVM. (Kompleksinis atnaujinimas (modernizavimas). Su projektavimu ir architektūrine dalimi) (Antakalnio g. 78, Vilnius)',
-          vat: '21%', unit: 'Objektas', qty: 1, maxPrice: '1128459,17'
+          name: '(RD3.2) Daugiabučių namų atnaujinimo (modernizavimo) rangos darbai (ypatingųjų arba neypatingųjų pastatų paprastasis remontas, neypatingųjų pastatų kapitalinis remontas arba rekonstrukcija), kurių planuojama vertė didesnė kaip 0,5 mln., bet neviršija 1 mln. Eur be PVM. (Kompleksinis atnaujinimas (modernizavimas). Su projektavimu ir architektūrine dalimi) (Antakalnio g. 78, Vilnius)'
         }]
       }]
     },
@@ -255,16 +251,11 @@
         <div id="cat-${p.id}-${i}">
           <table class="spec">
             <thead><tr>
-              <th>Specifikacijos pavadinimas</th><th>PVM</th><th>Mato vnt.</th><th>Kiekis</th>
-              <th class="price">Užsakovo nurodyta<br>maksimali kaina su PVM</th>
+              <th>Specifikacijos pavadinimas</th>
             </tr></thead>
             <tbody>${c.specs.map(s => `
               <tr>
                 <td><div class="spec-name"><span class="tag tag-outline">Specifikacija</span><a href="#">${esc(s.name)}</a></div></td>
-                <td class="num">${esc(s.vat)}</td>
-                <td class="num">${esc(s.unit)}</td>
-                <td class="num">${esc(s.qty)}</td>
-                <td class="price">${esc(s.maxPrice)}</td>
               </tr>`).join('')}
             </tbody>
           </table>
