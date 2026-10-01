@@ -94,7 +94,7 @@
   }
   .badge-info { background: #dff3f1; color: #0b7a70; }
   .muted { color: var(--muted); }
-  .count { font-weight: 400; opacity: .8; text-transform: none; }
+  .count { font-weight: 400; color: var(--muted); }
   .btn-sm {
     display: inline-flex; align-items: center; justify-content: center;
     height: 28px; padding: 0 12px; font-size: 11px; text-decoration: none; white-space: nowrap;
@@ -122,12 +122,15 @@
   .category { border: 1px solid #c9d3e3; background: #fff; }
   .category-head {
     width: 100%; display: flex; align-items: center; gap: 12px;
-    background: var(--cpo-blue); color: #fff; border: 0; cursor: pointer;
-    font-family: inherit; text-align: left; padding: 12px 14px;
-    font-size: 11px; font-weight: 600; text-transform: uppercase; line-height: 1.4;
+    background: #f7f9fc; color: var(--text); cursor: pointer;
+    border: 0; border-left: 3px solid var(--cpo-blue); border-bottom: 1px solid var(--border);
+    font-family: inherit; text-align: left; padding: 9px 12px;
+    font-size: 12px; font-weight: 500; line-height: 1.45;
   }
-  .category-head:hover { background: var(--cpo-blue-dark); }
-  .category-head svg { flex-shrink: 0; transition: transform .2s ease; }
+  .category-head:hover { background: var(--cpo-blue-light); }
+  .category-head[aria-expanded="false"] { border-bottom-color: transparent; }
+  .category-head .tag { background: var(--cpo-blue); color: #fff; text-transform: uppercase; }
+  .category-head svg { color: var(--cpo-blue); flex-shrink: 0; transition: transform .2s ease; }
   .category-head[aria-expanded="false"] svg { transform: rotate(180deg); }
   .tag {
     flex-shrink: 0; display: inline-block; padding: 2px 8px; border-radius: 10px;
