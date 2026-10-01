@@ -77,7 +77,7 @@
 
   /* Pirkimų lentelė */
   .table-wrap { overflow-x: auto; }
-  table.purchases { width: 100%; min-width: 1300px; border-collapse: collapse; table-layout: fixed; }
+  table.purchases { width: 100%; min-width: 1150px; border-collapse: collapse; table-layout: fixed; }
   table.purchases > thead > tr > th {
     background: var(--cpo-blue); color: #fff; text-align: left;
     font-size: 11px; font-weight: 600; text-transform: uppercase;
@@ -87,7 +87,6 @@
     padding: 18px 10px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle;
   }
   table.purchases > tbody > tr.row-main:hover > td { background: #fafbfc; }
-  .col-toggle { width: 34px; padding-left: 8px !important; padding-right: 0 !important; }
   .badge {
     display: inline-block; padding: 2px 6px; border-radius: 3px;
     background: var(--badge-yellow); color: var(--badge-yellow-text); font-size: 9px; font-weight: 500; white-space: nowrap;
@@ -101,79 +100,22 @@
   }
   .btn-sm:focus-visible { outline: 2px solid var(--cpo-blue); outline-offset: 2px; }
 
-  /* Išskleidimo mygtukas */
-  .toggle {
-    width: 24px; height: 24px; border: 1px solid #c9d3e3; border-radius: 3px;
-    background: #fff; color: var(--cpo-blue); cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center; padding: 0;
-  }
-  .toggle:hover { background: var(--cpo-blue-light); }
-  .toggle:focus-visible { outline: 2px solid var(--cpo-blue); outline-offset: 2px; }
-  .toggle svg { transition: transform .2s ease; }
-  .toggle[aria-expanded="true"] { background: var(--cpo-blue); color: #fff; border-color: var(--cpo-blue); }
-  .toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
-
-  tr.row-main.is-open > td { background: var(--cpo-blue-light); border-bottom-color: transparent; }
-
-  /* Išskleista specifikacijos dalis */
-  tr.row-details > td { padding: 0 10px 16px !important; background: var(--cpo-blue-light); }
-  tr.row-details[hidden] { display: none; }
-
-  .category { border: 1px solid #c9d3e3; background: #fff; }
-  .category-head {
-    width: 100%; display: flex; align-items: center; gap: 12px;
-    background: #f7f9fc; color: var(--text); cursor: pointer;
-    border: 0; border-left: 3px solid var(--cpo-blue); border-bottom: 1px solid var(--border);
-    font-family: inherit; text-align: left; padding: 9px 12px;
-    font-size: 12px; font-weight: 500; line-height: 1.45;
-  }
-  .category-head:hover { background: var(--cpo-blue-light); }
-  .category-head[aria-expanded="false"] { border-bottom-color: transparent; }
-  .category-head .tag { background: var(--cpo-blue); color: #fff; text-transform: uppercase; }
-  .category-head svg { color: var(--cpo-blue); flex-shrink: 0; transition: transform .2s ease; }
-  .category-head[aria-expanded="false"] svg { transform: rotate(180deg); }
-  .tag {
-    flex-shrink: 0; display: inline-block; padding: 2px 8px; border-radius: 10px;
-    background: #fff; color: var(--cpo-blue); font-size: 9px; font-weight: 600;
-  }
-  .tag-outline { background: #f1f2f4; color: #555; border: 1px solid var(--border); }
-
-  table.spec { width: 100%; border-collapse: collapse; }
-  table.spec th {
-    font-size: 9px; font-weight: 500; text-transform: uppercase; color: #555; text-align: left;
-    padding: 10px 12px; border-bottom: 1px solid var(--border); background: #fafbfc; vertical-align: bottom;
-  }
-  table.spec td { font-size: 12px; padding: 14px 12px; vertical-align: top; }
-  table.spec tbody tr + tr td { border-top: 1px solid var(--border); }
-  .spec-name { display: flex; gap: 10px; align-items: flex-start; }
-  .spec-name .tag { margin-top: 2px; }
-  .spec-name a { color: var(--link); text-decoration: none; line-height: 1.5; }
-  .spec-name a:hover { text-decoration: underline; }
-
   @media (max-width: 900px) {
     .topbar { flex-wrap: wrap; gap: 16px; }
     .user-info { margin-left: 0; text-align: left; }
     .main-nav { gap: 16px; }
   }
 
-  /* C variantas: kategorijos ir specifikacijos stulpeliai */
+  /* Specifikacijų stulpelis */
   table.purchases > thead > tr > th { white-space: normal; vertical-align: middle; line-height: 1.3; }
-  .cell-item { display: flex; gap: 6px; align-items: flex-start; }
-  .cell-item + .cell-item { margin-top: 6px; }
-  .clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+  .spec-list { list-style: none; margin: 0; padding: 0; }
+  .spec-list li { display: flex; gap: 6px; align-items: flex-start; line-height: 1.4; }
+  .spec-list .code { min-width: 64px; text-align: center; }
+  .spec-list li + li { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); }
   .code {
     flex-shrink: 0; font-size: 10px; font-weight: 600; color: var(--cpo-blue);
     background: var(--cpo-blue-light); border-radius: 3px; padding: 1px 6px; white-space: nowrap; margin-top: 1px;
   }
-  tr.row-main.is-open .code { background: #fff; }
-  .cat-codes { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-  .cat-codes .code { cursor: help; }
-  .cat-short { font-size: 12px; cursor: help; }
-  .more {
-    margin-top: 6px; padding: 0; border: 0; background: none; cursor: pointer;
-    font-family: inherit; font-size: 11px; font-weight: 500; color: var(--cpo-blue);
-  }
-  .more:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -224,15 +166,12 @@
     <table class="purchases">
       <thead>
         <tr>
-          <th class="col-toggle"><span class="visually-hidden" style="position:absolute;left:-9999px">Išskleisti</span></th>
-          <th style="width:60px">ID ⇕</th>
-          <th style="width:15%">Organizacija ⇕</th>
-          <th style="width:19%">Modulis ⇕</th>
-          <th style="width:130px">Kategorija</th>
+          <th style="width:70px">ID ⇕</th>
+          <th style="width:16%">Organizacija ⇕</th>
+          <th style="width:20%">Modulis ⇕</th>
           <th>Specifikacija</th>
           <th style="width:110px">Būsena ⇕</th>
           <th style="width:130px">Pasiūlymų pateikimo terminas ⇕</th>
-          <th style="width:11%">Veikimas</th>
           <th style="width:110px">Operacijos</th>
         </tr>
       </thead>
@@ -242,9 +181,6 @@
 </main>
 
 <script>
-  const CHEVRON_DOWN = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const CHEVRON_UP = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 8l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
   const MOD_RENOV = 'Daugiabučių namų atnaujinimo (modernizavimo) rangos darbai (pagal naują statybų reglamentavimą)';
 
   // Specifikacijos duomenys pateikti tik pirkimui 13887 (pagal pateiktą ekrano nuotrauką).
@@ -286,108 +222,33 @@
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-  function renderDetails(p) {
-    return p.categories.map((c, i) => `
-      <div class="category"${i ? ' style="margin-top:10px"' : ''}>
-        <button type="button" class="category-head" aria-expanded="true" aria-controls="cat-${p.id}-${i}">
-          ${CHEVRON_UP}<span class="tag">${esc(c.label || 'Kategorija')}</span><span>${esc(c.name)} <span class="count">(${c.specs.length})</span></span>
-        </button>
-        <div id="cat-${p.id}-${i}">
-          <table class="spec">
-            <thead><tr>
-              <th>Specifikacijos pavadinimas</th>
-            </tr></thead>
-            <tbody>${c.specs.map(s => `
-              <tr>
-                <td><div class="spec-name"><span class="tag tag-outline">Specifikacija</span><a href="#">${esc(s.name)}</a></div></td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
-      </div>`).join('');
-  }
-
-  // C variantas: kategorija ir specifikacija rodomos pagrindinės lentelės stulpeliuose.
-  // Ilgi pavadinimai sutrumpinami iki 2 eilučių (visas tekstas – užvedus pelę ir išskleidus eilutę).
+  // Visos pirkimo specifikacijos rodomos stulpelyje „Specifikacija“ (be išskleidimo).
   // Kodas atskiriamas nuo pavadinimo pagal pradžioje esančius skliaustus, pvz., „(RD3.2) …“.
   function splitCode(name) {
     const m = /^\(([^()]+)\)\s*(.*)$/s.exec(name);
     return m ? { code: m[1], text: m[2] } : { code: '', text: name };
   }
   const NONE = '<span class="muted">—</span>';
-  const item = name => {
-    const x = splitCode(name);
-    return `<div class="cell-item" title="${esc(name)}">${x.code ? `<span class="code">${esc(x.code)}</span>` : ''}<span class="clamp">${esc(x.text)}</span></div>`;
-  };
-  const more = (p, n, what) => n > 0
-    ? `<button type="button" class="more" data-target="${p.id}">+ dar ${n} ${what}</button>` : '';
 
-  // D variantas: kategorijos stulpelyje – tik kodas; visas pavadinimas – užvedus pelę ir išskleidus eilutę.
-  // Jei kodo nėra (pvz., pirkimo dalis „Nepavojingos atliekos“), rodomas trumpas pavadinimas.
-  function renderCategoryCell(p) {
-    if (!p.categories || !p.categories.length) return NONE;
-    return '<div class="cat-codes">' + p.categories.map(c => {
-      const x = splitCode(c.name);
-      return x.code
-        ? `<span class="code" title="${esc(c.name)}">${esc(x.code)}</span>`
-        : `<span class="cat-short clamp" title="${esc(c.name)}">${esc(x.text)}</span>`;
-    }).join('') + '</div>';
-  }
   function renderSpecCell(p) {
-    if (!p.categories || !p.categories.length) return NONE;
-    const specs = p.categories.flatMap(c => c.specs);
-    if (specs.length === 1) return item(specs[0].name);
-    return item(specs[0].name) + more(p, specs.length - 1, 'spec.');
+    const specs = (p.categories || []).flatMap(c => c.specs);
+    if (!specs.length) return NONE;
+    return '<ul class="spec-list">' + specs.map(sp => {
+      const x = splitCode(sp.name);
+      return `<li>${x.code ? `<span class="code">${esc(x.code)}</span>` : ''}<span>${esc(x.text)}</span></li>`;
+    }).join('') + '</ul>';
   }
 
-  const body = document.getElementById('purchases-body');
-  body.innerHTML = purchases.map(p => {
-    const hasSpec = Array.isArray(p.categories) && p.categories.length > 0;
-    const toggle = hasSpec
-      ? `<button type="button" class="toggle" aria-expanded="false" aria-controls="details-${p.id}" aria-label="Rodyti pirkimo ${p.id} specifikaciją" title="Rodyti specifikaciją">${CHEVRON_DOWN}</button>`
-      : '';
-    const main = `
+  document.getElementById('purchases-body').innerHTML = purchases.map(p => `
       <tr class="row-main" data-id="${p.id}">
-        <td class="col-toggle">${toggle}</td>
         <td>${p.id}</td>
         <td>${esc(p.org)}</td>
-        <td>${p.module ? esc(p.module) : '<span class="muted">—</span>'}</td>
-        <td>${renderCategoryCell(p)}</td>
+        <td>${p.module ? esc(p.module) : NONE}</td>
         <td>${renderSpecCell(p)}</td>
         <td><span class="badge${p.statusType ? ' badge-' + p.statusType : ''}">${esc(p.status || 'Paskelbtas')}</span></td>
-        <td>${p.deadline ? esc(p.deadline) : '<span class="muted">—</span>'}</td>
-        <td>${p.deadline ? 'Pasiūlymų pateikimo terminas ' + esc(p.deadline) : '<span class="muted">—</span>'}</td>
+        <td>${p.deadline ? esc(p.deadline) : NONE}</td>
         <td><a class="btn btn-sm" href="#" aria-label="Peržiūrėti pirkimą ${p.id}">Peržiūrėti</a></td>
-      </tr>`;
-    const details = hasSpec
-      ? `<tr class="row-details" id="details-${p.id}" hidden><td colspan="10">${renderDetails(p)}</td></tr>`
-      : '';
-    return main + details;
-  }).join('');
-
-  body.addEventListener('click', e => {
-    const moreBtn = e.target.closest('.more');
-    if (moreBtn) {
-      const t = body.querySelector(`tr[data-id="${moreBtn.dataset.target}"] .toggle`);
-      if (t && t.getAttribute('aria-expanded') !== 'true') t.click();
-      return;
-    }
-    const toggle = e.target.closest('.toggle');
-    if (toggle) {
-      const open = toggle.getAttribute('aria-expanded') !== 'true';
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('title', open ? 'Slėpti specifikaciją' : 'Rodyti specifikaciją');
-      toggle.closest('tr').classList.toggle('is-open', open);
-      document.getElementById(toggle.getAttribute('aria-controls')).hidden = !open;
-      return;
-    }
-    const head = e.target.closest('.category-head');
-    if (head) {
-      const open = head.getAttribute('aria-expanded') !== 'true';
-      head.setAttribute('aria-expanded', String(open));
-      document.getElementById(head.getAttribute('aria-controls')).hidden = !open;
-    }
-  });
+      </tr>`).join('');
 </script>
 </body>
 </html>
