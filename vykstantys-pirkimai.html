@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vykstantys pirkimai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cpo-blue: #0f4c97;
+    --cpo-blue-dark: #0b3d7a;
+    --cpo-blue-light: #eef3fa;
+    --text: #1d1d1b;
+    --muted: #8a8f98;
+    --border: #e3e6ea;
+    --bg: #f5f6f8;
+    --badge-yellow: #fbf6c9;
+    --badge-yellow-text: #7a6a00;
+    --link: #0f4c97;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Jost", "Futura", Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    font-size: 14px;
+  }
+
+  /* Viršutinė navigacija */
+  .topbar {
+    background: #fff;
+    display: flex; align-items: center; gap: 40px;
+    padding: 10px 20px;
+  }
+  .logo { display: flex; align-items: center; gap: 8px; font-size: 18px; color: #555; text-decoration: none; }
+  .logo-dots { display: flex; gap: 3px; }
+  .logo-dots span { width: 9px; height: 9px; border-radius: 50%; display: block; }
+  .main-nav { display: flex; gap: 38px; flex-wrap: wrap; }
+  .main-nav a { color: var(--text); text-decoration: none; font-size: 14px; }
+  .main-nav a:hover { color: var(--cpo-blue); }
+  .user-info { margin-left: auto; text-align: right; font-size: 9px; text-transform: uppercase; line-height: 1.6; }
+  .user-info strong { font-weight: 600; }
+  .user-info span { color: var(--cpo-blue); }
+
+  .subnav {
+    background: #fff; border-top: 1px solid var(--border);
+    display: flex; gap: 22px; flex-wrap: wrap; padding: 12px 20px;
+  }
+  .subnav a { color: var(--text); text-decoration: none; font-size: 11px; }
+  .subnav a:hover { color: var(--cpo-blue); }
+
+  .tabs { display: flex; padding: 14px 12px 0; }
+  .tabs a {
+    padding: 8px 14px; color: var(--text); text-decoration: none; font-size: 13px;
+    border-bottom: 2px solid var(--border);
+  }
+  .tabs a.active { border-bottom-color: var(--cpo-blue); font-weight: 500; }
+
+  .card { background: #fff; margin: 14px 10px; padding: 12px 12px 4px; }
+  .card h1 { font-size: 15px; font-weight: 500; margin: 0 0 10px; }
+
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .filters input, .filters select {
+    font-family: inherit; font-size: 12px; color: var(--muted);
+    height: 34px; padding: 0 10px; border: 1px solid #d6d9de; border-radius: 3px; background: #fff;
+    width: 180px;
+  }
+  .filters select { width: 120px; }
+  .btn {
+    font-family: inherit; font-size: 12px; font-weight: 500; height: 34px; padding: 0 14px;
+    border: 1px solid var(--cpo-blue); color: var(--cpo-blue); background: #fff; border-radius: 3px; cursor: pointer;
+  }
+  .btn:hover { background: var(--cpo-blue-light); }
+
+  /* Pirkimų lentelė */
+  .table-wrap { overflow-x: auto; }
+  table.purchases { width: 100%; min-width: 1100px; border-collapse: collapse; table-layout: fixed; }
+  table.purchases > thead > tr > th {
+    background: var(--cpo-blue); color: #fff; text-align: left;
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    padding: 12px 10px; white-space: nowrap;
+  }
+  table.purchases > tbody > tr > td {
+    padding: 18px 10px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle;
+  }
+  table.purchases > tbody > tr.row-main:hover > td { background: #fafbfc; }
+  .col-toggle { width: 34px; padding-left: 8px !important; padding-right: 0 !important; }
+  .badge {
+    display: inline-block; padding: 2px 6px; border-radius: 3px;
+    background: var(--badge-yellow); color: var(--badge-yellow-text); font-size: 9px; font-weight: 500;
+  }
+  .link { color: var(--link); text-decoration: none; }
+  .link:hover { text-decoration: underline; }
+
+  /* Išskleidimo mygtukas */
+  .toggle {
+    width: 24px; height: 24px; border: 1px solid #c9d3e3; border-radius: 3px;
+    background: #fff; color: var(--cpo-blue); cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .toggle:hover { background: var(--cpo-blue-light); }
+  .toggle:focus-visible { outline: 2px solid var(--cpo-blue); outline-offset: 2px; }
+  .toggle svg { transition: transform .2s ease; }
+  .toggle[aria-expanded="true"] { background: var(--cpo-blue); color: #fff; border-color: var(--cpo-blue); }
+  .toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+  tr.row-main.is-open > td { background: var(--cpo-blue-light); border-bottom-color: transparent; }
+
+  /* Išskleista specifikacijos dalis */
+  tr.row-details > td { padding: 0 10px 16px !important; background: var(--cpo-blue-light); }
+  tr.row-details[hidden] { display: none; }
+
+  .category { border: 1px solid #c9d3e3; background: #fff; }
+  .category-head {
+    width: 100%; display: flex; align-items: center; gap: 12px;
+    background: var(--cpo-blue); color: #fff; border: 0; cursor: pointer;
+    font-family: inherit; text-align: left; padding: 12px 14px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase; line-height: 1.4;
+  }
+  .category-head:hover { background: var(--cpo-blue-dark); }
+  .category-head svg { flex-shrink: 0; transition: transform .2s ease; }
+  .category-head[aria-expanded="false"] svg { transform: rotate(180deg); }
+  .tag {
+    flex-shrink: 0; display: inline-block; padding: 2px 8px; border-radius: 10px;
+    background: #fff; color: var(--cpo-blue); font-size: 9px; font-weight: 600;
+  }
+  .tag-outline { background: #f1f2f4; color: #555; border: 1px solid var(--border); }
+
+  table.spec { width: 100%; border-collapse: collapse; }
+  table.spec th {
+    font-size: 9px; font-weight: 500; text-transform: uppercase; color: #555; text-align: left;
+    padding: 10px 12px; border-bottom: 1px solid var(--border); background: #fafbfc; vertical-align: bottom;
+  }
+  table.spec td { font-size: 12px; padding: 14px 12px; vertical-align: top; }
+  table.spec .num { white-space: nowrap; }
+  table.spec .price { text-align: right; white-space: nowrap; font-weight: 500; }
+  table.spec th.price { text-align: right; }
+  .spec-name { display: flex; gap: 10px; align-items: flex-start; }
+  .spec-name .tag { margin-top: 2px; }
+  .spec-name a { color: var(--link); text-decoration: none; line-height: 1.5; }
+  .spec-name a:hover { text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .topbar { flex-wrap: wrap; gap: 16px; }
+    .user-info { margin-left: 0; text-align: left; }
+    .main-nav { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="#">
+    <span class="logo-dots"><span style="background:#f2c200"></span><span style="background:#4a4a4a"></span><span style="background:#0f4c97"></span><span style="background:#34a37b"></span></span>
+    cpo katalogas
+  </a>
+  <nav class="main-nav">
+    <a href="#">Katalogas</a><a href="#">Tiekėjai</a><a href="#">Pagalba</a><a href="#">Atviri duomenys</a>
+    <a href="#">Naujienos</a><a href="#">EPC Katalogas</a><a href="#">Apklausos</a>
+  </nav>
+  <div class="user-info">
+    <strong>Viešoji įstaiga CPO LT</strong><br>
+    Živilė Lasevičienė <span>(pavaduoja Rūta Šatienė administrator)</span> | Modulio administratorius, Administratorius
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="#">Pirkimų administravimas</a><a href="#">Produktų administravimas</a><a href="#">Tiekėjų administravimas</a>
+  <a href="#">Žinutės</a><a href="#">Instrukcijos</a><a href="#">Centralizavimo srities struktūros dokumentacija</a>
+  <a href="#">Moduliai</a><a href="#">Kalendorius</a><a href="#">Organizacijos</a><a href="#">Paskyros</a>
+  <a href="#">Dokumentai</a><a href="#">Nariai</a><a href="#">VAPRIS</a><a href="#">Ataskaitos</a>
+  <a href="#">Klasifikatoriai</a><a href="#">SODRA skola</a>
+</nav>
+
+<div class="tabs">
+  <a href="#">Užduotys</a><a href="#" class="active">Vykstantys pirkimai</a><a href="#">Visi pirkimai</a>
+</div>
+
+<main class="card">
+  <h1>Vykstantys pirkimai</h1>
+
+  <div class="filters">
+    <input placeholder="Pirkimo ID">
+    <select><option>Organizacija</option></select>
+    <select><option>Modulis</option></select>
+    <select><option>Būsena</option></select>
+    <input placeholder="Pasiūlymo pateikimo terminas nuo">
+    <input placeholder="Pasiūlymų pateikimo terminas iki">
+    <select><option>Tipas</option></select>
+    <button class="btn" type="button">Filtruoti</button>
+    <button class="btn" type="button">Išvalyti</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="purchases">
+      <thead>
+        <tr>
+          <th class="col-toggle"><span class="visually-hidden" style="position:absolute;left:-9999px">Išskleisti</span></th>
+          <th style="width:60px">ID ⇕</th>
+          <th style="width:19%">Organizacija ⇕</th>
+          <th>Modulis ⇕</th>
+          <th style="width:90px">Būsena ⇕</th>
+          <th style="width:240px">Pasiūlymų pateikimo terminas ⇕</th>
+          <th style="width:16%">Veikimas</th>
+          <th style="width:90px">Operacijos</th>
+        </tr>
+      </thead>
+      <tbody id="purchases-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+  const CHEVRON_DOWN = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const CHEVRON_UP = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 8l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  const MOD_RENOV = 'Daugiabučių namų atnaujinimo (modernizavimo) rangos darbai (pagal naują statybų reglamentavimą)';
+
+  // Specifikacijos duomenys pateikti tik pirkimui 13887 (pagal pateiktą ekrano nuotrauką).
+  const purchases = [
+    { id: 13887, org: 'Viešoji įstaiga "Atnaujinkime miestą"', module: MOD_RENOV, deadline: '2026-10-28 09:00',
+      categories: [{
+        name: '(RD3) Daugiabučių namų atnaujinimo (modernizavimo) rangos darbai (ypatingųjų arba neypatingųjų pastatų paprastasis remontas, neypatingųjų pastatų kapitalinis remontas arba rekonstrukcija), kurių planuojama vertė didesnė kaip 0,5 mln., bet neviršija 1 mln. Eur be PVM',
+        specs: [{
+          name: '(RD3.2) Daugiabučių namų atnaujinimo (modernizavimo) rangos darbai (ypatingųjų arba neypatingųjų pastatų paprastasis remontas, neypatingųjų pastatų kapitalinis remontas arba rekonstrukcija), kurių planuojama vertė didesnė kaip 0,5 mln., bet neviršija 1 mln. Eur be PVM. (Kompleksinis atnaujinimas (modernizavimas). Su projektavimu ir architektūrine dalimi) (Antakalnio g. 78, Vilnius)',
+          vat: '21%', unit: 'Objektas', qty: 1, maxPrice: '1128459,17'
+        }]
+      }]
+    },
+    { id: 13899, org: 'Viešoji įstaiga "Atnaujinkime miestą"', module: MOD_RENOV, deadline: '2026-10-28 09:00' },
+    { id: 13900, org: 'Viešoji įstaiga "Atnaujinkime miestą"', module: MOD_RENOV, deadline: '2026-10-28 09:00' },
+    { id: 13683, org: 'Viešoji įstaiga "Atnaujinkime miestą"', module: MOD_RENOV, deadline: '2026-10-27 09:00' },
+    { id: 13708, org: 'Viešoji įstaiga "Atnaujinkime miestą"', module: MOD_RENOV, deadline: '2026-10-27 09:00' },
+    { id: 13744, org: 'UAB "In domu"', module: '(EPC) EPC - ' + MOD_RENOV, deadline: '2026-10-23 09:00' },
+    { id: 13682, org: 'Lietuvos sveikatos mokslų universiteto Kauno ligoninė', module: 'Baldai su projektavimu', deadline: '2026-10-20 09:00' },
+    { id: 13583, org: 'Uždaroji akcinė bendrovė "Biržų šilumos tinklai"', module: MOD_RENOV, deadline: '2026-10-19 09:00' },
+    { id: 13130, org: 'AB "LTG Cargo"', module: 'Elektromobilių įkrovimo stotelės', deadline: '2026-10-15 09:00' },
+    { id: 13159, org: 'AB "LTG Infra"', module: 'Elektromobilių įkrovimo stotelės', deadline: '2026-10-15 09:00' },
+  ];
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function renderDetails(p) {
+    return p.categories.map((c, i) => `
+      <div class="category">
+        <button type="button" class="category-head" aria-expanded="true" aria-controls="cat-${p.id}-${i}">
+          ${CHEVRON_UP}<span class="tag">Kategorija</span><span>${esc(c.name)}</span>
+        </button>
+        <div id="cat-${p.id}-${i}">
+          <table class="spec">
+            <thead><tr>
+              <th>Specifikacijos pavadinimas</th><th>PVM</th><th>Mato vnt.</th><th>Kiekis</th>
+              <th class="price">Užsakovo nurodyta<br>maksimali kaina su PVM</th>
+            </tr></thead>
+            <tbody>${c.specs.map(s => `
+              <tr>
+                <td><div class="spec-name"><span class="tag tag-outline">Specifikacija</span><a href="#">${esc(s.name)}</a></div></td>
+                <td class="num">${esc(s.vat)}</td>
+                <td class="num">${esc(s.unit)}</td>
+                <td class="num">${esc(s.qty)}</td>
+                <td class="price">${esc(s.maxPrice)}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`).join('');
+  }
+
+  const body = document.getElementById('purchases-body');
+  body.innerHTML = purchases.map(p => {
+    const hasSpec = Array.isArray(p.categories) && p.categories.length > 0;
+    const toggle = hasSpec
+      ? `<button type="button" class="toggle" aria-expanded="false" aria-controls="details-${p.id}" aria-label="Rodyti pirkimo ${p.id} specifikaciją" title="Rodyti specifikaciją">${CHEVRON_DOWN}</button>`
+      : '';
+    const main = `
+      <tr class="row-main" data-id="${p.id}">
+        <td class="col-toggle">${toggle}</td>
+        <td>${p.id}</td>
+        <td>${esc(p.org)}</td>
+        <td>${esc(p.module)}</td>
+        <td><span class="badge">Paskelbtas</span></td>
+        <td>${esc(p.deadline)}</td>
+        <td>Pasiūlymų pateikimo terminas ${esc(p.deadline)}</td>
+        <td><a class="link" href="#">Peržiūrėti</a></td>
+      </tr>`;
+    const details = hasSpec
+      ? `<tr class="row-details" id="details-${p.id}" hidden><td colspan="8">${renderDetails(p)}</td></tr>`
+      : '';
+    return main + details;
+  }).join('');
+
+  body.addEventListener('click', e => {
+    const toggle = e.target.closest('.toggle');
+    if (toggle) {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('title', open ? 'Slėpti specifikaciją' : 'Rodyti specifikaciją');
+      toggle.closest('tr').classList.toggle('is-open', open);
+      document.getElementById(toggle.getAttribute('aria-controls')).hidden = !open;
+      return;
+    }
+    const head = e.target.closest('.category-head');
+    if (head) {
+      const open = head.getAttribute('aria-expanded') !== 'true';
+      head.setAttribute('aria-expanded', String(open));
+      document.getElementById(head.getAttribute('aria-controls')).hidden = !open;
+    }
+  });
+</script>
+</body>
+</html>
