@@ -1582,8 +1582,8 @@
   const EVENTS = [
     { id: 'e1', course: 'claude', date: '09.29', city: 'Vilnius', status: 'soldout' },
     { id: 'e2', course: 'claude', date: '10.02', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
-    { id: 'e3', course: 'claude', date: '10.08', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
-    { id: 'e4', course: 'claude', date: '10.09', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e3', course: 'claude', date: '10.08', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 2 },
+    { id: 'e4', course: 'claude', date: '10.09', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 1 },
     { id: 'e5', course: 'claude', date: '10.14', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
     { id: 'e6', course: 'claude', date: '10.15', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
     { id: 'e7', course: 'agentas', date: '10.16', city: 'Vilnius', time: '9:30–12:30', status: 'few', left: 5 },
@@ -1610,6 +1610,12 @@
   const now = new Date();
   EVENTS.splice(0, EVENTS.length, ...EVENTS.filter((e) => eventEnd(e) > now));
   const eur = (n) => `${n.toLocaleString('lt-LT')} €`;
+  // Lietuviški linksniai: 1 vieta, 2–9 vietos, 10–20 vietų, 21 vieta...
+  const seats = (n) => {
+    const last = n % 10, lastTwo = n % 100;
+    const word = lastTwo >= 10 && lastTwo <= 20 ? 'vietų' : last === 1 ? 'vieta' : last === 0 ? 'vietų' : 'vietos';
+    return `${n} ${word}`;
+  };
   const nextFree = (course, city) =>
     EVENTS.find((e) => e.course === course && e.status !== 'soldout' && (!city || e.city === city)) ||
     EVENTS.find((e) => e.course === course && e.status !== 'soldout');
@@ -1618,7 +1624,7 @@
   const eventsEl = document.getElementById('events');
   const statusPill = (e) => e.status === 'soldout'
     ? '<span class="pill soldout-badge">Išparduota</span>'
-    : e.status === 'few' ? `<span class="pill pill--yellow">Liko ${e.left} vietos</span>` : '';
+    : e.status === 'few' ? `<span class="pill pill--yellow">Liko ${seats(e.left)}</span>` : '';
   eventsEl.innerHTML = EVENTS.map((e) => {
     const c = COURSES[e.course];
     const when = e.time || c.meta.split(' · ')[0];
@@ -1684,7 +1690,7 @@
       el.innerHTML = '<span class="next-label">Artimiausia laisva data</span><span class="next-line"><b>Naujos datos netrukus</b></span>';
       return;
     }
-    el.innerHTML = `<span class="next-label">Artimiausia laisva data</span><span class="next-line"><b>${e.date}</b><span>${e.city}</span>${e.status === 'few' ? `<span class="pill pill--yellow">Liko ${e.left} vietos</span>` : ''}</span>`;
+    el.innerHTML = `<span class="next-label">Artimiausia laisva data</span><span class="next-line"><b>${e.date}</b><span>${e.city}</span>${e.status === 'few' ? `<span class="pill pill--yellow">Liko ${seats(e.left)}</span>` : ''}</span>`;
   });
 
   // ---------- Langai ----------
@@ -1736,7 +1742,7 @@
     const buyEvent = document.getElementById('buy-event');
     buyEvent.innerHTML = '<option value="">Pasirinkite datą ir miestą</option>' + EVENTS
       .filter((e) => e.course === buyState.course)
-      .map((e) => `<option value="${e.id}"${e.status === 'soldout' ? ' disabled' : ''}>${e.date} · ${e.city}${e.time ? ` · ${e.time}` : ''}${e.status === 'soldout' ? ' · išparduota' : e.status === 'few' ? ` · liko ${e.left} vietos` : ''}</option>`)
+      .map((e) => `<option value="${e.id}"${e.status === 'soldout' ? ' disabled' : ''}>${e.date} · ${e.city}${e.time ? ` · ${e.time}` : ''}${e.status === 'soldout' ? ' · išparduota' : e.status === 'few' ? ` · liko ${seats(e.left)}` : ''}</option>`)
       .join('');
     if (buyState.event) buyEvent.value = buyState.event;
     buyError.textContent = '';
