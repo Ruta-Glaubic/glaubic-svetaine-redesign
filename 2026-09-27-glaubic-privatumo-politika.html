@@ -630,6 +630,10 @@
   .policy ul { padding-left: 22px; margin: 8px 0; }
   .policy li { margin: 6px 0; }
   .policy a { text-underline-offset: 3px; }
+  .policy-table-wrap { overflow-x: auto; margin: 12px 0; border-radius: var(--radius-card); border: 1px solid var(--ink-300); background: var(--white); }
+  .policy-table { width: 100%; border-collapse: collapse; font-size: 16px; }
+  .policy-table th, .policy-table td { text-align: left; vertical-align: top; padding: 12px 16px; border-top: 1px solid var(--ink-300); }
+  .policy-table th { border-top: 0; background: var(--violet-100); font-family: var(--font-head); font-size: 15px; }
   .policy-placeholder { border: 2px dashed var(--ink-300); border-radius: var(--radius-card); padding: 24px; background: var(--white); }
   /* ---------- Kontaktai ---------- */
   .contact { background: var(--violet-500); padding: var(--section) 0; }
@@ -1041,8 +1045,89 @@
         <a class="back-link" href="2026-09-27-glaubic-maketas.html">Back to home</a>
         <span class="eyebrow">Legal information</span>
         <h2>Privacy Policy</h2>
-        <div class="policy-body policy-placeholder">
-          <p>The English privacy policy text from glaubic.com/privatumo-politika#en will be placed here.</p>
+        <p class="policy-updated">Last updated: 2 August 2026</p>
+        <div class="policy-body">
+          <p>This privacy policy explains how the website <a href="https://www.glaubic.com">www.glaubic.com</a> (“Glaubic”, “we”) collects, uses and protects your personal data when you visit the website, register for AI training, purchase services, subscribe to the newsletter or contact us. We respect your privacy and process data in accordance with the EU General Data Protection Regulation (GDPR) and applicable Lithuanian law.</p>
+
+          <h3>1. Data Controller</h3>
+          <p>The data controller responsible for processing your personal data is:</p>
+          <p>MB "Glaubic"<br>Company code: 306622581<br>Address: Raitininkų g. 4-74, Vilnius, Lithuania<br>Email: <a href="mailto:ai@marketyourvisions.lt">ai@marketyourvisions.lt</a><br>Phone: <a href="tel:+37062910499">+370 629 10499</a><br>Website: <a href="https://www.glaubic.com">www.glaubic.com</a></p>
+
+          <h3>2. What Data We Collect</h3>
+          <p>Depending on how you use the website, we may process the following data:</p>
+          <ul>
+            <li><strong>Registration and purchase data:</strong> first name, last name, email address, phone number, selected training date.</li>
+            <li><strong>Invoicing data (for companies):</strong> company name, company code, VAT number, address.</li>
+            <li><strong>Payment data:</strong> payments are processed by Stripe. Card details are entered in Stripe's secure environment and are never accessible to or stored on our servers.</li>
+            <li><strong>Newsletter data:</strong> email address, if you subscribe to our updates.</li>
+            <li><strong>Contact data:</strong> email address, topic of interest and the content of your message when you submit a contact or company inquiry form.</li>
+            <li><strong>Technical and usage data:</strong> IP address, browser type, device, date and time of visit, pages viewed — collected automatically via cookies and analytics tools.</li>
+          </ul>
+
+          <h3>3. Purposes and Legal Basis</h3>
+          <div class="policy-table-wrap">
+            <table class="policy-table">
+              <thead><tr><th>Purpose</th><th>Legal basis (GDPR)</th></tr></thead>
+              <tbody>
+                <tr><td>Managing training registrations and delivering services</td><td>Performance of a contract (Art. 6(1)(b))</td></tr>
+                <tr><td>Processing payments and issuing invoices</td><td>Contract and legal obligation (Art. 6(1)(b) and (c))</td></tr>
+                <tr><td>Sending the newsletter</td><td>Your consent (Art. 6(1)(a))</td></tr>
+                <tr><td>Responding to inquiries, customer support</td><td>Legitimate interest / consent (Art. 6(1)(f) or (a))</td></tr>
+                <tr><td>Ensuring website operation, analytics and improvement</td><td>Legitimate interest / cookie consent (Art. 6(1)(f) or (a))</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>4. Data Processors and Third Parties</h3>
+          <p>To provide our services, we rely on trusted providers that process data on our behalf:</p>
+          <ul>
+            <li><strong>Stripe</strong> (Stripe, Inc. / Stripe Payments Europe) — payment processing.</li>
+            <li><strong>Resend</strong> — sending automated emails (confirmations, gift coupons, notifications).</li>
+            <li><strong>Google Analytics</strong> (Google Ireland Ltd.) — anonymized website traffic statistics.</li>
+            <li><strong>Google</strong> (Sheets / Apps Script) — purchase records and internal logging.</li>
+            <li><strong>Railway</strong> — website hosting services.</li>
+          </ul>
+          <p>We do not sell your data to third parties. Data may be disclosed to public authorities where required by law. Some providers are located outside the EU/EEA — in such cases transfers are safeguarded by GDPR mechanisms (e.g. EU Standard Contractual Clauses).</p>
+
+          <h3>5. Cookies</h3>
+          <p>We use cookies to ensure the website functions properly and to analyze traffic:</p>
+          <ul>
+            <li><strong>Essential cookies</strong> — required for the website and payment functions to work.</li>
+            <li><strong>Analytics cookies</strong> — Google Analytics, helping us understand how visitors use the site.</li>
+          </ul>
+          <p>You can manage or delete cookies in your browser settings. Disabling some cookies may limit certain website features.</p>
+
+          <h3>6. Data Retention</h3>
+          <p>We retain personal data no longer than necessary to achieve the purposes:</p>
+          <ul>
+            <li>Purchase and accounting data — as required by accounting legislation (typically up to 10 years).</li>
+            <li>Newsletter data — until you unsubscribe.</li>
+            <li>Inquiry correspondence — as long as needed to handle the request and for a reasonable period afterwards.</li>
+          </ul>
+
+          <h3>7. Your Rights</h3>
+          <p>Under the GDPR you have the right to:</p>
+          <ul>
+            <li>access the data we hold about you;</li>
+            <li>request correction of inaccurate data;</li>
+            <li>request erasure of data (“right to be forgotten”);</li>
+            <li>restrict or object to processing;</li>
+            <li>receive your data in a structured format (data portability);</li>
+            <li>withdraw consent (e.g. newsletter subscription) at any time.</li>
+          </ul>
+          <p>To exercise these rights, contact us at <a href="mailto:ai@marketyourvisions.lt">ai@marketyourvisions.lt</a>.</p>
+
+          <h3>8. Data Security</h3>
+          <p>We apply technical and organizational measures to protect your data against unauthorized access, loss or disclosure. The website uses encrypted HTTPS, and payments are processed in Stripe's secure environment.</p>
+
+          <h3>9. Complaints</h3>
+          <p>If you believe your data is being processed improperly, you have the right to lodge a complaint with the supervisory authority — the State Data Protection Inspectorate of Lithuania (L. Sapiegos St. 17, Vilnius, <a href="https://vdai.lrv.lt">vdai.lrv.lt</a>).</p>
+
+          <h3>10. Changes to This Policy</h3>
+          <p>We may update this privacy policy from time to time. The current version is always published on this page with the update date indicated.</p>
+
+          <h3>11. Contact Us</h3>
+          <p>For any questions about privacy or data processing:<br>Email: <a href="mailto:ai@marketyourvisions.lt">ai@marketyourvisions.lt</a><br>Phone: <a href="tel:+37062910499">+370 629 10499</a></p>
         </div>
       </article>
     </div>
