@@ -976,6 +976,11 @@
   .video-card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .video-card iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2; background: var(--ink-900); }
   .video-card { background: linear-gradient(180deg, rgba(36, 29, 43, 0.15) 30%, rgba(36, 29, 43, 0.85) 100%), var(--video-poster, none) center / cover no-repeat, var(--ink-800); }
+  .quote.quote--video:has(.video-card--embed) { aspect-ratio: 9 / 16; min-height: 0; }
+  .video-card--embed { min-height: 0; padding: 0; }
+  .video-overlay { position: absolute; inset: 0 0 auto 0; z-index: 3; padding: 16px 20px 32px; background: linear-gradient(180deg, rgba(36, 29, 43, 0.85) 0%, rgba(36, 29, 43, 0.5) 65%, rgba(36, 29, 43, 0) 100%); pointer-events: none; }
+  .video-overlay .video-badge { position: static; display: inline-block; margin-bottom: 12px; }
+  .video-overlay .ig-link { pointer-events: auto; }
   .video-caption .ig-link { display: flex; width: max-content; color: var(--white); margin-top: 6px; font-size: 14px; gap: 6px; }
   .video-badge { position: absolute; top: 20px; left: 20px; background: var(--white); color: var(--ink-800); border-radius: var(--radius-pill); padding: 6px 12px; font-size: 13px; font-weight: 700; }
   .video-play {
@@ -1202,10 +1207,9 @@
           <blockquote>Dėkoju už mokymus, kurių metu parodėt, kad kiekvienas gali lengvinti savo darbą su Claude. Ir esu tikra, kad tai tik pradžia mano projektų. Jau kelis mėnesius laukiau, kol išorinis partneris man padarys tokią sistemą, kur galiu pateikti klientams detalias atliktų darbų ataskaitas. KELIS MĖNESIUS. Su Claude viską pasidariau per savaitgalį. Tikras kosmosas ir neribotos galimybės.</blockquote>
         </li>
         <li class="quote quote--video" data-video-embed="https://drive.google.com/file/d/1X6vE-_cXiiiYtkW9HTpA9HSOrXyPWkGb/preview">
-          <div class="video-card" style="--video-poster: url('https://drive.google.com/thumbnail?id=1X6vE-_cXiiiYtkW9HTpA9HSOrXyPWkGb&amp;sz=w800')">
-            <span class="video-badge">Vaizdo atsiliepimas</span>
-            <button class="video-play" type="button" aria-label="Paleisti vaizdo atsiliepimą: Irina Danylienė"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.2-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg></button>
-            <div class="video-caption"><b>Irina Danylienė</b>Asmeninė stilistė<a class="ig-link" href="https://www.instagram.com/irina_danyliene/" rel="noopener"><svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17.6" cy="6.4" r="1.4" fill="currentColor"/></svg><span>@irina_danyliene</span></a></div>
+          <div class="video-card video-card--embed" style="--video-poster: url('https://drive.google.com/thumbnail?id=1X6vE-_cXiiiYtkW9HTpA9HSOrXyPWkGb&amp;sz=w800')">
+            <div class="video-overlay"><span class="video-badge">Vaizdo atsiliepimas</span>
+            <div class="video-caption"><b>Irina Danylienė</b>Asmeninė stilistė<a class="ig-link" href="https://www.instagram.com/irina_danyliene/" rel="noopener"><svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="17.6" cy="6.4" r="1.4" fill="currentColor"/></svg><span>@irina_danyliene</span></a></div></div>
           </div>
         </li>
         <li class="quote">
@@ -1935,19 +1939,30 @@
 
   // ---------- Vaizdo atsiliepimai ----------
   let videoPlaying = false;
-  document.querySelectorAll('.quote--video').forEach((card) => {
+  // Įterptas vaizdo įrašas įkeliamas, kai kortelė priartėja prie ekrano: lieka vienas grotuvo „play“ mygtukas.
+  const loadEmbed = (card) => {
+    const box = card.querySelector('.video-card');
+    if (box.querySelector('iframe')) return;
+    box.insertAdjacentHTML('afterbegin', `<iframe src="${card.dataset.videoEmbed}" title="Vaizdo atsiliepimas" allow="autoplay; fullscreen" allowfullscreen></iframe>`);
+  };
+  const embedCards = document.querySelectorAll('.quote--video[data-video-embed]');
+  if ('IntersectionObserver' in window) {
+    const embedObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { if (entry.isIntersecting) { loadEmbed(entry.target); embedObserver.unobserve(entry.target); } });
+    }, { rootMargin: '300px' });
+    embedCards.forEach((card) => embedObserver.observe(card));
+  } else embedCards.forEach(loadEmbed);
+  // Spaudžiant grotuvą fokusas pereina į iframe: tada karuselė nesisuka, kol lankytojas grįžta į puslapį.
+  window.addEventListener('blur', () => setTimeout(() => {
+    if (document.activeElement && document.activeElement.tagName === 'IFRAME') videoPlaying = true;
+  }, 0));
+  window.addEventListener('focus', () => { videoPlaying = false; });
+
+  document.querySelectorAll('.quote--video:not([data-video-embed])').forEach((card) => {
     const btn = card.querySelector('.video-play');
     btn.addEventListener('click', () => {
       const src = card.dataset.videoSrc;
       const box = card.querySelector('.video-card');
-      const embed = card.dataset.videoEmbed;
-      if (embed) {
-        box.insertAdjacentHTML('afterbegin', `<iframe src="${embed}" title="Vaizdo atsiliepimas" allow="autoplay; fullscreen" allowfullscreen></iframe>`);
-        box.classList.add('is-playing');
-        btn.hidden = true;
-        videoPlaying = true;
-        return;
-      }
       if (!src) {
         if (!box.querySelector('.video-note')) {
           box.insertAdjacentHTML('beforeend', '<p class="video-note" role="status">Vaizdo įrašas bus įkeltas netrukus.</p>');
