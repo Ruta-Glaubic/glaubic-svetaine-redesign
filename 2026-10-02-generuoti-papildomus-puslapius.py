@@ -9,7 +9,7 @@ def shell(title, main_html, extra_js=''):
     head=head.replace('<a class="promo" href="#dovana" data-open-gift ',f'<a class="promo" href="{MAIN}#dovana" ')
     head=re.sub(r'<button class="btn btn--cta promo-cta" type="button" data-open-gift aria-label="Pasirinkti dovaną">(.*?)</button>',
                 lambda m:f'<a class="btn btn--cta promo-cta" href="{MAIN}#dovana" aria-label="Pasirinkti dovaną">{m.group(1)}</a>',head,flags=re.S)
-    head=re.sub(r'href="#(kursai|verslui|apie|lektoriai|kontaktai)"',lambda m:f'href="{MAIN}#{m.group(1)}"',head)
+    head=re.sub(r'href="#(kursai|verslui|akimirkos|lektoriai|kontaktai)"',lambda m:f'href="{MAIN}#{m.group(1)}"',head)
     head=head.replace('<a class="logo" href="#" aria-label="GLAUBIC pradžia">',f'<a class="logo" href="{MAIN}" aria-label="GLAUBIC pradžia">')
     assert 'data-open-gift' not in head
     f0=s.index('<footer class="site-footer">'); f1=s.index('</footer>')+len('</footer>')
