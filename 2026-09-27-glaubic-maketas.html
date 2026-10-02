@@ -143,7 +143,9 @@
   .btn--cta:hover, .btn--cta:focus-visible { background: var(--ink-800); color: var(--white); }
   .btn--ghost { background: transparent; color: var(--ink-800); border-color: var(--ink-800); }
   .btn--ghost:hover, .btn--ghost:focus-visible { background: var(--coral); border-color: var(--coral); }
-  .btn--ghost:active, .btn--cta:active { transform: translateY(1px); }
+  .btn--white { background: var(--white); color: var(--ink-800); border-color: var(--white); }
+  .btn--white:hover, .btn--white:focus-visible { background: var(--yellow); border-color: var(--yellow); }
+  .btn--ghost:active, .btn--cta:active, .btn--white:active { transform: translateY(1px); }
   .btn { transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.1s ease; }
   .btn--sm { height: 44px; padding: 0 18px; font-size: 16px; }
   .btn--block { width: 100%; }
@@ -1059,7 +1061,7 @@
         <p class="lead">Kiek valandų per savaitę atima laiškai, ataskaitos ir pasiūlymai? Per 3–3,5 val. gyvų mokymų mažoje grupėje išmoksite juos paruošti su Claude ir AI agentais. Kitą rytą darbe jau naudosite savo paruoštą sprendimą.</p>
         <div class="hero-actions">
           <a class="btn btn--cta" href="#kursai">Pasirinkti mokymus</a>
-          <a class="btn btn--ghost" href="#verslui">Sprendimai verslui</a>
+          <a class="btn btn--white" href="#verslui">Sprendimai verslui</a>
         </div>
         <div class="stats">
           <div class="stat"><b><span data-count="750">750</span>+</b><span>mokymų dalyvių</span></div>
