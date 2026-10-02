@@ -648,14 +648,6 @@
   .policy-table th { border-top: 0; background: var(--violet-100); font-family: var(--font-head); font-size: 15px; }
   .policy-placeholder { border: 2px dashed var(--ink-300); border-radius: var(--radius-card); padding: 24px; background: var(--white); }
   /* ---------- Kontaktai ---------- */
-  .contact { background: var(--violet-500); padding: var(--section) 0; }
-  .contact .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
-  .contact h2 { font-size: clamp(32px, 4vw, 52px); margin-top: 12px; }
-  .contact p { margin-top: 16px; font-size: 19px; max-width: 32em; }
-  .contact-card { background: var(--white); border-radius: var(--radius-panel); padding: clamp(24px, 3vw, 36px); display: grid; gap: 18px; }
-  .contact-line { display: grid; gap: 2px; }
-  .contact-line span { font-size: 14px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-  .contact-line a { font-size: 20px; text-underline-offset: 4px; }
 
   /* ---------- Naujienlaiškis ---------- */
   .newsletter { background: var(--fog); padding: clamp(56px, 8vw, 96px) 0; }
@@ -689,7 +681,6 @@
   .quote-person { min-width: 0; }
   .quote-person .ig-link { display: flex; width: max-content; max-width: 100%; margin-top: 4px; font-size: 14px; gap: 6px; }
   .ig-icon { width: 20px; height: 20px; flex-shrink: 0; }
-  .contact-line .ig-icon { width: 22px; height: 22px; }
   /* ---------- Poraštė ---------- */
   .site-footer { background: var(--violet-500); padding: 64px 0 40px; }
   .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; }
@@ -865,7 +856,7 @@
     .moments-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .moments-grid.is-open .moment:last-child, .moments-grid:not(.is-open) .moment:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
     .moments-grid.is-open .moment:last-child img, .moments-grid:not(.is-open) .moment:nth-child(3) img { object-position: center 20%; }
-    .newsletter .wrap, .contact .wrap { grid-template-columns: 1fr; }
+    .newsletter .wrap { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 820px) {
@@ -1043,9 +1034,9 @@
     <nav class="nav" id="pagrindinis-meniu" aria-label="Pagrindinis meniu">
       <a href="2026-09-27-glaubic-maketas.html#kursai">Kursai</a>
       <a href="2026-09-27-glaubic-maketas.html#verslui">Verslui</a>
-      <a href="2026-09-27-glaubic-maketas.html#akimirkos">Akimirkos</a>
       <a href="2026-09-27-glaubic-maketas.html#lektoriai">Lektoriai</a>
-      <a href="2026-09-27-glaubic-maketas.html#kontaktai">Kontaktai</a>
+      <a href="2026-09-27-glaubic-maketas.html#akimirkos">Akimirkos</a>
+      <a href="#kontaktai">Kontaktai</a>
       <div class="nav-lang" aria-label="Kalba"><a href="#" data-lang="lt" aria-current="true">LT</a><a href="#" data-lang="en">EN</a></div>
     </nav>
     <div class="lang" aria-label="Kalba">
@@ -1103,7 +1094,7 @@
     </div>
   </section>
 </main>
-<footer class="site-footer">
+<footer class="site-footer" id="kontaktai">
   <div class="wrap">
     <div class="footer-grid">
       <div>
@@ -1113,19 +1104,21 @@
       <div>
         <h3>Kursai</h3>
         <ul>
+          <li><a href="2026-09-27-glaubic-maketas.html#tvarkarastis">Tvarkaraštis</a></li>
           <li><a href="2026-09-27-glaubic-maketas.html#kursas-agentas">AI agentas per 3 val.</a></li>
           <li><a href="2026-09-27-glaubic-maketas.html#kursas-claude">Claude darbe</a></li>
           <li><a href="2026-09-27-glaubic-maketas.html#kursas-paketas">Paketas</a></li>
-          <li><a href="2026-09-27-glaubic-maketas.html#tvarkarastis">Tvarkaraštis</a></li>
-          <li><a href="2026-09-27-glaubic-maketas.html#dovanos">Dovanų kuponas</a></li>
         </ul>
       </div>
       <div>
         <h3>Įmonė</h3>
         <ul>
+          <li><a href="2026-09-27-glaubic-maketas.html#rezultatai">Atsiliepimai</a></li>
           <li><a href="2026-09-27-glaubic-maketas.html#verslui">Verslui</a></li>
-          <li><a href="2026-09-27-glaubic-maketas.html#akimirkos">Akimirkos</a></li>
           <li><a href="2026-09-27-glaubic-maketas.html#lektoriai">Lektoriai</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#naujienlaiskis">Naujienlaiškis</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#dovanos">Dovanų kuponas</a></li>
+          <li><a href="2026-09-27-glaubic-maketas.html#akimirkos">Akimirkos</a></li>
           <li><a href="2026-09-27-glaubic-duk.html">DUK</a></li>
         </ul>
       </div>
