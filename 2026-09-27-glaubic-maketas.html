@@ -617,6 +617,14 @@
   .faq-more { margin-top: 24px; font-size: 16px; }
   .faq-more a { text-decoration: underline; text-underline-offset: 3px; }
   .back-link { display: inline-block; margin-bottom: 20px; font-size: 16px; text-underline-offset: 4px; }
+  /* ---------- Privatumo politika ---------- */
+  .policy-page { background: var(--fog); padding: clamp(40px, 6vw, 72px) 0 var(--section); }
+  .policy { max-width: 820px; }
+  .policy h2 { font-size: clamp(32px, 4vw, 48px); margin: 12px 0 24px; }
+  .policy h3 { font-size: 22px; margin: 32px 0 10px; }
+  .policy p, .policy li { font-size: 17px; }
+  .policy p + p { margin-top: 12px; }
+  .policy-placeholder { border: 2px dashed var(--ink-300); border-radius: var(--radius-card); padding: 24px; background: var(--white); }
   /* ---------- Kontaktai ---------- */
   .contact { background: var(--violet-500); padding: var(--section) 0; }
   .contact .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
@@ -1002,11 +1010,11 @@
       <a href="#apie">Apie</a>
       <a href="#lektoriai">Lektoriai</a>
       <a href="#kontaktai">Kontaktai</a>
-      <div class="nav-lang" aria-label="Kalba"><a href="#" aria-current="true">LT</a><a href="#">EN</a></div>
+      <div class="nav-lang" aria-label="Kalba"><a href="#" data-lang="lt" aria-current="true">LT</a><a href="#" data-lang="en">EN</a></div>
     </nav>
     <div class="lang" aria-label="Kalba">
-      <a href="#" aria-current="true">LT</a>
-      <a href="#">EN</a>
+      <a href="#" data-lang="lt" aria-current="true">LT</a>
+      <a href="#" data-lang="en">EN</a>
     </div>
     <button class="pill menu-btn" type="button" aria-controls="pagrindinis-meniu" aria-expanded="false">Meniu</button>
   </div>
@@ -1388,7 +1396,7 @@
     <div class="footer-bottom">
       <span>© 2026 MB „Glaubic“</span>
       <nav aria-label="Teisinė informacija">
-        <a href="https://glaubic.com/privatumo-politika">Privatumo politika</a>
+        <a href="2026-09-27-glaubic-privatumo-politika.html#lt" data-privacy>Privatumo politika</a>
         <a href="#">Paslaugų teikimo sąlygos</a>
         <button class="link-btn" type="button" data-cookies-open>Slapukų nustatymai</button>
       </nav>
@@ -1550,7 +1558,7 @@
     <button class="btn btn--ghost" type="button" data-cookies="necessary">Tik būtini</button>
     <button class="btn btn--cta" type="button" data-cookies="all">Priimti visus</button>
   </div>
-  <p class="cookies-more">Daugiau informacijos <a href="https://glaubic.com/privatumo-politika">privatumo politikoje</a>.</p>
+  <p class="cookies-more">Daugiau informacijos <a href="2026-09-27-glaubic-privatumo-politika.html#lt" data-privacy>privatumo politikoje</a>.</p>
 </section>
 
 <p class="mock-note">Maketas pagal brandbook'ą. Tvarkaraščio datos, vietų skaičius ir atsiliepimai yra pavyzdiniai.</p>
@@ -1921,6 +1929,23 @@
     });
   });
 
+  // ---------- Kalba: pasirinkimas išsaugomas ir perduodamas privatumo politikai ----------
+  const LANG_KEY = 'glaubic-kalba';
+  const getLang = () => { try { return localStorage.getItem(LANG_KEY) || 'lt'; } catch (e) { return 'lt'; } };
+  const setLang = (l) => { try { localStorage.setItem(LANG_KEY, l); } catch (e) { /* naršyklė neleidžia saugoti */ } };
+  const applyLang = (l) => {
+    document.querySelectorAll('[data-lang]').forEach((a) => {
+      if (a.dataset.lang === l) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+    document.querySelectorAll('[data-privacy]').forEach((a) => { a.href = `${a.getAttribute('href').split('#')[0]}#${l}`; });
+    if (window.onLangChange) window.onLangChange(l);
+  };
+  document.querySelectorAll('[data-lang]').forEach((a) => a.addEventListener('click', (e) => {
+    e.preventDefault();
+    setLang(a.dataset.lang);
+    applyLang(a.dataset.lang);
+  }));
+
   // ---------- Slapukų pranešimas ----------
   const cookieBar = document.getElementById('slapukai');
   const COOKIE_KEY = 'glaubic-slapukai';
@@ -1935,6 +1960,7 @@
     cookieBar.hidden = false;
     cookieBar.querySelector('[data-cookies="necessary"]').focus();
   });
+  applyLang(getLang());
 </script>
 </body>
 </html>
