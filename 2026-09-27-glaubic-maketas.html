@@ -1581,7 +1581,7 @@
   // status: soldout, few (liko nedaug vietų), open
   const EVENTS = [
     { id: 'e1', course: 'claude', date: '09.29', city: 'Vilnius', status: 'soldout' },
-    { id: 'e2', course: 'claude', date: '10.02', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e2', course: 'claude', date: '10.02', city: 'Vilnius', time: '9:30–13:00', status: 'soldout' },
     { id: 'e3', course: 'claude', date: '10.08', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 2 },
     { id: 'e4', course: 'claude', date: '10.09', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 1 },
     { id: 'e5', course: 'claude', date: '10.14', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
@@ -1590,14 +1590,14 @@
     { id: 'e8', course: 'claude', date: '10.17', city: 'Klaipėda', time: '9:30–13:00', status: 'few', left: 5 },
     { id: 'e9', course: 'claude', date: '10.22', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
     { id: 'e10', course: 'claude', date: '10.30', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
-    { id: 'e11', course: 'claude', date: '11.05', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
-    { id: 'e12', course: 'claude', date: '11.06', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
-    { id: 'e13', course: 'claude', date: '11.12', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
-    { id: 'e14', course: 'claude', date: '11.13', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
-    { id: 'e15', course: 'claude', date: '11.19', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
-    { id: 'e16', course: 'claude', date: '11.20', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
-    { id: 'e17', course: 'claude', date: '11.26', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
-    { id: 'e18', course: 'claude', date: '11.27', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 }
+    { id: 'e11', course: 'claude', date: '11.05', city: 'Kaunas', time: '10:00–13:30', status: 'open' },
+    { id: 'e12', course: 'claude', date: '11.06', city: 'Vilnius', time: '9:30–13:00', status: 'open' },
+    { id: 'e13', course: 'claude', date: '11.12', city: 'Kaunas', time: '10:00–13:30', status: 'open' },
+    { id: 'e14', course: 'claude', date: '11.13', city: 'Vilnius', time: '9:30–13:00', status: 'open' },
+    { id: 'e15', course: 'claude', date: '11.19', city: 'Kaunas', time: '10:00–13:30', status: 'open' },
+    { id: 'e16', course: 'claude', date: '11.20', city: 'Vilnius', time: '9:30–13:00', status: 'open' },
+    { id: 'e17', course: 'claude', date: '11.26', city: 'Kaunas', time: '10:00–13:30', status: 'open' },
+    { id: 'e18', course: 'claude', date: '11.27', city: 'Vilnius', time: '9:30–13:00', status: 'open' }
   ];
   // Praėję mokymai nerodomi: data laikoma pasibaigusia po mokymų pabaigos laiko (jei laikas nežinomas, dienos pabaigoje)
   const EVENT_YEAR = 2026;
