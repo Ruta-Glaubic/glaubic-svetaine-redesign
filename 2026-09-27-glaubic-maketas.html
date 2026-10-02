@@ -1033,7 +1033,7 @@
       <aside class="schedule" id="tvarkarastis" aria-labelledby="schedule-title">
         <div class="schedule-head">
           <h2 id="schedule-title">Artimiausi mokymai</h2>
-          <div class="months" role="group" aria-label="Rodyti mėnesio datas"><button type="button" data-month="09" aria-pressed="false">Rugsėjis</button><button type="button" data-month="10" aria-pressed="false">Spalis</button></div>
+          <div class="months" role="group" aria-label="Rodyti mėnesio datas"></div>
         </div>
         <div class="filters" role="group" aria-label="Filtruoti pagal miestą">
           <button type="button" data-city="visi" aria-pressed="true">Visi miestai</button>
@@ -1589,7 +1589,15 @@
     { id: 'e7', course: 'agentas', date: '10.16', city: 'Vilnius', time: '9:30–12:30', status: 'few', left: 5 },
     { id: 'e8', course: 'claude', date: '10.17', city: 'Klaipėda', time: '9:30–13:00', status: 'few', left: 5 },
     { id: 'e9', course: 'claude', date: '10.22', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
-    { id: 'e10', course: 'claude', date: '10.30', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 }
+    { id: 'e10', course: 'claude', date: '10.30', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e11', course: 'claude', date: '11.05', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
+    { id: 'e12', course: 'claude', date: '11.06', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e13', course: 'claude', date: '11.12', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
+    { id: 'e14', course: 'claude', date: '11.13', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e15', course: 'claude', date: '11.19', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
+    { id: 'e16', course: 'claude', date: '11.20', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 },
+    { id: 'e17', course: 'claude', date: '11.26', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
+    { id: 'e18', course: 'claude', date: '11.27', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 }
   ];
   // Praėję mokymai nerodomi: data laikoma pasibaigusia po mokymų pabaigos laiko (jei laikas nežinomas, dienos pabaigoje)
   const EVENT_YEAR = 2026;
@@ -1634,8 +1642,13 @@
   let showAll = false;
   let activeCity = 'visi';
   let activeMonth = '';
+  // Rodomi du artimiausi mėnesiai, kuriems yra datų
+  const MONTH_NAMES = ['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Gegužė', 'Birželis', 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis'];
+  const upcomingMonths = [...new Set(EVENTS.map((e) => e.date.slice(0, 2)))].sort().slice(0, 2);
+  document.querySelector('.months').innerHTML = upcomingMonths
+    .map((m) => `<button type="button" data-month="${m}" aria-pressed="false">${MONTH_NAMES[Number(m) - 1]}</button>`)
+    .join('');
   const monthButtons = document.querySelectorAll('.months [data-month]');
-  monthButtons.forEach((btn) => { btn.hidden = !EVENTS.some((e) => e.date.startsWith(btn.dataset.month)); });
   const applyFilter = () => {
     const rows = [...eventsEl.querySelectorAll('.event')];
     const matching = rows.filter((ev) => (activeCity === 'visi' || ev.dataset.city === activeCity) && (!activeMonth || ev.dataset.month === activeMonth));
