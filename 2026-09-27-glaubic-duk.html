@@ -557,7 +557,7 @@
   }
   /* Blokas nusidažo violetine tik užvedus pelę arba pasirinkus klaviatūra */
   .service:hover, .service:focus-within { background: var(--violet-500); transform: translateY(-4px); }
-  @media (prefers-reduced-motion: reduce) { .service { transition: none; } .service:hover, .service:focus-within { transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .moment img { transition: none; } .service { transition: none; } .service:hover, .service:focus-within { transform: none; } }
   .service-no { font-family: var(--font-head); font-size: 20px; }
   .service h3 { font-size: clamp(26px, 2.6vw, 34px); }
   .service ul { margin: 0; padding-left: 20px; }
@@ -584,25 +584,11 @@
   }
 
   /* ---------- Vertybės: brandbook 04 psl. ---------- */
-  .values { padding: var(--section) 0; background: var(--white); }
-  .value-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .value {
-    border-radius: var(--radius-card);
-    padding: 24px;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .value:nth-child(1) { background: var(--violet-500); }
-  .value:nth-child(2) { background: var(--violet-400); }
-  .value:nth-child(3) { background: var(--coral); }
-  .value:nth-child(4) { background: var(--yellow); }
-  .value-no { font-weight: 700; font-size: 15px; }
-  .value-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-  .value-icon { width: 72px; height: 72px; display: block; }
-  .value h3 { font-size: 28px; margin-bottom: 10px; }
-  .value p { font-size: 16px; }
+  .moments { padding: var(--section) 0; background: var(--white); }
+  .moments-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .moment { margin: 0; border-radius: var(--radius-card); overflow: hidden; aspect-ratio: 3 / 4; background: var(--violet-100); }
+  .moment img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .moment:hover img { transform: scale(1.04); }
 
   /* ---------- Dovana: kvadratinis rėmas, brandbook 14 psl. ---------- */
   .gift { background: var(--paper); padding: var(--section) 0; }
@@ -866,7 +852,7 @@
     .hero .wrap { grid-template-columns: minmax(0, 1fr); }
     .course-grid { grid-template-columns: minmax(0, 1fr); max-width: 620px; row-gap: 20px; }
     .quote-track { grid-auto-columns: calc((100% - 20px) / 2); }
-    .value-grid { grid-template-columns: 1fr 1fr; }
+    .moments-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .newsletter .wrap, .contact .wrap { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
@@ -901,8 +887,7 @@
   @media (max-width: 560px) {
     .btn { white-space: normal; height: auto; min-height: 52px; padding: 12px 22px; text-align: center; line-height: 1.25; }
     .service .btn { align-self: stretch; }
-    .value-grid { grid-template-columns: 1fr; }
-    .value { min-height: 220px; }
+    .moments-grid { gap: 10px; }
     .footer-grid { grid-template-columns: 1fr; }
     .gift-row { grid-template-columns: 1fr auto; }
     .gift-row .btn { grid-column: 1 / -1; width: 100%; }
