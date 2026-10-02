@@ -620,10 +620,16 @@
   /* ---------- Privatumo politika ---------- */
   .policy-page { background: var(--fog); padding: clamp(40px, 6vw, 72px) 0 var(--section); }
   .policy { max-width: 820px; }
+  .policy .back-link, .policy .eyebrow { display: block; }
+  .policy .back-link { width: max-content; }
   .policy h2 { font-size: clamp(32px, 4vw, 48px); margin: 12px 0 24px; }
   .policy h3 { font-size: 22px; margin: 32px 0 10px; }
   .policy p, .policy li { font-size: 17px; }
   .policy p + p { margin-top: 12px; }
+  .policy-updated { color: var(--ink-600); font-size: 15px; margin-bottom: 24px; }
+  .policy ul { padding-left: 22px; margin: 8px 0; }
+  .policy li { margin: 6px 0; }
+  .policy a { text-underline-offset: 3px; }
   .policy-placeholder { border: 2px dashed var(--ink-300); border-radius: var(--radius-card); padding: 24px; background: var(--white); }
   /* ---------- Kontaktai ---------- */
   .contact { background: var(--violet-500); padding: var(--section) 0; }
@@ -1063,7 +1069,7 @@
             <p>Jei mokymus atšaukiame ar perkeliame dėl nuo mūsų priklausančių priežasčių, pasiūlome kitą datą arba grąžiname visą sumą.</p>
           </details>
         </div>
-      <p class="faq-more"><a href="#">Visos paslaugų teikimo sąlygos</a></p>
+      <p class="faq-more"><a href="2026-10-02-glaubic-paslaugu-teikimo-salygos.html#lt" data-terms>Visos paslaugų teikimo sąlygos</a></p>
     </div>
   </section>
 </main>
@@ -1106,7 +1112,7 @@
       <span>© 2026 MB „Glaubic“</span>
       <nav aria-label="Teisinė informacija">
         <a href="2026-09-27-glaubic-privatumo-politika.html#lt" data-privacy>Privatumo politika</a>
-        <a href="#">Paslaugų teikimo sąlygos</a>
+        <a href="2026-10-02-glaubic-paslaugu-teikimo-salygos.html#lt" data-terms>Paslaugų teikimo sąlygos</a>
         <button class="link-btn" type="button" data-cookies-open>Slapukų nustatymai</button>
       </nav>
       <span class="spaced">WWW.GLAUBIC.COM</span>
@@ -1157,7 +1163,7 @@
     document.querySelectorAll('[data-lang]').forEach((a) => {
       if (a.dataset.lang === l) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
     });
-    document.querySelectorAll('[data-privacy]').forEach((a) => { a.href = `${a.getAttribute('href').split('#')[0]}#${l}`; });
+    document.querySelectorAll('[data-privacy], [data-terms]').forEach((a) => { a.href = `${a.getAttribute('href').split('#')[0]}#${l}`; });
     if (window.onLangChange) window.onLangChange(l);
   };
   document.querySelectorAll('[data-lang]').forEach((a) => a.addEventListener('click', (e) => {

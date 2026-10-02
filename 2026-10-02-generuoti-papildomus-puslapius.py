@@ -25,44 +25,52 @@ def shell(title, main_html, extra_js=''):
 d=open(DUK,encoding='utf-8').read()
 open(DUK,'w',encoding='utf-8').write(shell('DUK | GLAUBIC', d[d.index('<main>'):d.index('</main>')+len('</main>')]))
 
-# Privatumo politika: LT ir EN versijos, rodoma pagal pasirinktą kalbą
-if os.path.exists(PRIV):
-    old=open(PRIV,encoding='utf-8').read()
-    priv_main=old[old.index('<main>'):old.index('</main>')+len('</main>')]
-else:
-    priv_main=f'''<main>
+def legal_page(fname, title_lt, title_en, eyebrow, h_lt, h_en, lt_body, en_body):
+    """Teisinis puslapis su LT ir EN versijomis, rodoma pagal pasirinktą kalbą. Esamas turinys išsaugomas."""
+    if os.path.exists(fname):
+        old=open(fname,encoding='utf-8').read()
+        page_main=old[old.index('<main>'):old.index('</main>')+len('</main>')]
+    else:
+        page_main=f'''<main>
   <section class="policy-page">
     <div class="wrap">
       <article class="policy" id="lt" lang="lt">
         <a class="back-link" href="{MAIN}">Grįžti į pradžią</a>
-        <span class="eyebrow">Teisinė informacija</span>
-        <h2>Privatumo politika</h2>
-        <div class="policy-body policy-placeholder">
-          <p>Čia bus įkeltas privatumo politikos tekstas lietuvių kalba iš glaubic.com/privatumo-politika#lt.</p>
-        </div>
+        <span class="eyebrow">{eyebrow[0]}</span>
+        <h2>{h_lt}</h2>
+{lt_body}
       </article>
       <article class="policy" id="en" lang="en" hidden>
         <a class="back-link" href="{MAIN}">Back to home</a>
-        <span class="eyebrow">Legal information</span>
-        <h2>Privacy Policy</h2>
-        <div class="policy-body policy-placeholder">
-          <p>The English privacy policy text from glaubic.com/privatumo-politika#en will be placed here.</p>
-        </div>
+        <span class="eyebrow">{eyebrow[1]}</span>
+        <h2>{h_en}</h2>
+{en_body}
       </article>
     </div>
   </section>
 </main>'''
-priv_js='''  // ---------- Privatumo politikos kalba ----------
+    lang_js=f'''  // ---------- Puslapio kalba ----------
   const hashLang = location.hash.replace('#', '');
-  if (hashLang === 'lt' || hashLang === 'en') { try { localStorage.setItem('glaubic-kalba', hashLang); } catch (e) { /* nieko */ } }
-  window.onLangChange = (l) => {
+  if (hashLang === 'lt' || hashLang === 'en') {{ try {{ localStorage.setItem('glaubic-kalba', hashLang); }} catch (e) {{ /* nieko */ }} }}
+  window.onLangChange = (l) => {{
     document.getElementById('lt').hidden = l !== 'lt';
     document.getElementById('en').hidden = l !== 'en';
     document.documentElement.lang = l;
-    document.title = l === 'en' ? 'Privacy Policy | GLAUBIC' : 'Privatumo politika | GLAUBIC';
-    if (location.hash !== `#${l}`) history.replaceState(null, '', `#${l}`);
-  };
+    document.title = l === 'en' ? '{title_en}' : '{title_lt}';
+    if (location.hash !== `#${{l}}`) history.replaceState(null, '', `#${{l}}`);
+  }};
 
 '''
-open(PRIV,'w',encoding='utf-8').write(shell('Privatumo politika | GLAUBIC', priv_main, priv_js))
+    open(fname,'w',encoding='utf-8').write(shell(title_lt, page_main, lang_js))
+
+legal_page(PRIV, 'Privatumo politika | GLAUBIC', 'Privacy Policy | GLAUBIC', ('Teisinė informacija','Legal information'),
+    'Privatumo politika', 'Privacy Policy',
+    '        <div class="policy-body policy-placeholder"><p>Čia bus įkeltas privatumo politikos tekstas lietuvių kalba iš glaubic.com/privatumo-politika#lt.</p></div>',
+    '        <div class="policy-body policy-placeholder"><p>The English privacy policy text from glaubic.com/privatumo-politika#en will be placed here.</p></div>')
+
+TERMS='2026-10-02-glaubic-paslaugu-teikimo-salygos.html'
+lt_terms=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'salygos-lt.html'),encoding='utf-8').read() if not os.path.exists(TERMS) else ''
+legal_page(TERMS, 'Paslaugų teikimo sąlygos | GLAUBIC', 'Terms of Service | GLAUBIC', ('Teisinė informacija','Legal information'),
+    'Paslaugų teikimo sąlygos', 'Terms of Service', lt_terms,
+    '        <div class="policy-body policy-placeholder"><p>The English Terms of Service text from glaubic.com/naudojimosi-taisykles#en will be placed here.</p></div>')
 print('ok')
