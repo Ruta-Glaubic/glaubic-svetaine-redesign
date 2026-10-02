@@ -974,6 +974,9 @@
   }
   .video-card { position: relative; height: 100%; min-height: 440px; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px; }
   .video-card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .video-card iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2; background: var(--ink-900); }
+  .video-card { background: linear-gradient(180deg, rgba(36, 29, 43, 0.15) 30%, rgba(36, 29, 43, 0.85) 100%), var(--video-poster, none) center / cover no-repeat, var(--ink-800); }
+  .video-caption .ig-link { display: flex; width: max-content; color: var(--white); margin-top: 6px; font-size: 14px; gap: 6px; }
   .video-badge { position: absolute; top: 20px; left: 20px; background: var(--white); color: var(--ink-800); border-radius: var(--radius-pill); padding: 6px 12px; font-size: 13px; font-weight: 700; }
   .video-play {
     position: absolute;
