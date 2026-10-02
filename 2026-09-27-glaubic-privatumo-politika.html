@@ -589,6 +589,8 @@
   .moment { margin: 0; border-radius: var(--radius-card); overflow: hidden; aspect-ratio: 1 / 1; background: var(--violet-100); }
   .moment img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
   .moment:hover img { transform: scale(1.04); }
+  .moments-grid:not(.is-open) .moment:nth-child(n+4) { display: none; }
+  .moments-more { display: flex; justify-content: center; margin-top: 28px; }
 
   /* ---------- Dovana: kvadratinis rėmas, brandbook 14 psl. ---------- */
   .frame {
@@ -861,7 +863,8 @@
     .course-grid { grid-template-columns: minmax(0, 1fr); max-width: 620px; row-gap: 20px; }
     .quote-track { grid-auto-columns: calc((100% - 20px) / 2); }
     .moments-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .moment:last-child { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
+    .moments-grid.is-open .moment:last-child, .moments-grid:not(.is-open) .moment:nth-child(3) { grid-column: 1 / -1; aspect-ratio: 2 / 1; }
+    .moments-grid.is-open .moment:last-child img, .moments-grid:not(.is-open) .moment:nth-child(3) img { object-position: center 20%; }
     .newsletter .wrap, .contact .wrap { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
