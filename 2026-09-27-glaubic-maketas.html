@@ -591,7 +591,6 @@
   .moment:hover img { transform: scale(1.04); }
 
   /* ---------- Dovana: kvadratinis rėmas, brandbook 14 psl. ---------- */
-  .gift { background: var(--paper); padding: var(--section) 0; }
   .frame {
     position: relative;
     max-width: 760px;
@@ -661,6 +660,15 @@
   .newsletter .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
   .newsletter h2 { font-size: clamp(30px, 3.6vw, 46px); margin-top: 12px; }
   .newsletter p { margin-top: 14px; }
+  .newsletter .nl-gift { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: clamp(32px, 5vw, 72px); }
+  .nl-col .nl-form { margin-top: 28px; }
+  .nl-gift .frame { max-width: none; margin: 0; background: var(--white); border-radius: var(--radius-card); padding: 48px 28px 44px; }
+  .nl-gift .frame h2 { font-size: clamp(24px, 2.4vw, 30px); }
+  .nl-gift .frame p { font-size: 16px; margin: 12px auto 24px; }
+  .nl-gift .frame .gift-icon { width: 52px; height: 52px; margin-bottom: 12px; }
+  .nl-gift .frame-band { background: var(--white); border: 2px solid var(--ink-800); border-radius: var(--radius-pill); padding: 3px 14px; font-size: 13px; color: var(--ink-800); }
+  .nl-gift .frame-band--top { top: -15px; }
+  .nl-gift .frame-band--bottom { bottom: -15px; }
   .nl-form { display: flex; gap: 10px; flex-wrap: wrap; }
   .nl-form input {
     flex: 1 1 240px;
@@ -1301,23 +1309,18 @@
   </section>
 
   <section class="newsletter" id="naujienlaiskis">
-    <div class="wrap">
-      <div>
+    <div class="wrap nl-gift">
+      <div class="nl-col">
         <span class="eyebrow">Naujienlaiškis</span>
         <h2>Naujos mokymų datos ir praktiniai patarimai</h2>
         <p>Siunčiame 1–2 kartus per mėnesį: naujas mokymų datas ir Glaubic naujienas.</p>
+        <form class="nl-form" onsubmit="return false">
+          <label class="visually-hidden" for="nl-email">El. paštas</label>
+          <input id="nl-email" type="email" placeholder="jusu@pastas.lt" autocomplete="email">
+          <button class="btn btn--ghost" type="submit">Prenumeruoti</button>
+        </form>
       </div>
-      <form class="nl-form" onsubmit="return false">
-        <label class="visually-hidden" for="nl-email">El. paštas</label>
-        <input id="nl-email" type="email" placeholder="jusu@pastas.lt" autocomplete="email">
-        <button class="btn btn--ghost" type="submit">Prenumeruoti</button>
-      </form>
-    </div>
-  </section>
-
-  <section class="gift" id="dovanos">
-    <div class="wrap">
-      <div class="frame">
+      <div class="frame" id="dovanos">
         <span class="frame-band frame-band--top">DOVANA</span>
         <svg class="gift-icon" viewBox="0 0 32 32" aria-hidden="true"><g class="box-all"><rect x="5" y="14" width="22" height="15" rx="2" fill="#FFFFFF" stroke="#322838" stroke-width="2"/><rect x="14" y="14" width="4" height="15" fill="#322838"/></g><g class="lid"><rect x="3" y="9" width="26" height="6" rx="2" fill="#FFED00" stroke="#322838" stroke-width="2"/><rect x="14" y="9" width="4" height="6" fill="#322838"/><path d="M16 9c-2.5-4.5-7-5-7.5-2.5S12 9 16 9zm0 0c2.5-4.5 7-5 7.5-2.5S20 9 16 9z" fill="none" stroke="#322838" stroke-width="2" stroke-linejoin="round"/></g><g class="spark" fill="#322838"><circle cx="4" cy="4" r="1.3"/><circle cx="28" cy="3" r="1.3"/><circle cx="16" cy="1" r="1.1"/></g></svg>
         <h2>Padovanokite mokymus kolegai ar artimajam</h2>
