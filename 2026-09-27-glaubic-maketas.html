@@ -96,6 +96,27 @@
     font-family: var(--font-body);
   }
   .pill--sm { height: 32px; padding: 0 14px; font-size: 14px; }
+  @property --live-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  .pill--live {
+    border: 2px solid transparent;
+    text-decoration: none;
+    background:
+      linear-gradient(var(--white), var(--white)) padding-box,
+      conic-gradient(from var(--live-angle), transparent 0 60%, var(--coral) 78% 94%, transparent 100%) border-box;
+    animation: live-run 2.6s linear infinite;
+    transition: transform 0.2s ease;
+  }
+  .pill--live:hover, .pill--live:focus-visible {
+    background:
+      linear-gradient(var(--yellow), var(--yellow)) padding-box,
+      conic-gradient(from var(--live-angle), transparent 0 60%, var(--coral) 78% 94%, transparent 100%) border-box;
+    animation-duration: 1.2s;
+    transform: translateY(-1px);
+  }
+  @keyframes live-run { to { --live-angle: 360deg; } }
+  @media (prefers-reduced-motion: reduce) {
+    .pill--live { animation: none; background: linear-gradient(var(--white), var(--white)) padding-box, linear-gradient(var(--coral), var(--coral)) border-box; }
+  }
   .pill--violet { background: var(--violet-200); }
   .pill--coral { background: var(--coral); }
   .pill--yellow { background: var(--yellow); }
@@ -1034,7 +1055,7 @@
   <section class="hero">
     <div class="wrap">
       <div>
-        <span class="pill pill--sm">Gyvi mokymai Vilniuje, Kaune ir Klaipėdoje</span>
+        <a class="pill pill--sm pill--live" href="#tvarkarastis">Gyvi mokymai Vilniuje, Kaune ir Klaipėdoje</a>
         <h1>Praktiniai AI mokymai, po kurių kitą dieną dirbsite lengviau</h1>
         <p class="lead">Kiek valandų per savaitę atima laiškai, ataskaitos ir pasiūlymai? Per 3–3,5 val. gyvų mokymų mažoje grupėje išmoksite juos paruošti su Claude ir AI agentais. Kitą rytą darbe jau naudosite savo paruoštą sprendimą.</p>
         <div class="hero-actions">
