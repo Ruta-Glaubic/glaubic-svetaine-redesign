@@ -1286,7 +1286,7 @@
     </div>
   </section>
 
-  <section class="newsletter">
+  <section class="newsletter" id="naujienlaiskis">
     <div class="wrap">
       <div>
         <span class="eyebrow">Naujienlaiškis</span>
@@ -1591,6 +1591,16 @@
     { id: 'e9', course: 'claude', date: '10.22', city: 'Kaunas', time: '10:00–13:30', status: 'few', left: 5 },
     { id: 'e10', course: 'claude', date: '10.30', city: 'Vilnius', time: '9:30–13:00', status: 'few', left: 5 }
   ];
+  // Praėję mokymai nerodomi: data laikoma pasibaigusia po mokymų pabaigos laiko (jei laikas nežinomas, dienos pabaigoje)
+  const EVENT_YEAR = 2026;
+  const eventEnd = (e) => {
+    const [month, day] = e.date.split('.').map(Number);
+    const endTime = (e.time || '').split('–')[1] || '23:59';
+    const [hours, minutes] = endTime.split(':').map(Number);
+    return new Date(EVENT_YEAR, month - 1, day, hours, minutes);
+  };
+  const now = new Date();
+  EVENTS.splice(0, EVENTS.length, ...EVENTS.filter((e) => eventEnd(e) > now));
   const eur = (n) => `${n.toLocaleString('lt-LT')} €`;
   const nextFree = (course, city) =>
     EVENTS.find((e) => e.course === course && e.status !== 'soldout' && (!city || e.city === city)) ||
@@ -1605,9 +1615,9 @@
     const c = COURSES[e.course];
     const when = e.time || c.meta.split(' · ')[0];
     const alt = e.status === 'soldout' ? nextFree(e.course, e.city) : null;
-    const action = e.status === 'soldout'
+    const action = e.status === 'soldout' && alt
       ? `<button class="btn btn--ghost btn--sm" type="button" data-buy="${e.course}" data-event="${alt.id}" aria-label="Kita data: ${alt.date} ${alt.city}">Kita data ${alt.date}</button>`
-      : `<button class="btn btn--ghost btn--sm" type="button" data-buy="${e.course}" data-event="${e.id}" aria-label="Įsigyti bilietą: ${e.date} ${e.city}">Įsigyti bilietą</button>`;
+      : e.status === 'soldout' ? '' : `<button class="btn btn--ghost btn--sm" type="button" data-buy="${e.course}" data-event="${e.id}" aria-label="Įsigyti bilietą: ${e.date} ${e.city}">Įsigyti bilietą</button>`;
     return `<li class="event${e.status === 'soldout' ? ' event--soldout' : ''}" data-city="${e.city}" data-month="${e.date.slice(0, 2)}">
       <span class="event-date">${e.date}</span>
       <div><div class="event-title">${c.title}</div><div class="event-meta"><span class="nowrap">${e.city} ·</span><span class="nowrap">${when}</span>${statusPill(e)}</div></div>
@@ -1615,6 +1625,9 @@
     </li>`;
   }).join('');
 
+  if (!EVENTS.length) {
+    eventsEl.innerHTML = '<li class="event"><div style="grid-column:1/-1">Naujos mokymų datos skelbiamos netrukus. Apie jas pranešime <a href="#naujienlaiskis">naujienlaiškyje</a>.</div></li>';
+  }
   const filterButtons = document.querySelectorAll('.filters [data-city]');
   const moreBtn = document.getElementById('events-more');
   const VISIBLE = 5;
@@ -1622,6 +1635,7 @@
   let activeCity = 'visi';
   let activeMonth = '';
   const monthButtons = document.querySelectorAll('.months [data-month]');
+  monthButtons.forEach((btn) => { btn.hidden = !EVENTS.some((e) => e.date.startsWith(btn.dataset.month)); });
   const applyFilter = () => {
     const rows = [...eventsEl.querySelectorAll('.event')];
     const matching = rows.filter((ev) => (activeCity === 'visi' || ev.dataset.city === activeCity) && (!activeMonth || ev.dataset.month === activeMonth));
@@ -1653,6 +1667,10 @@
   // Artimiausia laisva data kortelėse
   document.querySelectorAll('[data-next]').forEach((el) => {
     const e = nextFree(el.dataset.next);
+    if (!e) {
+      el.innerHTML = '<span class="next-label">Artimiausia laisva data</span><span class="next-line"><b>Naujos datos netrukus</b></span>';
+      return;
+    }
     el.innerHTML = `<span class="next-label">Artimiausia laisva data</span><span class="next-line"><b>${e.date}</b><span>${e.city}</span>${e.status === 'few' ? `<span class="pill pill--yellow">Liko ${e.left} vietos</span>` : ''}</span>`;
   });
 
