@@ -90,12 +90,12 @@ PREP_LT = dict(
   topics=['Praktiškai pradėsime taikyti Claude Cowork.',
           'Claude galimybės projektų valdymui.',
           'Claude užklausų formulavimas, kad gautumėte tikslų rezultatą.',
-          'Claude ir el. paštas: atsakymų rengimas, šablonai, susirašinėjimo automatizavimas.',
+          'Claude ir el. paštas: atsakymų rengimas, šablonai, komunikacijos automatizavimas.',
           'Ataskaitų ir dokumentų kūrimas su Claude.',
           'Bendravimas su klientais: pasiūlymų, pristatymų ir atsakymų rengimas su Claude.',
           'Darbas su failais: dokumentų analizė ir tvarkymas tiesiai jūsų kompiuteryje.',
-          '<strong>Svarbiausia:</strong> Claude jungtys (angl. <em>connectors</em>): kaip prie Claude prijungti Canva, Google Workspace, kalendorius ir kitus įrankius.'],
-  fit=['Visiems, kurie dar nėra dirbę su Claude arba naudojo tik jo pokalbių langą ir nori išnaudoti daugiau galimybių.',
+          '<strong>Svarbiausia:</strong> Claude jungtys (angl. <em>connectors</em>) ir integracija su Canva, Google Workspace, kalendoriais ar kitais įrankiais, kurie prijungiami prie Claude.'],
+  fit=['Visiems, kurie dar nėra dirbę su Claude arba dirbo tik su Claude Chat funkcija ir nori daugiau galimybių.',
        'Verslo savininkams, specialistams ir visiems, kurie nori neatsilikti ir tobulinti savo darbo su AI įgūdžius.'])
 PREP_EN = dict(
   topics=['We will start using Claude Cowork in practice.',
@@ -189,15 +189,15 @@ def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, dire
 LECT_LT = 'Vilhelmas Šulcas, IT projektų vadovas, Code Academy dėstytojas'
 LECT_EN = 'Vilhelmas Šulcas, IT project manager and Code Academy lecturer'
 CITY_V = ('vilnius', 'Vilnius',
-     'Glaubic biuras, Dominikonų g. 5, Vilnius', 'Glaubic office, Dominikonų g. 5, Vilnius',
+     'Glaubic ofisas, Dominikonų g. 5, Vilnius', 'Glaubic office, Dominikonų g. 5, Vilnius',
      'https://www.google.com/maps/search/?api=1&amp;query=Dominikon%C5%B3+g.+5%2C+Vilnius',
-     'Glaubic biuras yra Dominikonų g. 5, tačiau į vidinį kiemą įeinama tarp Vokiečių g. 13 ir 15 pastatų. Praėję pro arką, eikite tiesiai iki pat kiemo galo. Ten pamatysite žalius vartus: įėję pro juos, prie durų priešais paspauskite skambutį <strong>Nr. 9</strong>.',
+     'Glaubic ofisas yra Dominikonų g. 5, tačiau į vidinį kiemą įeinama tarp Vokiečių g. 13 ir 15 pastatų. Praėję pro bromą, eikite tiesiai iki pat kiemo galo. Ten pamatysite žalius vartus: įėję pro juos, prie durų priešais paspauskite skambutį <strong>Nr. 9</strong>.',
      'The Glaubic office is at Dominikonų g. 5, but the entrance to the inner courtyard is between the buildings at Vokiečių g. 13 and 15. Go through the archway and walk straight to the far end of the courtyard. You will see a green gate: go through it and press <strong>No. 9</strong> at the door straight ahead.',
      {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 9 d., penktadienis', '{{laikas}}': '9:30', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT,
       '{{training_name}}': 'Claude for work and everyday tasks', '{{date}}': 'Friday, 9 October', '{{time}}': '9:30', '{{duration}}': '3.5 hours', '{{trainer}}': LECT_EN})
 prep(*CITY_V)
 CITY_K = ('kaunas', 'Kaunas',
-     '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir biurų erdvė, E. Ožeškienės g. 10, Kaunas',
+     '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir ofisų erdvė, E. Ožeškienės g. 10, Kaunas',
      '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> coworking and office space, E. Ožeškienės g. 10, Kaunas',
      'https://www.google.com/maps/search/?api=1&amp;query=E.+O%C5%BEe%C5%A1kien%C4%97s+g.+10%2C+Kaunas',
      None, None,
