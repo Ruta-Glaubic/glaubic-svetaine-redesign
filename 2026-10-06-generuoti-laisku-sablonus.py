@@ -207,6 +207,80 @@ prep(*CITY_K)
 remind(*CITY_V)
 remind(*CITY_K)
 
+def gif(lang):
+    data = base64.b64encode(open(os.path.join(OUT, f'2026-10-06-padeka-{lang}.gif'), 'rb').read()).decode()
+    alt = 'Ačiū, kad mokėtės kartu!' if lang == 'lt' else 'Thank you for learning with us!'
+    return f'<img src="data:image/gif;base64,{data}" alt="{alt}" width="536" style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:16px;margin:0 0 24px;">'
+
+HOMEWORK_LT = [
+    h2('Namų darbai'),
+    p('Pabaikite šiuos scenarijus:'),
+    '<ol style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
+        'Laiškui uždedama etiketė (label) ir su AI agentu parengiamas atsakymas (Reply to a message).',
+        'Laiškui uždedama etiketė ir jis persiunčiamas, pvz. gavus laišką dėl buhalterinės klaidos ar sąskaitos, visa laiško informacija persiunčiama atsakingiems darbuotojams ir sukuriamas nuotolinis susitikimas.',
+        'Laiškui uždedama etiketė ir su AI agento pagalba sukuriamas juodraštis.',
+        'Laiškui uždedama etiketė ir jis pažymimas kaip perskaitytas.']) + '</ol>',
+    p('<strong>Papildomas darbas (bent vienas):</strong>'),
+    '<ol start="5" style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
+        'Priedų išsaugojimas į Google Drive arba OneDrive. Gmail Trigger mazge paspauskite „+ Add option“ ir pasirinkite „Download Attachments“, o tolesniuose žingsniuose pridėkite Google Drive mazgą (kaladėlę).',
+        'AI agentas remiasi DUK lentele Google Sheets. Galite remtis pirmuoju scenarijumi „Klientų pagalba“, kai su AI pagalba parengiamas atsakymas (Reply to a message). Patogiausia šį žingsnį pridėti prie AI Agent mazgo, dalyje „Tools“.']) + '</ol>',
+]
+HOMEWORK_EN = [
+    h2('Homework'),
+    p('Finish these scenarios:'),
+    '<ol style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
+        'An email gets a label and the AI agent prepares a reply (Reply to a message).',
+        'An email gets a label and is forwarded, e.g. an email about an accounting error or an invoice: all its information is forwarded to the responsible colleagues and an online meeting is created.',
+        'An email gets a label and the AI agent creates a draft.',
+        'An email gets a label and is marked as read.']) + '</ol>',
+    p('<strong>Extra task (at least one):</strong>'),
+    '<ol start="5" style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
+        'Save attachments to Google Drive or OneDrive. In the Gmail Trigger node, click “+ Add option”, choose “Download Attachments”, and then add a Google Drive node in the next steps.',
+        'The AI agent uses an FAQ table in Google Sheets. You can build on the first scenario, “Customer support”, where the AI prepares a reply (Reply to a message). The easiest way is to add this step to the AI Agent node, under “Tools”.']) + '</ol>',
+]
+
+def thanks(key, name, homework):
+    lt_body = [gif('lt'),
+        p('Laba diena,'),
+        p('dėkojame, kad dalyvavote mokymuose „{{mokymu_pavadinimas}}“. Tikimės, kad išmoktus dalykus jau spėjote išbandyti savo darbe.'),
+        h2('Mokymų medžiaga'),
+        p('Visą mokymų medžiagą rasite paspaudę mygtuką žemiau.'),
+        button('{{medziagos_nuoroda}}', 'Atsisiųsti medžiagą')]
+    if homework: lt_body += HOMEWORK_LT
+    lt_body += [h2('Pasidalinkite įspūdžiais'),
+        p('Labai vertintume jūsų atsiliepimą: jis padeda mums tobulėti, o kitiems lengviau apsispręsti. Tai užtruks vos kelias minutes.'),
+        button('{{atsiliepimo_nuoroda}}', 'Palikti atsiliepimą'),
+        p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
+        signature(['Su linkėjimais,', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
+    en_body = [gif('en'),
+        p('Hello,'),
+        p('thank you for joining the training “{{training_name}}”. We hope you have already tried what you learned in your own work.'),
+        h2('Training materials'),
+        p('You can find all the training materials by clicking the button below.'),
+        button('{{materials_url}}', 'Download materials')]
+    if homework: en_body += HOMEWORK_EN
+    en_body += [h2('Share your feedback'),
+        p('We would really appreciate your feedback: it helps us improve and helps others decide. It only takes a few minutes.'),
+        button('{{feedback_url}}', 'Leave feedback'),
+        p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
+        signature(['Kind regards,', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
+    lt = layout('lt', 'Ačiū, kad mokėtės kartu!', '{{mokymu_pavadinimas}}', 'Mokymų medžiaga ir trumpas klausimas apie jūsų patirtį.', '\n'.join(lt_body))
+    en = layout('en', 'Thank you for learning with us!', '{{training_name}}', 'Your training materials and a quick question about your experience.', '\n'.join(en_body))
+    ex_lt = 'Claude darbe ir kasdienėse užduotyse' if not homework else 'Susikurkite AI agentą per 3 val.'
+    ex_en = 'Claude for work and everyday tasks' if not homework else 'Build an AI agent in 3 hours'
+    TEMPLATES.append(dict(
+        key=key, name=name, when='3 dienos po mokymų. Padėka, medžiaga ir atsiliepimo forma.',
+        subject_lt='Ačiū už mokymus! Jūsų medžiaga ir trumpas klausimas', subject_en='Thank you for the training! Your materials and a quick question',
+        fields_lt=['{{mokymu_pavadinimas}}', '{{medziagos_nuoroda}}', '{{atsiliepimo_nuoroda}}'],
+        fields_en=['{{training_name}}', '{{materials_url}}', '{{feedback_url}}'],
+        example={'{{mokymu_pavadinimas}}': ex_lt, '{{training_name}}': ex_en,
+                 '{{medziagos_nuoroda}}': '#', '{{atsiliepimo_nuoroda}}': '#', '{{materials_url}}': '#', '{{feedback_url}}': '#'},
+        lt=lt, en=en))
+
+thanks('padeka-claude', 'Padėka: Claude mokymai', False)
+thanks('padeka-ai-agentas', 'Padėka: AI agento mokymai (su namų darbais)', True)
+
+
 DATE = '2026-10-06'
 os.makedirs(OUT, exist_ok=True)
 cards = []
