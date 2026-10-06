@@ -64,7 +64,7 @@ def sf():
         'Prisegame jūsų sąskaitą faktūrą {{saskaitos_numeris}}.',
         '\n'.join([
             p('Sveiki,'),
-            p('dėkojame, kad įsigijote GLAUBIC AI mokymus „{{mokymu_pavadinimas}}“. Prisegame Jūsų sąskaitą faktūrą {{saskaitos_numeris}}.'),
+            p('dėkojame, kad įsigijote GLAUBIC AI mokymus „{{mokymu_pavadinimas}}“. Prisegame jūsų sąskaitą faktūrą {{saskaitos_numeris}}.'),
             p('Kilus klausimų, drąsiai rašykite.'),
             signature(['Su linkėjimais,', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
         ]))
@@ -88,15 +88,15 @@ sf()
 
 PREP_LT = dict(
   topics=['Praktiškai pradėsime taikyti Claude Cowork.',
-          'Claude potencialas projektų valdymui.',
+          'Claude galimybės projektų valdymui.',
           'Claude užklausų formulavimas, kad gautumėte tikslų rezultatą.',
-          'Claude ir el. pašto valdymas: atsakymų rengimas, šablonai, komunikacijos automatizavimas.',
-          'Claude ataskaitų ir dokumentų kūrimui.',
-          'Claude klientų komunikacijai: pasiūlymų, pristatymų ir atsakymų rengimas.',
-          'Claude darbas su failais: dokumentų analizė ir tvarkymas tiesiai iš savo kompiuterio.',
-          '<strong>Svarbiausia:</strong> Claude jungtys (connectors) ir integracija su Canva, Google Workspace, kalendoriais ar kitais įrankiais, kurie prijungiami prie Claude.'],
-  fit=['Visiems, kurie niekada nėra dirbę su Claude arba dirbo tik su Claude Chat funkcija ir nori daugiau galimybių.',
-       'Verslų savininkams, specialistams ir tobulėjantiems, kurie nori neatsilikti ir plėsti AI kompetencijas.'])
+          'Claude ir el. paštas: atsakymų rengimas, šablonai, susirašinėjimo automatizavimas.',
+          'Ataskaitų ir dokumentų kūrimas su Claude.',
+          'Bendravimas su klientais: pasiūlymų, pristatymų ir atsakymų rengimas su Claude.',
+          'Darbas su failais: dokumentų analizė ir tvarkymas tiesiai jūsų kompiuteryje.',
+          '<strong>Svarbiausia:</strong> Claude jungtys (angl. <em>connectors</em>): kaip prie Claude prijungti Canva, Google Workspace, kalendorius ir kitus įrankius.'],
+  fit=['Visiems, kurie dar nėra dirbę su Claude arba naudojo tik jo pokalbių langą ir nori išnaudoti daugiau galimybių.',
+       'Verslo savininkams, specialistams ir visiems, kurie nori neatsilikti ir tobulinti savo darbo su AI įgūdžius.'])
 PREP_EN = dict(
   topics=['We will start using Claude Cowork in practice.',
           'Claude’s potential for project management.',
@@ -115,7 +115,7 @@ def prep(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, direct
         p('ačiū, kad renkatės tobulėti. Siunčiame jums informaciją apie praktinius mokymus „{{mokymu_pavadinimas}}“.'),
         box('Data: <strong>{{data}}, {{laikas}} val.</strong><br>Trukmė: <strong>{{trukme}}</strong><br>Vieta: <strong>' + place_lt + '</strong>', 'Mokymų informacija'),
         h2('Ką darysime mokymų metu?'), ul(PREP_LT['topics']),
-        box('Turėti savo kompiuterį ir mokamą Claude versiją <strong>Pro</strong>.', 'Būtina', B['yellow']),
+        box('Atsineškite savo kompiuterį ir turėkite mokamą <strong>Claude Pro</strong> prenumeratą.', 'Būtina', B['yellow']),
         h2('Mokymai tinka'), ul(PREP_LT['fit']),
         h2('Lektorius'), p('{{lektorius}}'),
     ]
@@ -154,7 +154,7 @@ def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, dire
         p('primename, kad jau poryt vyks praktiniai mokymai „{{mokymu_pavadinimas}}“. Laukiame jūsų!'),
         box('Data: <strong>{{data}}, {{laikas}} val.</strong><br>Trukmė: <strong>{{trukme}}</strong><br>Vieta: <strong>' + place_lt + '</strong>', 'Mokymų informacija'),
         box(ul(['Pasiimkite savo kompiuterį ir jo įkroviklį.',
-                'Įsitikinkite, kad turite mokamą <strong>Claude Pro</strong> versiją ir galite prisijungti prie savo Claude paskyros.']).replace('margin:0 0 16px', 'margin:0'),
+                'Įsitikinkite, kad turite mokamą <strong>Claude Pro</strong> prenumeratą ir galite prisijungti prie savo Claude paskyros.']).replace('margin:0 0 16px', 'margin:0'),
             'Prieš mokymus patikrinkite', B['yellow']),
     ]
     if directions_lt:
@@ -189,15 +189,15 @@ def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, dire
 LECT_LT = 'Vilhelmas Šulcas, IT projektų vadovas, Code Academy dėstytojas'
 LECT_EN = 'Vilhelmas Šulcas, IT project manager and Code Academy lecturer'
 CITY_V = ('vilnius', 'Vilnius',
-     'Glaubic ofisas, Dominikonų g. 5, Vilnius', 'Glaubic office, Dominikonų g. 5, Vilnius',
+     'Glaubic biuras, Dominikonų g. 5, Vilnius', 'Glaubic office, Dominikonų g. 5, Vilnius',
      'https://www.google.com/maps/search/?api=1&amp;query=Dominikon%C5%B3+g.+5%2C+Vilnius',
-     'Glaubic ofisas yra Dominikonų g. 5, bet įėjimas į vidinį kiemą yra tarp Vokiečių g. 13 ir 15 pastatų. Įėję pro bromą, eikite tiesiai gilyn iki pat vidinio kiemo galo. Ten pamatysite žalius vartus. Įeikite pro juos ir tiesiai esančiose duryse paspauskite <strong>Nr. 9</strong>.',
+     'Glaubic biuras yra Dominikonų g. 5, tačiau į vidinį kiemą įeinama tarp Vokiečių g. 13 ir 15 pastatų. Praėję pro arką, eikite tiesiai iki pat kiemo galo. Ten pamatysite žalius vartus: įėję pro juos, prie durų priešais paspauskite skambutį <strong>Nr. 9</strong>.',
      'The Glaubic office is at Dominikonų g. 5, but the entrance to the inner courtyard is between the buildings at Vokiečių g. 13 and 15. Go through the archway and walk straight to the far end of the courtyard. You will see a green gate: go through it and press <strong>No. 9</strong> at the door straight ahead.',
      {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 9 d., penktadienis', '{{laikas}}': '9:30', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT,
       '{{training_name}}': 'Claude for work and everyday tasks', '{{date}}': 'Friday, 9 October', '{{time}}': '9:30', '{{duration}}': '3.5 hours', '{{trainer}}': LECT_EN})
 prep(*CITY_V)
 CITY_K = ('kaunas', 'Kaunas',
-     '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir ofisų erdvė, E. Ožeškienės g. 10, Kaunas',
+     '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir biurų erdvė, E. Ožeškienės g. 10, Kaunas',
      '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> coworking and office space, E. Ožeškienės g. 10, Kaunas',
      'https://www.google.com/maps/search/?api=1&amp;query=E.+O%C5%BEe%C5%A1kien%C4%97s+g.+10%2C+Kaunas',
      None, None,
@@ -216,14 +216,14 @@ HOMEWORK_LT = [
     h2('Namų darbai'),
     p('Pabaikite šiuos scenarijus:'),
     '<ol style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
-        'Laiškui uždedama etiketė (label) ir su AI agentu parengiamas atsakymas (Reply to a message).',
-        'Laiškui uždedama etiketė ir jis persiunčiamas, pvz. gavus laišką dėl buhalterinės klaidos ar sąskaitos, visa laiško informacija persiunčiama atsakingiems darbuotojams ir sukuriamas nuotolinis susitikimas.',
-        'Laiškui uždedama etiketė ir su AI agento pagalba sukuriamas juodraštis.',
-        'Laiškui uždedama etiketė ir jis pažymimas kaip perskaitytas.']) + '</ol>',
+        'Laiškui priskiriama etiketė (angl. <em>label</em>) ir AI agentas parengia atsakymą (Reply to a message).',
+        'Laiškui priskiriama etiketė ir jis persiunčiamas. Pavyzdžiui, gavus laišką dėl buhalterinės klaidos ar sąskaitos, visa informacija persiunčiama atsakingiems darbuotojams ir sukuriamas nuotolinis susitikimas.',
+        'Laiškui priskiriama etiketė ir AI agentas sukuria atsakymo juodraštį.',
+        'Laiškui priskiriama etiketė ir jis pažymimas kaip perskaitytas.']) + '</ol>',
     p('<strong>Papildomas darbas (bent vienas):</strong>'),
     '<ol start="5" style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
-        'Priedų išsaugojimas į Google Drive arba OneDrive. Gmail Trigger mazge paspauskite „+ Add option“ ir pasirinkite „Download Attachments“, o tolesniuose žingsniuose pridėkite Google Drive mazgą (kaladėlę).',
-        'AI agentas remiasi DUK lentele Google Sheets. Galite remtis pirmuoju scenarijumi „Klientų pagalba“, kai su AI pagalba parengiamas atsakymas (Reply to a message). Patogiausia šį žingsnį pridėti prie AI Agent mazgo, dalyje „Tools“.']) + '</ol>',
+        'Priedų išsaugojimas Google Drive arba OneDrive aplanke. Gmail Trigger mazge paspauskite „+ Add option“ ir pasirinkite „Download Attachments“, o tolesniuose žingsniuose pridėkite Google Drive mazgą.',
+        'AI agentas atsakydamas remiasi DUK lentele Google Sheets. Galite remtis pirmuoju scenarijumi „Klientų pagalba“, kuriame AI parengia atsakymą (Reply to a message). Patogiausia šį žingsnį pridėti AI Agent mazgo dalyje „Tools“.']) + '</ol>',
 ]
 HOMEWORK_EN = [
     h2('Homework'),
@@ -338,7 +338,7 @@ def value():
         p('norime pasiteirauti, <strong>kaip jums sekasi dirbti su Claude</strong>. Nuo mokymų praėjo šiek tiek laiko, tad galbūt jau atradote užduočių, kurias Claude padeda atlikti greičiau? O gal kai kur dar kyla klausimų? Parašykite mums, tiesiog atsakydami į šį laišką. Perskaitome kiekvieną laišką ir mielai patarsime.'),
         box('Kasdienėms užduotims susikurkite Claude projektą (Projects): įkelkite dažniausiai naudojamus dokumentus ir instrukcijas, ir kiekvieną kartą nebereikės visko aiškinti iš naujo.', 'Patarimas'),
         h2('Nauji mokymai'),
-        p('Ruošiame naujus praktinius mokymus. Pasižiūrėkite, kas jums būtų aktualu:'),
+        p('Ruošiame naujus praktinius mokymus. Peržiūrėkite, kurie iš jų jums būtų naudingi:'),
         course_card(1, 'Sužinoti daugiau'), course_card(2, 'Sužinoti daugiau'),
         h2('Sužinokite pirmieji'),
         p('Prenumeruokite GLAUBIC naujienlaiškį: 1–2 kartus per mėnesį siunčiame naujas mokymų datas ir Glaubic naujienas.'),
