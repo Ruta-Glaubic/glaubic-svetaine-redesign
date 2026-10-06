@@ -5,7 +5,12 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'laisku-sablonai'
 B = dict(yellow='#FFED00', violet100='#ECEEFB', violet500='#9AA2E6', coral='#FF6A3D', ink800='#322838', ink600='#6B6072', paper='#F5F5F3', white='#FFFFFF')
 FONT = "'Hanken Grotesk',Arial,Helvetica,sans-serif"
 HEAD = "Manrope,'Hanken Grotesk',Arial,Helvetica,sans-serif"
-LOGO = 'https://glaubic.com/img/glaubic-logotipas.png?v=20261004'
+# Logotipas įdėtas į pačius failus (data URI), kad šablonai ir peržiūra visada rodytų logotipą
+# net atidarius be interneto. Siunčiant per server.js naudojamas MAIL_LOGO.url
+# (https://glaubic.com/img/glaubic-logotipas.png), nes Gmail data URI paveikslėlių nerodo.
+import base64
+_LOGO_FILE = os.path.join(OUT, 'glaubic-logotipas.png')
+LOGO = 'data:image/png;base64,' + base64.b64encode(open(_LOGO_FILE, 'rb').read()).decode()
 FOOT = {
   'lt': ('MB „Glaubic“ · Raitininkų g. 4-74, Vilnius', 'glaubic.com', 'https://glaubic.com'),
   'en': ('MB “Glaubic” · Raitininkų g. 4-74, Vilnius, Lithuania', 'glaubic.com/en', 'https://glaubic.com/en'),
