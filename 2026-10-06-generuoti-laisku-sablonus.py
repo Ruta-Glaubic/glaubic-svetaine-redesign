@@ -147,22 +147,65 @@ def prep(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, direct
         fields_en=['{{training_name}}', '{{date}}', '{{time}}', '{{duration}}', '{{trainer}}'],
         example=ex, lt=lt, en=en))
 
+
+def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, directions_en=None, ex=None):
+    lt_body = [
+        p('Laba diena,'),
+        p('primename, kad jau poryt vyks praktiniai mokymai „{{mokymu_pavadinimas}}“. Laukiame jūsų!'),
+        box('Data: <strong>{{data}}, {{laikas}} val.</strong><br>Trukmė: <strong>{{trukme}}</strong><br>Vieta: <strong>' + place_lt + '</strong>', 'Mokymų informacija'),
+        box(ul(['Pasiimkite savo kompiuterį ir jo įkroviklį.',
+                'Įsitikinkite, kad turite mokamą <strong>Claude Pro</strong> versiją ir galite prisijungti prie savo Claude paskyros.']).replace('margin:0 0 16px', 'margin:0'),
+            'Prieš mokymus patikrinkite', B['yellow']),
+    ]
+    if directions_lt:
+        lt_body += [h2('Kaip mus rasti'), p(directions_lt)]
+    lt_body += [button(maps, 'Atidaryti žemėlapyje'),
+                p('Jei negalite dalyvauti, praneškite mums kuo greičiau: registraciją galima perkelti į kitą datą arba vietoj savęs paskirti kitą žmogų.'),
+                p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
+                signature(['Iki susitikimo!', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
+    en_body = [
+        p('Hello,'),
+        p('a quick reminder that the hands-on training “{{training_name}}” takes place the day after tomorrow. We look forward to seeing you!'),
+        box('Date: <strong>{{date}}, {{time}}</strong><br>Duration: <strong>{{duration}}</strong><br>Venue: <strong>' + place_en + '</strong>', 'Training details'),
+        box(ul(['Bring your own laptop and its charger.',
+                'Make sure you have a paid <strong>Claude Pro</strong> plan and can sign in to your Claude account.']).replace('margin:0 0 16px', 'margin:0'),
+            'Before the training', B['yellow']),
+    ]
+    if directions_en:
+        en_body += [h2('How to find us'), p(directions_en)]
+    en_body += [button(maps, 'Open in maps'),
+                p('If you cannot attend, let us know as soon as possible: you can move your registration to another date or send someone else in your place.'),
+                p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
+                signature(['See you soon!', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
+    lt = layout('lt', 'Iki mokymų liko 2 dienos', '{{mokymu_pavadinimas}} · ' + city_lt, 'Primename datą, vietą ir ką pasiimti.', '\n'.join(lt_body))
+    en = layout('en', 'Your training is in 2 days', '{{training_name}} · ' + city_lt, 'A reminder of the date, venue and what to bring.', '\n'.join(en_body))
+    TEMPLATES.append(dict(
+        key=f'priminimas-{city_key}', name=f'Priminimas likus 2 d.: {city_lt}', when='Likus 2 dienoms iki mokymų.',
+        subject_lt='Priminimas: mokymai jau poryt', subject_en='Reminder: your training is the day after tomorrow',
+        fields_lt=['{{mokymu_pavadinimas}}', '{{data}}', '{{laikas}}', '{{trukme}}'],
+        fields_en=['{{training_name}}', '{{date}}', '{{time}}', '{{duration}}'],
+        example=ex, lt=lt, en=en))
+
 LECT_LT = 'Vilhelmas Šulcas, IT projektų vadovas, Code Academy dėstytojas'
 LECT_EN = 'Vilhelmas Šulcas, IT project manager and Code Academy lecturer'
-prep('vilnius', 'Vilnius',
+CITY_V = ('vilnius', 'Vilnius',
      'Glaubic ofisas, Dominikonų g. 5, Vilnius', 'Glaubic office, Dominikonų g. 5, Vilnius',
      'https://www.google.com/maps/search/?api=1&amp;query=Dominikon%C5%B3+g.+5%2C+Vilnius',
      'Glaubic ofisas yra Dominikonų g. 5, bet įėjimas į vidinį kiemą yra tarp Vokiečių g. 13 ir 15 pastatų. Įėję pro bromą, eikite tiesiai gilyn iki pat vidinio kiemo galo. Ten pamatysite žalius vartus. Įeikite pro juos ir tiesiai esančiose duryse paspauskite <strong>Nr. 9</strong>.',
      'The Glaubic office is at Dominikonų g. 5, but the entrance to the inner courtyard is between the buildings at Vokiečių g. 13 and 15. Go through the archway and walk straight to the far end of the courtyard. You will see a green gate: go through it and press <strong>No. 9</strong> at the door straight ahead.',
      {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 9 d., penktadienis', '{{laikas}}': '9:30', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT,
       '{{training_name}}': 'Claude for work and everyday tasks', '{{date}}': 'Friday, 9 October', '{{time}}': '9:30', '{{duration}}': '3.5 hours', '{{trainer}}': LECT_EN})
-prep('kaunas', 'Kaunas',
+prep(*CITY_V)
+CITY_K = ('kaunas', 'Kaunas',
      '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir ofisų erdvė, E. Ožeškienės g. 10, Kaunas',
      '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> coworking and office space, E. Ožeškienės g. 10, Kaunas',
      'https://www.google.com/maps/search/?api=1&amp;query=E.+O%C5%BEe%C5%A1kien%C4%97s+g.+10%2C+Kaunas',
      None, None,
      {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 8 d., ketvirtadienis', '{{laikas}}': '10:00', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT,
       '{{training_name}}': 'Claude for work and everyday tasks', '{{date}}': 'Thursday, 8 October', '{{time}}': '10:00', '{{duration}}': '3.5 hours', '{{trainer}}': LECT_EN})
+prep(*CITY_K)
+remind(*CITY_V)
+remind(*CITY_K)
 
 DATE = '2026-10-06'
 os.makedirs(OUT, exist_ok=True)
