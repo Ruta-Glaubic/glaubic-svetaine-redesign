@@ -281,6 +281,46 @@ thanks('padeka-claude', 'Padėka: Claude mokymai', False)
 thanks('padeka-ai-agentas', 'Padėka: AI agento mokymai (su namų darbais)', True)
 
 
+def coupon(label, code, amount, valid):
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;"><tr>'
+            f'<td align="center" style="background:{B["violet100"]};border:2px dashed {B["ink800"]};border-radius:18px;padding:22px 20px;font-family:{FONT};color:{B["ink800"]};">'
+            f'<p style="margin:0 0 8px;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">{label}</p>'
+            f'<p style="margin:0 0 12px;font-family:{HEAD};font-size:30px;line-height:1.2;font-weight:800;letter-spacing:3px;">{code}</p>'
+            f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 10px;"><tr><td style="background:{B["coral"]};border-radius:999px;padding:6px 16px;font-family:{FONT};font-size:16px;font-weight:700;color:{B["ink800"]};">{amount}</td></tr></table>'
+            f'<p style="margin:0;font-size:14px;line-height:1.5;">{valid}</p></td></tr></table>')
+
+def referral():
+    lt_body = [
+        p('Laba diena,'),
+        p('džiaugiamės, kad mokėtės kartu su mumis! Jei mokymai jums patiko, pasidalinkite jais: <strong>persiųskite šį laišką draugui(-ei) ar kolegai(-ei)</strong>, kuriems AI galėtų palengvinti darbą.'),
+        coupon('Nuolaidos kodas', '{{kupono_kodas}}', '−20 € GLAUBIC mokymams', 'Galioja 30 dienų, iki <strong>{{galioja_iki}}</strong>'),
+        p('Kodą panaudokite registruodamiesi į mokymus svetainėje www.glaubic.com.'),
+        button('https://www.glaubic.com/#kursai', 'Pasirinkti mokymus'),
+        p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
+        signature(['Ačiū, kad rekomenduojate mus!', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
+    ]
+    en_body = [
+        p('Hello,'),
+        p('we are glad you learned with us! If you enjoyed the training, pass it on: <strong>forward this email to a friend or colleague</strong> whose work AI could make easier.'),
+        coupon('Discount code', '{{coupon_code}}', '€20 off GLAUBIC training', 'Valid for 30 days, until <strong>{{valid_until}}</strong>'),
+        p('Use the code when registering for a training at www.glaubic.com.'),
+        button('https://www.glaubic.com/en#kursai', 'Choose a training'),
+        p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
+        signature(['Thank you for recommending us!', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
+    ]
+    lt = layout('lt', 'Pasidalinkite nuolaida', '20 € draugui(-ei) ar kolegai(-ei)', 'Persiųskite šį laišką: 20 € nuolaida GLAUBIC mokymams, galioja 30 dienų.', '\n'.join(lt_body))
+    en = layout('en', 'Share a discount', '€20 off for a friend or colleague', 'Forward this email: €20 off GLAUBIC training, valid for 30 days.', '\n'.join(en_body))
+    TEMPLATES.append(dict(
+        key='persiusk-draugui', name='Persiųsk draugui(-ei) ar kolegai(-ei)', when='Po mokymų (siuntimo laiką patikslinti). Kodas galioja 30 dienų nuo išsiuntimo.',
+        subject_lt='Dovanojame 20 € nuolaidą jūsų draugui(-ei) ar kolegai(-ei)', subject_en='€20 off for your friend or colleague',
+        fields_lt=['{{kupono_kodas}}', '{{galioja_iki}}'], fields_en=['{{coupon_code}}', '{{valid_until}}'],
+        example={'{{kupono_kodas}}': 'DRAUGAS-7K2M', '{{galioja_iki}}': '2026 m. lapkričio 8 d.',
+                 '{{coupon_code}}': 'DRAUGAS-7K2M', '{{valid_until}}': '8 November 2026'},
+        lt=lt, en=en))
+
+referral()
+
+
 DATE = '2026-10-06'
 os.makedirs(OUT, exist_ok=True)
 cards = []
