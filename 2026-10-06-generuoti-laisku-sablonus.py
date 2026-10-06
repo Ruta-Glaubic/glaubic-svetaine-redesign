@@ -335,7 +335,7 @@ def course_card(n, more):
 def value():
     lt_body = [
         p('Laba diena,'),
-        p('<strong>kaip sekasi su Claude?</strong> Praėjo šiek tiek laiko po mokymų, todėl smalsu, kurias užduotis jau patikėjote AI ir kur dar strigtelite. Atsakykite į šį laišką: perskaitome kiekvieną ir mielai patarsime.'),
+        p('norime pasiteirauti, <strong>kaip jums sekasi dirbti su Claude</strong>. Nuo mokymų praėjo šiek tiek laiko, tad galbūt jau atradote užduočių, kurias Claude padeda atlikti greičiau? O gal kai kur dar kyla klausimų? Parašykite mums, tiesiog atsakydami į šį laišką. Perskaitome kiekvieną laišką ir mielai patarsime.'),
         box('Kasdienėms užduotims susikurkite Claude projektą (Projects): įkelkite dažniausiai naudojamus dokumentus ir instrukcijas, ir kiekvieną kartą nebereikės visko aiškinti iš naujo.', 'Patarimas'),
         h2('Nauji mokymai'),
         p('Ruošiame naujus praktinius mokymus. Pasižiūrėkite, kas jums būtų aktualu:'),
@@ -357,11 +357,11 @@ def value():
         button('https://www.glaubic.com/en#naujienlaiskis', 'Subscribe to the newsletter'),
         signature(['Good luck and see you soon!', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
     ]
-    lt = layout('lt', 'Kaip sekasi?', 'Patarimas, nauji mokymai ir naujienlaiškis', 'Kaip sekasi su Claude? Patarimas ir nauji GLAUBIC mokymai.', '\n'.join(lt_body))
+    lt = layout('lt', 'Kaip sekasi?', 'Patarimas, nauji mokymai ir naujienlaiškis', 'Kaip sekasi dirbti su Claude? Patarimas ir nauji GLAUBIC mokymai.', '\n'.join(lt_body))
     en = layout('en', 'How are you getting on?', 'A tip, new training and our newsletter', 'How are you getting on with Claude? A tip and new GLAUBIC training.', '\n'.join(en_body))
     TEMPLATES.append(dict(
         key='vertes-laiskas', name='Vertės laiškas: kaip sekasi?', when='Po mokymų (siuntimo laiką patikslinti). Naujų mokymų blokas keičiamas pagal aktualumą.',
-        subject_lt='Kaip sekasi su Claude?', subject_en='How are you getting on with Claude?',
+        subject_lt='Kaip sekasi dirbti su Claude?', subject_en='How are you getting on with Claude?',
         fields_lt=['{{mokymai_1_pavadinimas}}', '{{mokymai_1_aprasymas}}', '{{mokymai_1_data}}', '{{mokymai_1_nuoroda}}', '(tas pats su 2)'],
         fields_en=['{{training_1_name}}', '{{training_1_description}}', '{{training_1_date}}', '{{training_1_url}}', '(same for 2)'],
         example={'{{mokymai_1_pavadinimas}}': 'Claude Design', '{{mokymai_1_aprasymas}}': '[Trumpas mokymų aprašymas: 1–2 sakiniai, ką dalyviai išmoks.]', '{{mokymai_1_data}}': 'Datos netrukus', '{{mokymai_1_nuoroda}}': 'https://www.glaubic.com/#kursai',
