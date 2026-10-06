@@ -321,6 +321,58 @@ def referral():
 referral()
 
 
+def course_card(n, more):
+    pre = '{{mokymai_%d_' % n if more == 'Sužinoti daugiau' else '{{training_%d_' % n
+    t = lambda f: pre + f + '}}'
+    names = ('pavadinimas', 'aprasymas', 'data', 'nuoroda') if more == 'Sužinoti daugiau' else ('name', 'description', 'date', 'url')
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 14px;"><tr>'
+            f'<td style="border:1px solid {B["ink600"]}33;border-radius:16px;padding:18px 20px;font-family:{FONT};color:{B["ink800"]};background:{B["white"]};">'
+            f'<p style="margin:0 0 6px;font-family:{HEAD};font-size:18px;font-weight:800;line-height:1.3;">{t(names[0])}</p>'
+            f'<p style="margin:0 0 10px;font-size:15px;line-height:1.55;">{t(names[1])}</p>'
+            f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 10px;"><tr><td style="background:{B["yellow"]};border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;">{t(names[2])}</td></tr></table>'
+            f'<a href="{t(names[3])}" style="font-weight:700;color:{B["ink800"]};">{more} →</a></td></tr></table>')
+
+def value():
+    lt_body = [
+        p('Laba diena,'),
+        p('<strong>kaip sekasi su Claude?</strong> Praėjo šiek tiek laiko po mokymų, todėl smalsu, kurias užduotis jau patikėjote AI ir kur dar strigtelite. Atsakykite į šį laišką: perskaitome kiekvieną ir mielai patarsime.'),
+        box('Kasdienėms užduotims susikurkite Claude projektą (Projects): įkelkite dažniausiai naudojamus dokumentus ir instrukcijas, ir kiekvieną kartą nebereikės visko aiškinti iš naujo.', 'Patarimas'),
+        h2('Nauji mokymai'),
+        p('Ruošiame naujus praktinius mokymus. Pasižiūrėkite, kas jums būtų aktualu:'),
+        course_card(1, 'Sužinoti daugiau'), course_card(2, 'Sužinoti daugiau'),
+        h2('Sužinokite pirmieji'),
+        p('Prenumeruokite GLAUBIC naujienlaiškį: 1–2 kartus per mėnesį siunčiame naujas mokymų datas ir Glaubic naujienas.'),
+        button('https://www.glaubic.com/#naujienlaiskis', 'Prenumeruoti naujienlaiškį'),
+        signature(['Sėkmės ir iki susitikimo!', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
+    ]
+    en_body = [
+        p('Hello,'),
+        p('<strong>how are you getting on with Claude?</strong> It has been a little while since the training, so we are curious which tasks you have already handed over to AI and where you still get stuck. Just reply to this email: we read every reply and are happy to help.'),
+        box('Create a Claude project (Projects) for your everyday tasks: upload the documents and instructions you use most often, so you do not have to explain everything from scratch each time.', 'Tip'),
+        h2('New training'),
+        p('We are preparing new hands-on training. See what might be useful for you:'),
+        course_card(1, 'Learn more'), course_card(2, 'Learn more'),
+        h2('Be the first to know'),
+        p('Subscribe to the GLAUBIC newsletter: once or twice a month we send new training dates and Glaubic news.'),
+        button('https://www.glaubic.com/en#naujienlaiskis', 'Subscribe to the newsletter'),
+        signature(['Good luck and see you soon!', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
+    ]
+    lt = layout('lt', 'Kaip sekasi?', 'Patarimas, nauji mokymai ir naujienlaiškis', 'Kaip sekasi su Claude? Patarimas ir nauji GLAUBIC mokymai.', '\n'.join(lt_body))
+    en = layout('en', 'How are you getting on?', 'A tip, new training and our newsletter', 'How are you getting on with Claude? A tip and new GLAUBIC training.', '\n'.join(en_body))
+    TEMPLATES.append(dict(
+        key='vertes-laiskas', name='Vertės laiškas: kaip sekasi?', when='Po mokymų (siuntimo laiką patikslinti). Naujų mokymų blokas keičiamas pagal aktualumą.',
+        subject_lt='Kaip sekasi su Claude?', subject_en='How are you getting on with Claude?',
+        fields_lt=['{{mokymai_1_pavadinimas}}', '{{mokymai_1_aprasymas}}', '{{mokymai_1_data}}', '{{mokymai_1_nuoroda}}', '(tas pats su 2)'],
+        fields_en=['{{training_1_name}}', '{{training_1_description}}', '{{training_1_date}}', '{{training_1_url}}', '(same for 2)'],
+        example={'{{mokymai_1_pavadinimas}}': 'Claude Design', '{{mokymai_1_aprasymas}}': '[Trumpas mokymų aprašymas: 1–2 sakiniai, ką dalyviai išmoks.]', '{{mokymai_1_data}}': 'Datos netrukus', '{{mokymai_1_nuoroda}}': 'https://www.glaubic.com/#kursai',
+                 '{{mokymai_2_pavadinimas}}': 'Claude Coding', '{{mokymai_2_aprasymas}}': '[Trumpas mokymų aprašymas: 1–2 sakiniai, ką dalyviai išmoks.]', '{{mokymai_2_data}}': 'Datos netrukus', '{{mokymai_2_nuoroda}}': 'https://www.glaubic.com/#kursai',
+                 '{{training_1_name}}': 'Claude Design', '{{training_1_description}}': '[Short description: 1–2 sentences on what participants will learn.]', '{{training_1_date}}': 'Dates coming soon', '{{training_1_url}}': 'https://www.glaubic.com/en#kursai',
+                 '{{training_2_name}}': 'Claude Coding', '{{training_2_description}}': '[Short description: 1–2 sentences on what participants will learn.]', '{{training_2_date}}': 'Dates coming soon', '{{training_2_url}}': 'https://www.glaubic.com/en#kursai'},
+        lt=lt, en=en))
+
+value()
+
+
 DATE = '2026-10-06'
 os.makedirs(OUT, exist_ok=True)
 cards = []
