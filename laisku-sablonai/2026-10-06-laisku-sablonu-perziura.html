@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="lt">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GLAUBIC laiškų šablonai</title>
+<style>
+  body { margin: 0; background: #ECEEFB; color: #322838; font-family: 'Hanken Grotesk', Arial, sans-serif; }
+  header { max-width: 1240px; margin: 0 auto; padding: 32px 24px 0; }
+  h1 { font-family: Manrope, Arial, sans-serif; font-size: 32px; margin: 0; }
+  header p { color: #6B6072; margin: 8px 0 0; max-width: 60em; }
+  .tpl { max-width: 1240px; margin: 24px auto; padding: 0 24px; }
+  .tpl h2 { font-family: Manrope, Arial, sans-serif; margin: 0; font-size: 24px; }
+  .when { margin: 6px 0 14px; color: #6B6072; }
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 20px; }
+  figure { margin: 0; background: #fff; border-radius: 16px; padding: 14px; }
+  figcaption { font-size: 14px; line-height: 1.6; margin-bottom: 10px; }
+  code { background: #ECEEFB; border-radius: 6px; padding: 1px 6px; font-size: 13px; }
+  iframe { width: 100%; height: 560px; border: 1px solid #CBC4D0; border-radius: 12px; background: #F5F5F3; }
+  figure > a { display: inline-block; margin-top: 8px; font-size: 14px; color: #322838; }
+</style></head>
+<body>
+<header><h1>GLAUBIC laiškų šablonai</h1>
+<p>Kiekvienas laiškas lietuvių ir anglų kalbomis. Peržiūroje laukai užpildyti pavyzdinėmis reikšmėmis; šablonų failuose jie pažymėti {{taip}} ir juos pakeičia siuntimo sistema.</p></header>
+
+  <section class="tpl">
+    <h2>Sąskaita faktūra</h2>
+    <p class="when">Kai išrašoma sąskaita faktūra (per 3 darbo dienas po pirkimo). Prisegamas PDF.</p>
+    <div class="pair">
+      <figure><figcaption><b>LT</b> · Tema: <code>Sąskaita faktūra {{saskaitos_numeris}}</code><br>Laukai: <code>{{mokymu_pavadinimas}}</code>, <code>{{saskaitos_numeris}}</code></figcaption>
+        <iframe src="2026-10-06-laiskas-saskaita-faktura-lt-pavyzdys.html" title="Sąskaita faktūra LT"></iframe>
+        <a href="2026-10-06-laiskas-saskaita-faktura-lt.html">Šablonas su laukais</a></figure>
+      <figure><figcaption><b>EN</b> · Subject: <code>Invoice {{invoice_number}}</code><br>Fields: <code>{{training_name}}</code>, <code>{{invoice_number}}</code></figcaption>
+        <iframe src="2026-10-06-laiskas-saskaita-faktura-en-pavyzdys.html" title="Sąskaita faktūra EN"></iframe>
+        <a href="2026-10-06-laiskas-saskaita-faktura-en.html">Template with fields</a></figure>
+    </div>
+  </section>
+</body></html>
