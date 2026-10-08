@@ -66,7 +66,7 @@ def sf():
             p('Sveiki,'),
             p('dėkojame, kad įsigijote GLAUBIC AI mokymus „{{mokymu_pavadinimas}}“. Prisegame jūsų sąskaitą faktūrą {{saskaitos_numeris}}.'),
             p('Kilus klausimų, drąsiai rašykite.'),
-            signature(['Su linkėjimais,', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
+            signature(['Su linkėjimais,', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
         ]))
     en = layout('en', 'Invoice', '{{invoice_number}}',
         'Please find attached your invoice {{invoice_number}}.',
@@ -74,7 +74,7 @@ def sf():
             p('Hello,'),
             p('thank you for purchasing the GLAUBIC AI training “{{training_name}}”. Please find attached your invoice {{invoice_number}}.'),
             p('If you have any questions, feel free to get in touch.'),
-            signature(['Kind regards,', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
+            signature(['Kind regards,', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
         ]))
     TEMPLATES.append(dict(
         key='saskaita-faktura', name='Sąskaita faktūra', when='Kai išrašoma sąskaita faktūra (per 3 darbo dienas po pirkimo). Prisegamas PDF.',
@@ -123,7 +123,7 @@ def prep(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, direct
         lt_body += [h2('Kaip mus rasti'), p(directions_lt)]
     lt_body += [button(maps, 'Atidaryti žemėlapyje'),
                 p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-                signature(['Su linkėjimais,', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
+                signature(['Su linkėjimais,', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
     en_body = [
         p('Hello,'),
         p('thank you for choosing to learn with us. Here is everything you need to know about the hands-on training “{{training_name}}”.'),
@@ -137,7 +137,7 @@ def prep(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, direct
         en_body += [h2('How to find us'), p(directions_en)]
     en_body += [button(maps, 'Open in maps'),
                 p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-                signature(['Kind regards,', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
+                signature(['Kind regards,', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
     lt = layout('lt', 'Pasiruošimas mokymams', '{{mokymu_pavadinimas}} · ' + city_lt, 'Data, vieta ir ką pasiimti į mokymus.', '\n'.join(lt_body))
     en = layout('en', 'Getting ready for your training', '{{training_name}} · ' + {'vilnius':'Vilnius','kaunas':'Kaunas'}[city_key], 'Date, venue and what to bring to your training.', '\n'.join(en_body))
     TEMPLATES.append(dict(
@@ -162,7 +162,7 @@ def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, dire
     lt_body += [button(maps, 'Atidaryti žemėlapyje'),
                 p('Jei negalite dalyvauti, praneškite mums kuo greičiau: registraciją galima perkelti į kitą datą arba vietoj savęs paskirti kitą žmogų.'),
                 p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-                signature(['Iki susitikimo!', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
+                signature(['Iki susitikimo!', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
     en_body = [
         p('Hello,'),
         p('a quick reminder that the hands-on training “{{training_name}}” takes place the day after tomorrow. We look forward to seeing you!'),
@@ -176,7 +176,7 @@ def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, dire
     en_body += [button(maps, 'Open in maps'),
                 p('If you cannot attend, let us know as soon as possible: you can move your registration to another date or send someone else in your place.'),
                 p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-                signature(['See you soon!', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
+                signature(['See you soon!', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
     lt = layout('lt', 'Iki mokymų liko 2 dienos', '{{mokymu_pavadinimas}} · ' + city_lt, 'Primename datą, vietą ir ką pasiimti.', '\n'.join(lt_body))
     en = layout('en', 'Your training is in 2 days', '{{training_name}} · ' + city_lt, 'A reminder of the date, venue and what to bring.', '\n'.join(en_body))
     TEMPLATES.append(dict(
@@ -251,7 +251,7 @@ def thanks(key, name, homework):
         p('Labai vertintume jūsų atsiliepimą: jis padeda mums tobulėti, o kitiems lengviau apsispręsti. Tai užtruks vos kelias minutes.'),
         button('{{atsiliepimo_nuoroda}}', 'Palikti atsiliepimą'),
         p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-        signature(['Su linkėjimais,', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
+        signature(['Su linkėjimais,', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
     en_body = [gif('en'),
         p('Hello,'),
         p('thank you for joining the training “{{training_name}}”. We hope you have already tried what you learned in your own work.'),
@@ -263,7 +263,7 @@ def thanks(key, name, homework):
         p('We would really appreciate your feedback: it helps us improve and helps others decide. It only takes a few minutes.'),
         button('{{feedback_url}}', 'Leave feedback'),
         p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-        signature(['Kind regards,', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
+        signature(['Kind regards,', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
     lt = layout('lt', 'Ačiū, kad mokėtės kartu!', '{{mokymu_pavadinimas}}', 'Mokymų medžiaga ir trumpas klausimas apie jūsų patirtį.', '\n'.join(lt_body))
     en = layout('en', 'Thank you for learning with us!', '{{training_name}}', 'Your training materials and a quick question about your experience.', '\n'.join(en_body))
     ex_lt = 'Claude darbe ir kasdienėse užduotyse' if not homework else 'Susikurkite AI agentą per 3 val.'
@@ -297,7 +297,7 @@ def referral():
         p('Kodą panaudokite registruodamiesi į mokymus svetainėje www.glaubic.com.'),
         button('https://www.glaubic.com/#kursai', 'Pasirinkti mokymus'),
         p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-        signature(['Ačiū, kad rekomenduojate mus!', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
+        signature(['Ačiū, kad rekomenduojate mus!', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
     ]
     en_body = [
         p('Hello,'),
@@ -306,7 +306,7 @@ def referral():
         p('Use the code when registering for a training at www.glaubic.com.'),
         button('https://www.glaubic.com/en#kursai', 'Choose a training'),
         p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-        signature(['Thank you for recommending us!', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
+        signature(['Thank you for recommending us!', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
     ]
     lt = layout('lt', 'Pasidalinkite nuolaida', '20 € draugui(-ei) ar kolegai(-ei)', 'Persiųskite šį laišką: 20 € nuolaida GLAUBIC mokymams, galioja 30 dienų.', '\n'.join(lt_body))
     en = layout('en', 'Share a discount', '€20 off for a friend or colleague', 'Forward this email: €20 off GLAUBIC training, valid for 30 days.', '\n'.join(en_body))
@@ -343,7 +343,7 @@ def value():
         h2('Sužinokite pirmieji'),
         p('Prenumeruokite GLAUBIC naujienlaiškį: 1–2 kartus per mėnesį siunčiame naujas mokymų datas ir Glaubic naujienas.'),
         button('https://www.glaubic.com/#naujienlaiskis', 'Prenumeruoti naujienlaiškį'),
-        signature(['Sėkmės ir iki susitikimo!', 'Glaubic AI komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
+        signature(['Sėkmės ir iki susitikimo!', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
     ]
     en_body = [
         p('Hello,'),
@@ -355,7 +355,7 @@ def value():
         h2('Be the first to know'),
         p('Subscribe to the GLAUBIC newsletter: once or twice a month we send new training dates and Glaubic news.'),
         button('https://www.glaubic.com/en#naujienlaiskis', 'Subscribe to the newsletter'),
-        signature(['Good luck and see you soon!', 'Glaubic AI team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
+        signature(['Good luck and see you soon!', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
     ]
     lt = layout('lt', 'Kaip sekasi?', 'Patarimas, nauji mokymai ir naujienlaiškis', 'Kaip sekasi dirbti su Claude? Patarimas ir nauji GLAUBIC mokymai.', '\n'.join(lt_body))
     en = layout('en', 'How are you getting on?', 'A tip, new training and our newsletter', 'How are you getting on with Claude? A tip and new GLAUBIC training.', '\n'.join(en_body))
