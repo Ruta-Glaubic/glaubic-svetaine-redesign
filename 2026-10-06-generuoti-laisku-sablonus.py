@@ -177,44 +177,28 @@ def gif():
     alt = 'Ačiū, kad mokėtės kartu!'
     return f'<img src="data:image/gif;base64,{data}" alt="{alt}" width="536" style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:16px;margin:0 0 24px;">'
 
-HOMEWORK_LT = [
-    h2('Namų darbai'),
-    p('Pabaikite šiuos scenarijus:'),
-    '<ol style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
-        'Laiškui priskiriama etiketė (angl. <em>label</em>) ir AI agentas parengia atsakymą (Reply to a message).',
-        'Laiškui priskiriama etiketė ir jis persiunčiamas. Pavyzdžiui, gavus laišką dėl buhalterinės klaidos ar sąskaitos, visa informacija persiunčiama atsakingiems darbuotojams ir sukuriamas nuotolinis susitikimas.',
-        'Laiškui priskiriama etiketė ir AI agentas sukuria atsakymo juodraštį.',
-        'Laiškui priskiriama etiketė ir jis pažymimas kaip perskaitytas.']) + '</ol>',
-    p('<strong>Papildomas darbas (bent vienas):</strong>'),
-    '<ol start="5" style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
-        'Priedų išsaugojimas Google Drive arba OneDrive aplanke. Gmail Trigger mazge paspauskite „+ Add option“ ir pasirinkite „Download Attachments“, o tolesniuose žingsniuose pridėkite Google Drive mazgą.',
-        'AI agentas atsakydamas remiasi DUK lentele Google Sheets. Galite remtis pirmuoju scenarijumi „Klientų pagalba“, kuriame AI parengia atsakymą (Reply to a message). Patogiausia šį žingsnį pridėti AI Agent mazgo dalyje „Tools“.']) + '</ol>',
-]
-
-def thanks(key, name, homework):
+# Bendra padėka visiems mokymams. Užduotys ar namų darbai dedami į mokymų medžiagą.
+def thanks():
     lt_body = [gif(),
         p('Laba diena,'),
         p('dėkojame, kad dalyvavote mokymuose „{{mokymu_pavadinimas}}“. Tikimės, kad išmoktus dalykus jau spėjote išbandyti savo darbe.'),
         h2('Mokymų medžiaga'),
-        p('Visą mokymų medžiagą rasite paspaudę mygtuką žemiau.'),
-        button('{{medziagos_nuoroda}}', 'Atsisiųsti medžiagą')]
-    if homework: lt_body += HOMEWORK_LT
-    lt_body += [h2('Pasidalinkite įspūdžiais'),
+        p('Skaidres, šablonus ir užduotis rasite paspaudę mygtuką žemiau.'),
+        button('{{medziagos_nuoroda}}', 'Atsisiųsti medžiagą'),
+        h2('Pasidalinkite įspūdžiais'),
         p('Labai vertintume jūsų atsiliepimą: jis padeda mums tobulėti, o kitiems lengviau apsispręsti. Tai užtruks vos kelias minutes.'),
         button('{{atsiliepimo_nuoroda}}', 'Palikti atsiliepimą'),
         p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
         signature(['Su linkėjimais,', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
     lt = layout('lt', 'Ačiū, kad mokėtės kartu!', '{{mokymu_pavadinimas}}', 'Mokymų medžiaga ir trumpas klausimas apie jūsų patirtį.', '\n'.join(lt_body))
-    ex_lt = 'Claude darbe ir kasdienėse užduotyse' if not homework else 'Susikurkite AI agentą per 3 val.'
     TEMPLATES.append(dict(
-        key=key, name=name, when='3 dienos po mokymų. Padėka, medžiaga ir atsiliepimo forma.',
+        key='padeka', name='Padėka po mokymų (visiems mokymams)', when='3 dienos po mokymų. Padėka, medžiaga ir atsiliepimo forma.',
         subject_lt='Ačiū už mokymus! Jūsų medžiaga ir trumpas klausimas',
         fields_lt=['{{mokymu_pavadinimas}}', '{{medziagos_nuoroda}}', '{{atsiliepimo_nuoroda}}'],
-        example={'{{mokymu_pavadinimas}}': ex_lt, '{{medziagos_nuoroda}}': '#', '{{atsiliepimo_nuoroda}}': '#'},
+        example={'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{medziagos_nuoroda}}': '#', '{{atsiliepimo_nuoroda}}': '#'},
         lt=lt))
 
-thanks('padeka-claude', 'Padėka: Claude mokymai', False)
-thanks('padeka-ai-agentas', 'Padėka: AI agento mokymai (su namų darbais)', True)
+thanks()
 
 
 def coupon(label, code, amount, valid):
