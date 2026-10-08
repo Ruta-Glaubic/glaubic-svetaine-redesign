@@ -24,6 +24,14 @@ def box(inner, title='', bg=None):
     bg = bg or B['violet100']
     head = f'<p style="margin:0 0 6px;font-weight:700;">{title}</p>' if title else ''
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;"><tr><td style="background:{bg};border-radius:16px;padding:16px 20px;font-family:{FONT};font-size:15px;line-height:1.6;color:{B["ink800"]};">{head}{inner}</td></tr></table>'
+def cal_button(href, label, bg, border): return f'<table role="presentation" cellpadding="0" cellspacing="0" style="display:inline-table;margin:0 8px 8px 0;"><tr><td style="background:{bg};border:2px solid {border};border-radius:999px;"><a href="{href}" style="display:inline-block;padding:11px 22px;font-family:{FONT};font-size:15px;font-weight:700;color:{B["ink800"]};text-decoration:none;border-radius:999px;">{label}</a></td></tr></table>'
+# Kalendoriaus mygtukai. Nuorodas sudaro siuntimo sistema:
+#   {{google_kalendoriaus_nuoroda}} = https://calendar.google.com/calendar/render?action=TEMPLATE&text=...&dates=YYYYMMDDTHHMMSS/YYYYMMDDTHHMMSS&ctz=Europe/Vilnius&location=...&details=...
+#   {{ics_nuoroda}} = viešas .ics failo adresas (Apple, Outlook)
+def calendar_block():
+    return ('<p style="margin:0 0 10px;font-weight:700;">Išsisaugokite mokymus kalendoriuje:</p>'
+            + cal_button('{{google_kalendoriaus_nuoroda}}', '+ Google kalendorius', B['coral'], B['coral'])
+            + cal_button('{{ics_nuoroda}}', '+ Apple / Outlook (.ics)', B['white'], B['ink800']))
 def button(href, label): return f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:20px 0;"><tr><td style="background:{B["coral"]};border-radius:999px;"><a href="{href}" style="display:inline-block;padding:13px 26px;font-family:{FONT};font-size:16px;font-weight:700;color:{B["ink800"]};text-decoration:none;border-radius:999px;">{label}</a></td></tr></table>'
 
 def layout(lang, title, subtitle, preheader, body):
@@ -88,11 +96,15 @@ PREP_LT = dict(
   fit=['Visiems, kurie dar nėra dirbę su Claude arba dirbo tik su Claude Chat funkcija ir nori daugiau galimybių.',
        'Verslo savininkams, specialistams ir visiems, kurie nori neatsilikti ir tobulinti savo darbo su AI įgūdžius.'])
 
-def prep(city_key, city_lt, place_lt, maps, directions_lt=None, ex=None):
+def prep(city_key, city_lt, place_lt, maps, directions_lt=None, ex=None, calendar=None):
     lt_body = [
         p('Laba diena,'),
         p('ačiū, kad renkatės tobulėti. Siunčiame jums informaciją apie praktinius mokymus „{{mokymu_pavadinimas}}“.'),
         box('Data: <strong>{{data}}, {{laikas}} val.</strong><br>Trukmė: <strong>{{trukme}}</strong><br>Vieta: <strong>' + place_lt + '</strong>', 'Mokymų informacija'),
+    ]
+    if calendar:
+        lt_body += [calendar_block()]
+    lt_body += [
         h2('Ką darysime mokymų metu?'), ul(PREP_LT['topics']),
         box('Atsineškite savo kompiuterį ir turėkite mokamą <strong>Claude Pro</strong> prenumeratą.', 'Būtina', B['yellow']),
         h2('Mokymai tinka'), ul(PREP_LT['fit']),
@@ -107,8 +119,9 @@ def prep(city_key, city_lt, place_lt, maps, directions_lt=None, ex=None):
     TEMPLATES.append(dict(
         key=f'pasiruosimas-{city_key}', name=f'Pasiruošimas: {city_lt}', when='Per 24 val. po pirkimo. Visa informacija apie mokymus.',
         subject_lt='Pasiruošimas mokymams: {{mokymu_pavadinimas}}',
-        fields_lt=['{{mokymu_pavadinimas}}', '{{data}}', '{{laikas}}', '{{trukme}}', '{{lektorius}}'],
-        example=ex, lt=lt))
+        fields_lt=['{{mokymu_pavadinimas}}', '{{data}}', '{{laikas}}', '{{trukme}}', '{{lektorius}}']
+                  + (['{{google_kalendoriaus_nuoroda}}', '{{ics_nuoroda}}'] if calendar else []),
+        example=dict(ex, **(calendar or {})), lt=lt))
 
 
 def remind(city_key, city_lt, place_lt, maps, directions_lt=None, ex=None):
@@ -139,7 +152,12 @@ CITY_V = ('vilnius', 'Vilnius',
      'https://www.google.com/maps/search/?api=1&amp;query=Dominikon%C5%B3+g.+5%2C+Vilnius',
      'Glaubic ofisas yra Dominikonų g. 5, tačiau į vidinį kiemą įeinama tarp Vokiečių g. 13 ir 15 pastatų. Praėję pro bromą, eikite tiesiai iki pat kiemo galo. Ten pamatysite žalius vartus: įėję pro juos, prie durų priešais paspauskite skambutį <strong>Nr. 9</strong>.',
      {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 9 d., penktadienis', '{{laikas}}': '9:30', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT})
-prep(*CITY_V)
+# Pavyzdinės kalendoriaus nuorodos: spalio 9 d. 9:30–13:00 (3,5 val.), Vilniaus laiku
+CAL_V = {
+    '{{google_kalendoriaus_nuoroda}}': 'https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Claude%20darbe%20ir%20kasdien%C4%97se%20u%C5%BEduotyse&amp;dates=20261009T093000/20261009T130000&amp;ctz=Europe%2FVilnius&amp;location=Glaubic%20ofisas%2C%20Dominikon%C5%B3%20g.%205%2C%20Vilnius&amp;details=Praktiniai%20GLAUBIC%20mokymai.%20Atsine%C5%A1kite%20savo%20kompiuter%C4%AF%20ir%20tur%C4%97kite%20Claude%20Pro%20prenumerat%C4%85.',
+    '{{ics_nuoroda}}': '2026-10-08-kalendorius-pavyzdys-vilnius.ics',
+}
+prep(*CITY_V, calendar=CAL_V)
 CITY_K = ('kaunas', 'Kaunas',
      '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir ofisų erdvė, E. Ožeškienės g. 10, Kaunas',
      'https://www.google.com/maps/search/?api=1&amp;query=E.+O%C5%BEe%C5%A1kien%C4%97s+g.+10%2C+Kaunas',
