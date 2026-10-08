@@ -13,7 +13,6 @@ _LOGO_FILE = os.path.join(OUT, 'glaubic-logotipas.png')
 LOGO = 'data:image/png;base64,' + base64.b64encode(open(_LOGO_FILE, 'rb').read()).decode()
 FOOT = {
   'lt': ('MB „Glaubic“ · Raitininkų g. 4-74, Vilnius', 'glaubic.com', 'https://glaubic.com'),
-  'en': ('MB “Glaubic” · Raitininkų g. 4-74, Vilnius, Lithuania', 'glaubic.com/en', 'https://glaubic.com/en'),
 }
 
 def p(t): return f'<p style="margin:0 0 16px;">{t}</p>'
@@ -56,7 +55,7 @@ def layout(lang, title, subtitle, preheader, body):
 </html>
 '''
 
-# Kiekvienas šablonas: failo pavadinimas, tema, laukai, LT ir EN turinys.
+# Kiekvienas šablonas: failo pavadinimas, tema, laukai ir turinys.
 TEMPLATES = []
 
 def sf():
@@ -68,21 +67,12 @@ def sf():
             p('Kilus klausimų, drąsiai rašykite.'),
             signature(['Su linkėjimais,', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
         ]))
-    en = layout('en', 'Invoice', '{{invoice_number}}',
-        'Please find attached your invoice {{invoice_number}}.',
-        '\n'.join([
-            p('Hello,'),
-            p('thank you for purchasing the GLAUBIC AI training “{{training_name}}”. Please find attached your invoice {{invoice_number}}.'),
-            p('If you have any questions, feel free to get in touch.'),
-            signature(['Kind regards,', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
-        ]))
     TEMPLATES.append(dict(
         key='saskaita-faktura', name='Sąskaita faktūra', when='Kai išrašoma sąskaita faktūra (per 3 darbo dienas po pirkimo). Prisegamas PDF.',
-        subject_lt='Sąskaita faktūra {{saskaitos_numeris}}', subject_en='Invoice {{invoice_number}}',
-        fields_lt=['{{mokymu_pavadinimas}}', '{{saskaitos_numeris}}'], fields_en=['{{training_name}}', '{{invoice_number}}'],
-        example={'{{mokymu_pavadinimas}}': 'Claude verslo ir asmeninėse užduotyse', '{{saskaitos_numeris}}': 'GL26/146',
-                 '{{training_name}}': 'Claude for work and everyday tasks', '{{invoice_number}}': 'GL26/146'},
-        lt=lt, en=en))
+        subject_lt='Sąskaita faktūra {{saskaitos_numeris}}',
+        fields_lt=['{{mokymu_pavadinimas}}', '{{saskaitos_numeris}}'],
+        example={'{{mokymu_pavadinimas}}': 'Claude verslo ir asmeninėse užduotyse', '{{saskaitos_numeris}}': 'GL26/146'},
+        lt=lt))
 
 sf()
 
@@ -97,19 +87,8 @@ PREP_LT = dict(
           '<strong>Svarbiausia:</strong> Claude jungtys (angl. <em>connectors</em>) ir integracija su Canva, Google Workspace, kalendoriais ar kitais įrankiais, kurie prijungiami prie Claude.'],
   fit=['Visiems, kurie dar nėra dirbę su Claude arba dirbo tik su Claude Chat funkcija ir nori daugiau galimybių.',
        'Verslo savininkams, specialistams ir visiems, kurie nori neatsilikti ir tobulinti savo darbo su AI įgūdžius.'])
-PREP_EN = dict(
-  topics=['We will start using Claude Cowork in practice.',
-          'Claude’s potential for project management.',
-          'Writing Claude prompts that get you precise results.',
-          'Claude and email: drafting replies, templates, automating communication.',
-          'Claude for creating reports and documents.',
-          'Claude for client communication: preparing proposals, presentations and replies.',
-          'Claude and files: analysing and organising documents right from your computer.',
-          '<strong>Most important:</strong> Claude connectors and integrations with Canva, Google Workspace, calendars and other tools you can connect to Claude.'],
-  fit=['Anyone who has never used Claude, or has only used Claude Chat and wants to do more.',
-       'Business owners, specialists and lifelong learners who want to keep up and grow their AI skills.'])
 
-def prep(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, directions_en=None, ex=None):
+def prep(city_key, city_lt, place_lt, maps, directions_lt=None, ex=None):
     lt_body = [
         p('Laba diena,'),
         p('ačiū, kad renkatės tobulėti. Siunčiame jums informaciją apie praktinius mokymus „{{mokymu_pavadinimas}}“.'),
@@ -124,31 +103,15 @@ def prep(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, direct
     lt_body += [button(maps, 'Atidaryti žemėlapyje'),
                 p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
                 signature(['Su linkėjimais,', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
-    en_body = [
-        p('Hello,'),
-        p('thank you for choosing to learn with us. Here is everything you need to know about the hands-on training “{{training_name}}”.'),
-        box('Date: <strong>{{date}}, {{time}}</strong><br>Duration: <strong>{{duration}}</strong><br>Venue: <strong>' + place_en + '</strong>', 'Training details'),
-        h2('What we will do'), ul(PREP_EN['topics']),
-        box('Bring your own laptop and have a paid <strong>Claude Pro</strong> plan.', 'Required', B['yellow']),
-        h2('Who it is for'), ul(PREP_EN['fit']),
-        h2('Trainer'), p('{{trainer}}'),
-    ]
-    if directions_en:
-        en_body += [h2('How to find us'), p(directions_en)]
-    en_body += [button(maps, 'Open in maps'),
-                p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-                signature(['Kind regards,', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
     lt = layout('lt', 'Pasiruošimas mokymams', '{{mokymu_pavadinimas}} · ' + city_lt, 'Data, vieta ir ką pasiimti į mokymus.', '\n'.join(lt_body))
-    en = layout('en', 'Getting ready for your training', '{{training_name}} · ' + {'vilnius':'Vilnius','kaunas':'Kaunas'}[city_key], 'Date, venue and what to bring to your training.', '\n'.join(en_body))
     TEMPLATES.append(dict(
         key=f'pasiruosimas-{city_key}', name=f'Pasiruošimas: {city_lt}', when='Per 24 val. po pirkimo. Visa informacija apie mokymus.',
-        subject_lt='Pasiruošimas mokymams: {{mokymu_pavadinimas}}', subject_en='Getting ready for your training: {{training_name}}',
+        subject_lt='Pasiruošimas mokymams: {{mokymu_pavadinimas}}',
         fields_lt=['{{mokymu_pavadinimas}}', '{{data}}', '{{laikas}}', '{{trukme}}', '{{lektorius}}'],
-        fields_en=['{{training_name}}', '{{date}}', '{{time}}', '{{duration}}', '{{trainer}}'],
-        example=ex, lt=lt, en=en))
+        example=ex, lt=lt))
 
 
-def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, directions_en=None, ex=None):
+def remind(city_key, city_lt, place_lt, maps, directions_lt=None, ex=None):
     lt_body = [
         p('Laba diena,'),
         p('primename, kad jau poryt vyks praktiniai mokymai „{{mokymu_pavadinimas}}“. Laukiame jūsų!'),
@@ -163,53 +126,32 @@ def remind(city_key, city_lt, place_lt, place_en, maps, directions_lt=None, dire
                 p('Jei negalite dalyvauti, praneškite mums kuo greičiau: registraciją galima perkelti į kitą datą arba vietoj savęs paskirti kitą žmogų.'),
                 p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
                 signature(['Iki susitikimo!', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
-    en_body = [
-        p('Hello,'),
-        p('a quick reminder that the hands-on training “{{training_name}}” takes place the day after tomorrow. We look forward to seeing you!'),
-        box('Date: <strong>{{date}}, {{time}}</strong><br>Duration: <strong>{{duration}}</strong><br>Venue: <strong>' + place_en + '</strong>', 'Training details'),
-        box(ul(['Bring your own laptop and its charger.',
-                'Make sure you have a paid <strong>Claude Pro</strong> plan and can sign in to your Claude account.']).replace('margin:0 0 16px', 'margin:0'),
-            'Before the training', B['yellow']),
-    ]
-    if directions_en:
-        en_body += [h2('How to find us'), p(directions_en)]
-    en_body += [button(maps, 'Open in maps'),
-                p('If you cannot attend, let us know as soon as possible: you can move your registration to another date or send someone else in your place.'),
-                p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-                signature(['See you soon!', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
     lt = layout('lt', 'Iki mokymų liko 2 dienos', '{{mokymu_pavadinimas}} · ' + city_lt, 'Primename datą, vietą ir ką pasiimti.', '\n'.join(lt_body))
-    en = layout('en', 'Your training is in 2 days', '{{training_name}} · ' + city_lt, 'A reminder of the date, venue and what to bring.', '\n'.join(en_body))
     TEMPLATES.append(dict(
         key=f'priminimas-{city_key}', name=f'Priminimas likus 2 d.: {city_lt}', when='Likus 2 dienoms iki mokymų.',
-        subject_lt='Priminimas: mokymai jau poryt', subject_en='Reminder: your training is the day after tomorrow',
+        subject_lt='Priminimas: mokymai jau poryt',
         fields_lt=['{{mokymu_pavadinimas}}', '{{data}}', '{{laikas}}', '{{trukme}}'],
-        fields_en=['{{training_name}}', '{{date}}', '{{time}}', '{{duration}}'],
-        example=ex, lt=lt, en=en))
+        example=ex, lt=lt))
 
 LECT_LT = 'Vilhelmas Šulcas, IT projektų vadovas, Code Academy dėstytojas'
-LECT_EN = 'Vilhelmas Šulcas, IT project manager and Code Academy lecturer'
 CITY_V = ('vilnius', 'Vilnius',
-     'Glaubic ofisas, Dominikonų g. 5, Vilnius', 'Glaubic office, Dominikonų g. 5, Vilnius',
+     'Glaubic ofisas, Dominikonų g. 5, Vilnius',
      'https://www.google.com/maps/search/?api=1&amp;query=Dominikon%C5%B3+g.+5%2C+Vilnius',
      'Glaubic ofisas yra Dominikonų g. 5, tačiau į vidinį kiemą įeinama tarp Vokiečių g. 13 ir 15 pastatų. Praėję pro bromą, eikite tiesiai iki pat kiemo galo. Ten pamatysite žalius vartus: įėję pro juos, prie durų priešais paspauskite skambutį <strong>Nr. 9</strong>.',
-     'The Glaubic office is at Dominikonų g. 5, but the entrance to the inner courtyard is between the buildings at Vokiečių g. 13 and 15. Go through the archway and walk straight to the far end of the courtyard. You will see a green gate: go through it and press <strong>No. 9</strong> at the door straight ahead.',
-     {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 9 d., penktadienis', '{{laikas}}': '9:30', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT,
-      '{{training_name}}': 'Claude for work and everyday tasks', '{{date}}': 'Friday, 9 October', '{{time}}': '9:30', '{{duration}}': '3.5 hours', '{{trainer}}': LECT_EN})
+     {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 9 d., penktadienis', '{{laikas}}': '9:30', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT})
 prep(*CITY_V)
 CITY_K = ('kaunas', 'Kaunas',
      '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir ofisų erdvė, E. Ožeškienės g. 10, Kaunas',
-     '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> coworking and office space, E. Ožeškienės g. 10, Kaunas',
      'https://www.google.com/maps/search/?api=1&amp;query=E.+O%C5%BEe%C5%A1kien%C4%97s+g.+10%2C+Kaunas',
-     None, None,
-     {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 8 d., ketvirtadienis', '{{laikas}}': '10:00', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT,
-      '{{training_name}}': 'Claude for work and everyday tasks', '{{date}}': 'Thursday, 8 October', '{{time}}': '10:00', '{{duration}}': '3.5 hours', '{{trainer}}': LECT_EN})
+     None,
+     {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 8 d., ketvirtadienis', '{{laikas}}': '10:00', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT})
 prep(*CITY_K)
 remind(*CITY_V)
 remind(*CITY_K)
 
-def gif(lang):
-    data = base64.b64encode(open(os.path.join(OUT, f'2026-10-06-padeka-{lang}.gif'), 'rb').read()).decode()
-    alt = 'Ačiū, kad mokėtės kartu!' if lang == 'lt' else 'Thank you for learning with us!'
+def gif():
+    data = base64.b64encode(open(os.path.join(OUT, '2026-10-06-padeka-lt.gif'), 'rb').read()).decode()
+    alt = 'Ačiū, kad mokėtės kartu!'
     return f'<img src="data:image/gif;base64,{data}" alt="{alt}" width="536" style="display:block;width:100%;max-width:536px;height:auto;border:0;border-radius:16px;margin:0 0 24px;">'
 
 HOMEWORK_LT = [
@@ -225,22 +167,9 @@ HOMEWORK_LT = [
         'Priedų išsaugojimas Google Drive arba OneDrive aplanke. Gmail Trigger mazge paspauskite „+ Add option“ ir pasirinkite „Download Attachments“, o tolesniuose žingsniuose pridėkite Google Drive mazgą.',
         'AI agentas atsakydamas remiasi DUK lentele Google Sheets. Galite remtis pirmuoju scenarijumi „Klientų pagalba“, kuriame AI parengia atsakymą (Reply to a message). Patogiausia šį žingsnį pridėti AI Agent mazgo dalyje „Tools“.']) + '</ol>',
 ]
-HOMEWORK_EN = [
-    h2('Homework'),
-    p('Finish these scenarios:'),
-    '<ol style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
-        'An email gets a label and the AI agent prepares a reply (Reply to a message).',
-        'An email gets a label and is forwarded, e.g. an email about an accounting error or an invoice: all its information is forwarded to the responsible colleagues and an online meeting is created.',
-        'An email gets a label and the AI agent creates a draft.',
-        'An email gets a label and is marked as read.']) + '</ol>',
-    p('<strong>Extra task (at least one):</strong>'),
-    '<ol start="5" style="margin:0 0 16px;padding-left:22px;">' + ''.join(f'<li style="margin:0 0 6px;">{i}</li>' for i in [
-        'Save attachments to Google Drive or OneDrive. In the Gmail Trigger node, click “+ Add option”, choose “Download Attachments”, and then add a Google Drive node in the next steps.',
-        'The AI agent uses an FAQ table in Google Sheets. You can build on the first scenario, “Customer support”, where the AI prepares a reply (Reply to a message). The easiest way is to add this step to the AI Agent node, under “Tools”.']) + '</ol>',
-]
 
 def thanks(key, name, homework):
-    lt_body = [gif('lt'),
+    lt_body = [gif(),
         p('Laba diena,'),
         p('dėkojame, kad dalyvavote mokymuose „{{mokymu_pavadinimas}}“. Tikimės, kad išmoktus dalykus jau spėjote išbandyti savo darbe.'),
         h2('Mokymų medžiaga'),
@@ -252,30 +181,14 @@ def thanks(key, name, homework):
         button('{{atsiliepimo_nuoroda}}', 'Palikti atsiliepimą'),
         p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
         signature(['Su linkėjimais,', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')])]
-    en_body = [gif('en'),
-        p('Hello,'),
-        p('thank you for joining the training “{{training_name}}”. We hope you have already tried what you learned in your own work.'),
-        h2('Training materials'),
-        p('You can find all the training materials by clicking the button below.'),
-        button('{{materials_url}}', 'Download materials')]
-    if homework: en_body += HOMEWORK_EN
-    en_body += [h2('Share your feedback'),
-        p('We would really appreciate your feedback: it helps us improve and helps others decide. It only takes a few minutes.'),
-        button('{{feedback_url}}', 'Leave feedback'),
-        p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-        signature(['Kind regards,', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')])]
     lt = layout('lt', 'Ačiū, kad mokėtės kartu!', '{{mokymu_pavadinimas}}', 'Mokymų medžiaga ir trumpas klausimas apie jūsų patirtį.', '\n'.join(lt_body))
-    en = layout('en', 'Thank you for learning with us!', '{{training_name}}', 'Your training materials and a quick question about your experience.', '\n'.join(en_body))
     ex_lt = 'Claude darbe ir kasdienėse užduotyse' if not homework else 'Susikurkite AI agentą per 3 val.'
-    ex_en = 'Claude for work and everyday tasks' if not homework else 'Build an AI agent in 3 hours'
     TEMPLATES.append(dict(
         key=key, name=name, when='3 dienos po mokymų. Padėka, medžiaga ir atsiliepimo forma.',
-        subject_lt='Ačiū už mokymus! Jūsų medžiaga ir trumpas klausimas', subject_en='Thank you for the training! Your materials and a quick question',
+        subject_lt='Ačiū už mokymus! Jūsų medžiaga ir trumpas klausimas',
         fields_lt=['{{mokymu_pavadinimas}}', '{{medziagos_nuoroda}}', '{{atsiliepimo_nuoroda}}'],
-        fields_en=['{{training_name}}', '{{materials_url}}', '{{feedback_url}}'],
-        example={'{{mokymu_pavadinimas}}': ex_lt, '{{training_name}}': ex_en,
-                 '{{medziagos_nuoroda}}': '#', '{{atsiliepimo_nuoroda}}': '#', '{{materials_url}}': '#', '{{feedback_url}}': '#'},
-        lt=lt, en=en))
+        example={'{{mokymu_pavadinimas}}': ex_lt, '{{medziagos_nuoroda}}': '#', '{{atsiliepimo_nuoroda}}': '#'},
+        lt=lt))
 
 thanks('padeka-claude', 'Padėka: Claude mokymai', False)
 thanks('padeka-ai-agentas', 'Padėka: AI agento mokymai (su namų darbais)', True)
@@ -299,32 +212,21 @@ def referral():
         p('Jeigu turėsite klausimų, rašykite ar skambinkite: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' arba ' + link('tel:+37062469115', '+370 624 69115') + '.'),
         signature(['Ačiū, kad rekomenduojate mus!', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
     ]
-    en_body = [
-        p('Hello,'),
-        p('we are glad you learned with us! If you enjoyed the training, pass it on: <strong>forward this email to a friend or colleague</strong> whose work AI could make easier.'),
-        coupon('Discount code', '{{coupon_code}}', '€20 off GLAUBIC training', 'Valid for 30 days, until <strong>{{valid_until}}</strong>'),
-        p('Use the code when registering for a training at www.glaubic.com.'),
-        button('https://www.glaubic.com/en#kursai', 'Choose a training'),
-        p('If you have any questions, email or call us: ' + link('mailto:ai@marketyourvisions.lt', 'ai@marketyourvisions.lt') + ' or ' + link('tel:+37062469115', '+370 624 69115') + '.'),
-        signature(['Thank you for recommending us!', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
-    ]
     lt = layout('lt', 'Pasidalinkite nuolaida', '20 € draugui(-ei) ar kolegai(-ei)', 'Persiųskite šį laišką: 20 € nuolaida GLAUBIC mokymams, galioja 30 dienų.', '\n'.join(lt_body))
-    en = layout('en', 'Share a discount', '€20 off for a friend or colleague', 'Forward this email: €20 off GLAUBIC training, valid for 30 days.', '\n'.join(en_body))
     TEMPLATES.append(dict(
         key='persiusk-draugui', name='Persiųsk draugui(-ei) ar kolegai(-ei)', when='Po mokymų (siuntimo laiką patikslinti). Kodas galioja 30 dienų nuo išsiuntimo.',
-        subject_lt='Dovanojame 20 € nuolaidą jūsų draugui(-ei) ar kolegai(-ei)', subject_en='€20 off for your friend or colleague',
-        fields_lt=['{{kupono_kodas}}', '{{galioja_iki}}'], fields_en=['{{coupon_code}}', '{{valid_until}}'],
-        example={'{{kupono_kodas}}': 'DRAUGAS-7K2M', '{{galioja_iki}}': '2026 m. lapkričio 8 d.',
-                 '{{coupon_code}}': 'DRAUGAS-7K2M', '{{valid_until}}': '8 November 2026'},
-        lt=lt, en=en))
+        subject_lt='Dovanojame 20 € nuolaidą jūsų draugui(-ei) ar kolegai(-ei)',
+        fields_lt=['{{kupono_kodas}}', '{{galioja_iki}}'],
+        example={'{{kupono_kodas}}': 'DRAUGAS-7K2M', '{{galioja_iki}}': '2026 m. lapkričio 8 d.'},
+        lt=lt))
 
 referral()
 
 
-def course_card(n, more):
-    pre = '{{mokymai_%d_' % n if more == 'Sužinoti daugiau' else '{{training_%d_' % n
+def course_card(n, more='Sužinoti daugiau'):
+    pre = '{{mokymai_%d_' % n
     t = lambda f: pre + f + '}}'
-    names = ('pavadinimas', 'aprasymas', 'data', 'nuoroda') if more == 'Sužinoti daugiau' else ('name', 'description', 'date', 'url')
+    names = ('pavadinimas', 'aprasymas', 'data', 'nuoroda')
     return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 14px;"><tr>'
             f'<td style="border:1px solid {B["ink600"]}33;border-radius:16px;padding:18px 20px;font-family:{FONT};color:{B["ink800"]};background:{B["white"]};">'
             f'<p style="margin:0 0 6px;font-family:{HEAD};font-size:18px;font-weight:800;line-height:1.3;">{t(names[0])}</p>'
@@ -345,30 +247,14 @@ def value():
         button('https://www.glaubic.com/#naujienlaiskis', 'Prenumeruoti naujienlaiškį'),
         signature(['Sėkmės ir iki susitikimo!', 'Glaubic komanda', link('https://www.glaubic.com', 'www.glaubic.com')]),
     ]
-    en_body = [
-        p('Hello,'),
-        p('<strong>how are you getting on with Claude?</strong> It has been a little while since the training, so we are curious which tasks you have already handed over to AI and where you still get stuck. Just reply to this email: we read every reply and are happy to help.'),
-        box('Create a Claude project (Projects) for your everyday tasks: upload the documents and instructions you use most often, so you do not have to explain everything from scratch each time.', 'Tip'),
-        h2('New training'),
-        p('We are preparing new hands-on training. See what might be useful for you:'),
-        course_card(1, 'Learn more'), course_card(2, 'Learn more'),
-        h2('Be the first to know'),
-        p('Subscribe to the GLAUBIC newsletter: once or twice a month we send new training dates and Glaubic news.'),
-        button('https://www.glaubic.com/en#naujienlaiskis', 'Subscribe to the newsletter'),
-        signature(['Good luck and see you soon!', 'Glaubic team', link('https://www.glaubic.com/en', 'www.glaubic.com')]),
-    ]
     lt = layout('lt', 'Kaip sekasi?', 'Patarimas, nauji mokymai ir naujienlaiškis', 'Kaip sekasi dirbti su Claude? Patarimas ir nauji GLAUBIC mokymai.', '\n'.join(lt_body))
-    en = layout('en', 'How are you getting on?', 'A tip, new training and our newsletter', 'How are you getting on with Claude? A tip and new GLAUBIC training.', '\n'.join(en_body))
     TEMPLATES.append(dict(
         key='vertes-laiskas', name='Vertės laiškas: kaip sekasi?', when='Po mokymų (siuntimo laiką patikslinti). Naujų mokymų blokas keičiamas pagal aktualumą.',
-        subject_lt='Kaip sekasi dirbti su Claude?', subject_en='How are you getting on with Claude?',
+        subject_lt='Kaip sekasi dirbti su Claude?',
         fields_lt=['{{mokymai_1_pavadinimas}}', '{{mokymai_1_aprasymas}}', '{{mokymai_1_data}}', '{{mokymai_1_nuoroda}}', '(tas pats su 2)'],
-        fields_en=['{{training_1_name}}', '{{training_1_description}}', '{{training_1_date}}', '{{training_1_url}}', '(same for 2)'],
         example={'{{mokymai_1_pavadinimas}}': 'Claude Design', '{{mokymai_1_aprasymas}}': '[Trumpas mokymų aprašymas: 1–2 sakiniai, ką dalyviai išmoks.]', '{{mokymai_1_data}}': 'Datos netrukus', '{{mokymai_1_nuoroda}}': 'https://www.glaubic.com/#kursai',
-                 '{{mokymai_2_pavadinimas}}': 'Claude Coding', '{{mokymai_2_aprasymas}}': '[Trumpas mokymų aprašymas: 1–2 sakiniai, ką dalyviai išmoks.]', '{{mokymai_2_data}}': 'Datos netrukus', '{{mokymai_2_nuoroda}}': 'https://www.glaubic.com/#kursai',
-                 '{{training_1_name}}': 'Claude Design', '{{training_1_description}}': '[Short description: 1–2 sentences on what participants will learn.]', '{{training_1_date}}': 'Dates coming soon', '{{training_1_url}}': 'https://www.glaubic.com/en#kursai',
-                 '{{training_2_name}}': 'Claude Coding', '{{training_2_description}}': '[Short description: 1–2 sentences on what participants will learn.]', '{{training_2_date}}': 'Dates coming soon', '{{training_2_url}}': 'https://www.glaubic.com/en#kursai'},
-        lt=lt, en=en))
+                 '{{mokymai_2_pavadinimas}}': 'Claude Coding', '{{mokymai_2_aprasymas}}': '[Trumpas mokymų aprašymas: 1–2 sakiniai, ką dalyviai išmoks.]', '{{mokymai_2_data}}': 'Datos netrukus', '{{mokymai_2_nuoroda}}': 'https://www.glaubic.com/#kursai'},
+        lt=lt))
 
 value()
 
@@ -377,13 +263,12 @@ DATE = '2026-10-06'
 os.makedirs(OUT, exist_ok=True)
 cards = []
 for t in TEMPLATES:
-    for lang in ('lt', 'en'):
-        fn = f'{DATE}-laiskas-{t["key"]}-{lang}.html'
-        open(os.path.join(OUT, fn), 'w', encoding='utf-8').write(t[lang])
-        ex = t[lang]
-        for k, v in t['example'].items(): ex = ex.replace(k, v)
-        exfn = f'{DATE}-laiskas-{t["key"]}-{lang}-pavyzdys.html'
-        open(os.path.join(OUT, exfn), 'w', encoding='utf-8').write(ex)
+    fn = f'{DATE}-laiskas-{t["key"]}-lt.html'
+    open(os.path.join(OUT, fn), 'w', encoding='utf-8').write(t['lt'])
+    ex = t['lt']
+    for k, v in t['example'].items(): ex = ex.replace(k, v)
+    exfn = f'{DATE}-laiskas-{t["key"]}-lt-pavyzdys.html'
+    open(os.path.join(OUT, exfn), 'w', encoding='utf-8').write(ex)
     cards.append(t)
 
 def esc(s): return html.escape(s)
@@ -397,9 +282,6 @@ for t in cards:
       <figure><figcaption><b>LT</b> · Tema: <code>{esc(t["subject_lt"])}</code><br>Laukai: {", ".join(f"<code>{esc(f)}</code>" for f in t["fields_lt"])}</figcaption>
         <iframe src="{DATE}-laiskas-{t["key"]}-lt-pavyzdys.html" title="{esc(t["name"])} LT"></iframe>
         <a href="{DATE}-laiskas-{t["key"]}-lt.html">Šablonas su laukais</a></figure>
-      <figure><figcaption><b>EN</b> · Subject: <code>{esc(t["subject_en"])}</code><br>Fields: {", ".join(f"<code>{esc(f)}</code>" for f in t["fields_en"])}</figcaption>
-        <iframe src="{DATE}-laiskas-{t["key"]}-en-pavyzdys.html" title="{esc(t["name"])} EN"></iframe>
-        <a href="{DATE}-laiskas-{t["key"]}-en.html">Template with fields</a></figure>
     </div>
   </section>'''
 preview = f'''<!doctype html>
@@ -422,7 +304,7 @@ preview = f'''<!doctype html>
 </style></head>
 <body>
 <header><h1>GLAUBIC laiškų šablonai</h1>
-<p>Kiekvienas laiškas lietuvių ir anglų kalbomis. Peržiūroje laukai užpildyti pavyzdinėmis reikšmėmis; šablonų failuose jie pažymėti {{{{taip}}}} ir juos pakeičia siuntimo sistema.</p></header>
+<p>Peržiūroje laukai užpildyti pavyzdinėmis reikšmėmis; šablonų failuose jie pažymėti {{{{taip}}}} ir juos pakeičia siuntimo sistema.</p></header>
 {rows}
 </body></html>
 '''
