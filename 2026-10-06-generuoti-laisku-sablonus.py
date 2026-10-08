@@ -163,7 +163,12 @@ CITY_K = ('kaunas', 'Kaunas',
      'https://www.google.com/maps/search/?api=1&amp;query=E.+O%C5%BEe%C5%A1kien%C4%97s+g.+10%2C+Kaunas',
      None,
      {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 8 d., ketvirtadienis', '{{laikas}}': '10:00', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT})
-prep(*CITY_K)
+# Pavyzdinės kalendoriaus nuorodos: spalio 8 d. 10:00–13:30 (3,5 val.), Vilniaus laiku
+CAL_K = {
+    '{{google_kalendoriaus_nuoroda}}': 'https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Claude%20darbe%20ir%20kasdien%C4%97se%20u%C5%BEduotyse&amp;dates=20261008T100000/20261008T133000&amp;ctz=Europe%2FVilnius&amp;location=Redakcija%2C%20E.%20O%C5%BEe%C5%A1kien%C4%97s%20g.%2010%2C%20Kaunas&amp;details=Praktiniai%20GLAUBIC%20mokymai.%20Atsine%C5%A1kite%20savo%20kompiuter%C4%AF%20ir%20tur%C4%97kite%20Claude%20Pro%20prenumerat%C4%85.',
+    '{{ics_nuoroda}}': '2026-10-08-kalendorius-pavyzdys-kaunas.ics',
+}
+prep(*CITY_K, calendar=CAL_K)
 remind(*CITY_V)
 remind(*CITY_K)
 
