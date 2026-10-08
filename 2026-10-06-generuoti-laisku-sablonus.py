@@ -161,7 +161,7 @@ prep(*CITY_V, calendar=CAL_V)
 CITY_K = ('kaunas', 'Kaunas',
      '<a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcija</a> bendradarbystės ir ofisų erdvė, E. Ožeškienės g. 10, Kaunas',
      'https://www.google.com/maps/search/?api=1&amp;query=E.+O%C5%BEe%C5%A1kien%C4%97s+g.+10%2C+Kaunas',
-     None,
+     'Mokymai vyks <a href="https://www.redakcijacoworking.lt/redakcija-laisve/" style="color:#322838;">Redakcijos</a> bendradarbystės ir ofisų erdvėje, E. Ožeškienės g. 10, Kaunas, <strong>4 aukšte</strong>. Jeigu nerasite, skambinkite lektoriui Vilhelmui tel. <a href="tel:+37062469115" style="color:#322838;">+370 624 69115</a>.',
      {'{{mokymu_pavadinimas}}': 'Claude darbe ir kasdienėse užduotyse', '{{data}}': 'spalio 8 d., ketvirtadienis', '{{laikas}}': '10:00', '{{trukme}}': '3,5 val.', '{{lektorius}}': LECT_LT})
 # Pavyzdinės kalendoriaus nuorodos: spalio 8 d. 10:00–13:30 (3,5 val.), Vilniaus laiku
 CAL_K = {
